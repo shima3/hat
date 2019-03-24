@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>js-hat (interpreter)</title>
+    <style type="text/css">
+      <!--
+      code, pre {
+	  font-family: "Courier New", Consolas, monospace;
+      }
+      -->
+    </style>
+  </head>
+  <body>
+    <h1>js-hat: A Hat Interpreter in JavaScript</h1>
+    js-hat is an interpreter for the Hat programming language written in JavaScript.
+    <h2>JavaScript データ</h2>
+    <dl>
+      <dt>タスク（Task）</dt>
+      <dd>実行中の処理を表すデータです。</dd>
+      <dd>アクター、関数呼び出し、継続スタックの組からなります。</dd>
+      <dd>そのアクターは、その処理を実行するアクターです。</dd>
+      <dd>その関数呼び出しは、その処理の手順を表します。</dd>
+      <dd>その継続スタックは、その関数呼び出しから復帰したときに実行すべき継続を表します。</dd>
+      <dt>タスクキュー（Task Queue）</dt>
+      <dd>タスクが実行順に並んだ待ち行列です。</dd>
+      <dt>プログラム（Program）</dt>
+      <dd>関数名と無名関数との対応表です。</dd>
+      <dt>継続付き式（Expression With Continuation, EWC）</dt>
+      <dd>式expと継続contからなる組です。</dd>
+      <dd>exp内で継続が省略されていたとき、contが継続として扱われます。</dd>
+      <dt>現在のアクター（Current Actor）</dt>
+      <dd>現在の処理を実行しているアクターです。</dd>
+      <dt>継続スタック（Continuation Stack）</dt>
+      <dd>継続を要素として持つ単一方向の連結リストです。</dd>
+      <dd>要素が0個の場合、null です。</dd>
+      <dt>現在タスク（Current Task）</dt>
+      <dd>現在、インタプリタが実行しているタスクです。</dd>
+      <!-- dt></dt>
+      <dd></dd -->
+    </dl>
+    <h2>JavaScript 関数</h2>
+    <dl>
+      <dt>new Program(F)</dt>
+      <dd>ファイル F を読み、そのファイルで定義された関数からなるプログラムを生成し、戻り値として返します。</dd>
+      <dt>new Actor(P)</dt>
+      <dd>プログラム P を振舞いとして持つアクターを生成し、戻り値として返します。</dd>
+      <dt>new CStack(C, S)</dt>
+      <dd>継続 C を継続スタック S の前に追加した継続スタックを生成し、戻り値として返します。</dd>
+      <dt>parse(E)</dt>
+      <dd>S式 E を構文解析し、木構造の配列を戻り値として返します。</dd>
+      <dt>stepCall(C)</dt>
+      <dd>関数呼び出し C を一段階実行します。</dd>
+      <dd></dd>
+      <dt>stepTask(T)</dt>
+      <dd>タスク T を一段階実行し、戻り値として以下を返します。<ul>
+	  <li>T が完了したならば true</li>
+	  <li>T の処理が残っていれば false<br>
+	    この場合、残った処理は T に入っています。</li>
+      </ul></dd>
+      <dd>具体的には以下の手順を実行します。<ol>
+	  <li>現在タスクを T に変更します。</li>
+	  <li>T が持つ関数呼び出しを C とおきます。</li>
+	  <li>C の先頭の式を F とおきます。</li>
+	  <li>F が関数名ならば、その値である無名関数に F の値を置き換えます。</li>
+	  <li>F に従って以下を判定します。<ul>
+	      <li>F が無名</li>
+	  </ul></li>
+	  <li></li>
+      </ol></dd>
+      <dt>stepTaskQueue( )</dt>
+      <dd>タスクキューの先頭のタスクを一段階実行します。</dd>
+      <dd>具体的には以下の手順を実行します。<ol>
+	  <li>タスクキューの先頭のタスクを取り出し、T とおきます。</li>
+	  <li>T に従って以下を判定します。<ul>
+	      <li>タスクを取り出せたならば、stepTask(T) を呼び出し、その戻り値に従って以下を判定します。<ul>
+		  <li>T が完了したならば、この関数から戻ります。</li>
+		  <li>そうでなければ、T をタスクキューに追加します。</li>
+	      </ul></li>
+	      <li>（タスクキューが空で）タスクを取り出せなければ、この関数から戻ります。</li>
+	  </ul></li>
+      </ol></dd>
+      <dt>sendMessage(A, M)</dt>
+      <dd>アクター A へメッセージ M を送ります。</dd>
+    </dl>
+    <h2>References</h2>
+    <ul>
+      <li>MDN web docs<ul>
+	  <li><a href="https://developer.mozilla.org/ja/docs/Web/API/XMLHttpRequest">XMLHttpRequest</a></li>
+	  <li><a href="https://developer.mozilla.org/ja/docs/Web/API/Document/getElementsByTagName">Document.getElementsByTagName()</a></li>
+      </ul></li>
+      <li>Node.js入門<ul>
+	  <li><a href="https://www.sejuku.net/blog/77966">requireの使い方とモジュールの作り方まとめ！</a></li>
+	  <li><a href="https://www.sejuku.net/blog/75691">npmの使い方とパッケージ管理の方法まとめ！</a></li>
+      </ul></li>
+      <li><a href="https://javascript.programmer-reference.com/js-array-slice/">配列内の要素を範囲指定で取り出す</a> コピペで使える JavaScript逆引きリファレンス</li>
+      <li><a href="https://www.infoscoop.org/blogjp/2012/05/17/javascript%E3%81%AE%E3%83%87%E3%83%90%E3%83%83%E3%82%B0%E3%81%A7object%E3%81%AE%E4%B8%AD%E8%BA%AB%E3%82%92%E6%96%87%E5%AD%97%E5%88%97%E3%81%A8%E3%81%97%E3%81%A6%E5%B1%95%E9%96%8B%E3%81%99%E3%82%8B/">javascriptのデバッグでobjectの中身を文字列として展開する方法</a> infoScoop開発者ブログ</li>
+      <li><a href="https://www.sejuku.net/blog/31671">function(関数)の使い方、呼び出し・戻り値など総まとめ！</a>【JavaScript入門】</li>
+      <li><a href="https://qiita.com/butchi_y/items/d6024f81a9eda826fea0">Functionによるevalの代替</a>@butchi_y, Qiita</li>
+      <li><a href="https://www.ipentec.com/document/javascript-xmlhttprequest-multi-connect-problem">[JavaScript] XMLHttpRequestで複数のファイルにアクセスしたがレスポンスが1度しかない</a>iPentec</li>
+      <li><a href="https://jmatsuzaki.com/archives/16866">JavaScriptで配列やオブジェクトを比較して等しいかチェックする方法</a> jMatsuzaki</li>
+      <li><a href="http://www.ituore.com/entry/javascript-for">JavaScriptの色々なfor文｜for・for-each・for-in・for-of</a> いつ俺</li>
+      <li><a href="https://pyteyon.hatenablog.com/entry/2018/11/22/184751">JavaScript：同期 / 非同期な読み込みの注意点 - スクリプトの依存関係</a> mathnukoの雑記帳</li>
+      <li><a href="http://home.a00.itscom.net/hatada/js-tips/loadserverfile.html">Serverファイルの読み込み</a></li>
+      <li><a href="http://tacamy.hatenablog.com/entry/2016/10/16/182658">jQuery.ajax()の代替としてFetch APIをざっくり使ってみる</a> tacamy--log</li>
+      <li><a href="https://www.catch.jp/wiki/index.php?javascript_file">Javascriptでファイル読み込みについて調べてみた。</a> catch.jp-wiki</li>
+      <li><a href="https://qiita.com/DNA1980/items/11fdb7233fc288ac3502">Node.jsで、存在するはずのmoduleがrequireでエラーになることについて</a> @DNA1980, Qiita</li>
+      <li><a href="http://www.tohoho-web.com/js/start.htm">まずは始めてみよう</a></li>
+      <li><a href="https://github.com/anko/sexpr-plus">sexpr-plus</a> anko</li>
+      <li><a href="https://webbibouroku.com/Blog/Article/js-obj-has-property">オブジェクトのプロパティ判定</a></li>
+      <li><a href="https://techacademy.jp/magazine/5541">JavaScriptでsetTimeoutを使う方法【初心者向け】</a></li>
+      <li><a href="http://d.hatena.ne.jp/mindcat/20091018/1255889695">JavaScriptのsetIntervaｌ関数の意味を正確に理解するための１つの説明</a></li>
+      <!--
+	  <li><a href=""></a></li>
+	  -->
+    </ul>
+  </body>
+</html>
