@@ -1,6 +1,4 @@
-<title>Hat (programming language)</title>
-
-# The Hat Programming Language
+# Hat (programming language)
 
 Hat is a programming language that supports functional programming, lambda calculus, continuation passing style, and the actor model.
 
