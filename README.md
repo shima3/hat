@@ -1,4 +1,3 @@
 # The Hat Programming Language
 
-[Home](index.html)
-
+- [Home](https://shima3.github.io/hat/)
