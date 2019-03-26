@@ -14,21 +14,19 @@
   <body>
     <h1>js-hat: A Hat Interpreter in JavaScript</h1>
     js-hat is an interpreter for the Hat programming language written in JavaScript.
-    <h2>JavaScript データ</h2>
+    <h2>Design of js-hat</h2>
+    <h3>JavaScript データ</h3>
     <dl>
       <dt>タスク（Task）</dt>
-      <dd>実行中の処理を表すデータです。</dd>
-      <dd>アクター、関数呼び出し、継続スタックの組からなります。</dd>
+      <dd>実行中の処理を示すデータです。</dd>
+      <dd>アクター、関数呼び出し、継続スタックからなります。</dd>
       <dd>そのアクターは、その処理を実行するアクターです。</dd>
-      <dd>その関数呼び出しは、その処理の手順を表します。</dd>
-      <dd>その継続スタックは、その関数呼び出しから復帰したときに実行すべき継続を表します。</dd>
+      <dd>その関数呼び出しは、その処理の手順を示します。</dd>
+      <dd>その継続スタックは、その関数呼び出しから復帰したときに実行すべき継続を示します。</dd>
       <dt>タスクキュー（Task Queue）</dt>
       <dd>タスクが実行順に並んだ待ち行列です。</dd>
       <dt>プログラム（Program）</dt>
-      <dd>関数名と無名関数との対応表です。</dd>
-      <dt>継続付き式（Expression With Continuation, EWC）</dt>
-      <dd>式expと継続contからなる組です。</dd>
-      <dd>exp内で継続が省略されていたとき、contが継続として扱われます。</dd>
+      <dd>ファイル名と関数辞書からなります。</dd>
       <dt>現在のアクター（Current Actor）</dt>
       <dd>現在の処理を実行しているアクターです。</dd>
       <dt>継続スタック（Continuation Stack）</dt>
@@ -36,10 +34,20 @@
       <dd>要素が0個の場合、null です。</dd>
       <dt>現在タスク（Current Task）</dt>
       <dd>現在、インタプリタが実行しているタスクです。</dd>
+      <dt>アクター（Actor）</dt>
+      <dd>メールボックス、関数表、変数表、変更表からなります。</dd>
+      <dt>メールボックス（Mailbox）</dt>
+      <dd>アクターに届いたメッセージのFIFOキューです。</dd>
+      <dt>関数辞書（Function Dictionary）</dt>
+      <dd>関数の名前に対する無名関数の対応を示す連想配列です。</dd>
+      <dt>変数辞書（Variable Dictionary）</dt>
+      <dd>変数の名前に対する値の対応を示す連想配列です。</dd>
+      <dt>変更辞書（Change Dictionary）</dt>
+      <dd>変更する変数の名前と変更後の値の対応を示す連想配列です。</dd>
       <!-- dt></dt>
       <dd></dd -->
     </dl>
-    <h2>JavaScript 関数</h2>
+    <h3>JavaScript 関数</h3>
     <dl>
       <dt>new Program(F)</dt>
       <dd>ファイル F を読み、そのファイルで定義された関数からなるプログラムを生成し、戻り値として返します。</dd>
@@ -62,7 +70,7 @@
 	  <li>現在タスクを T に変更します。</li>
 	  <li>T が持つ関数呼び出しを C とおきます。</li>
 	  <li>C の先頭の式を F とおきます。</li>
-	  <li>F が関数名ならば、その値である無名関数に F の値を置き換えます。</li>
+	  <li>F が関数の名前ならば、その値である無名関数に F の値を置き換えます。</li>
 	  <li>F に従って以下を判定します。<ul>
 	      <li>F が無名</li>
 	  </ul></li>
