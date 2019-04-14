@@ -1,4 +1,4 @@
-<!----- Conversion time: 2.294 seconds.
+<!----- Conversion time: 1.414 seconds.
 
 
 Using this Markdown file:
@@ -11,7 +11,7 @@ Using this Markdown file:
 Conversion notes:
 
 * Docs to Markdown version 1.0β17
-* Sat Apr 13 2019 11:38:21 GMT-0700 (PDT)
+* Sun Apr 14 2019 04:45:57 GMT-0700 (PDT)
 * Source doc: https://docs.google.com/open?id=1xkKfu4NZlP6MVn5jYriGAZygmM4TgBfXN6PLrsldMIU
 ----->
 
@@ -27,43 +27,89 @@ This page describes the design of [js-hat](index.html) that is a Hat interpreter
 This interpreter uses the following data of JavaScript.
 
 
+```
+タスク Task
+```
 
-*   _タスク Task \
-_実行中の処理を表すデータです。 \
+
+
+    実行中の処理を表すデータです。 \
 次のプロパティを持ちます。actor, call, stack \
 Actor、[関数呼び出し](http://localhost/nagisa/hat/index.html#function%20call)、ContStack からなります。 \
 そのアクターは、このタスクを実行しているアクターです。 \
 その関数呼び出しは、このタスクの手順を示します。 \
 その ContStack は、その関数呼び出しから戻ったときに実行すべき継続を示します。
-*   _[アクター Actor](http://localhost/nagisa/hat/index.html#actor)_ \
-メールボックス、プログラム、PropList からなります。
-*   _ContStack (Continuation Stack) \
-_継続を要素として持つ単一方向の連結リストです。 \
+
+
+```
+アクター Actor
+```
+
+
+
+    メールボックス、プログラム、PropList からなります。
+
+
+```
+ContStack (Continuation Stack)
+```
+
+
+
+    継続を要素として持つ単一方向の連結リストです。 \
 要素が0個の場合、null です。
-*   _メールボックス Mailbox \
-_アクターが受け取ったメッセージのFIFOキューです。
-*   _プログラム Program \
-_ファイル名と、そのファイルで定義された FuncList からなる組です。
-*   _FuncList (List of Functions) \
-_関数の名前に対応する無名関数を記憶し、検索できる連想配列です。 \
+
+
+```
+メールボックス Mailbox
+```
+
+
+
+    アクターが受け取ったメッセージのFIFOキューです。
+
+プログラム `Program`
+
+
+    ファイル名と、そのファイルで定義された FuncList からなる組です。
+
+`FuncList` (List of Functions)
+
+
+    関数の名前に対応する無名関数を記憶し、検索できる連想配列です。 \
 ファイルから読み込まれた後はプログラムの実行中に変更できません。
-*   _PropList (List of Properties) \
-_名前に対応する値を記憶し、検索できる連想配列です。 \
+
+`PropList `(List of Properties)
+
+
+    名前に対応する値を記憶し、検索できる連想配列です。 \
 プログラムの実行中に変更できます。
-*   _構文木（Syntax Tree） \
-_S式を構文解析した結果を木構造で表すデータです。 \
+
+構文木（Syntax Tree）
+
+
+    S式を構文解析した結果を木構造で表すデータです。 \
 SList, SAtom, SString の３種のノードで構成されます。 \
 各ノードはプロパティ type, content, start, end を持ちます。
-*   _SList (List of S-expression) \
-_S式のリストを示すノードです。 \
+
+`SList` (List of S-expression)
+
+
+    S式のリストを示すノードです。 \
 type の値は "list" です。 \
 content は構文木の配列です。
-*   _SAtom (Atom of S-expression) \
-_S式のアトムを示すノードです。 \
+
+`SAtom` (Atom of S-expression)
+
+
+    S式のアトムを示すノードです。 \
 type の値は "atom" です。 \
 content はアトムの名前を示す文字列です。
-*   _SString (String of S-expression) \
-_S式の文字列を示すノードです。 \
+
+`SString` (String of S-expression)
+
+
+    S式の文字列を示すノードです。 \
 type の値は "string" です。 \
 content は、前後のダブルクォートを含まず、エスケープシーケンスを変換済みの文字列です。
 
@@ -72,46 +118,82 @@ content は、前後のダブルクォートを含まず、エスケープシー
 
 This interpreter uses the following global variables in JavaScript.
 
-_TaskQ (Task Queue)_
+`TaskQ` (Task Queue)
 
-タスクが実行順に並んだ待ち行列です。
+
+    タスクが実行順に並んだ待ち行列です。
 
 
 ## **Functions of JavaScript**
 
 This interpreter uses the following functions in JavaScript.
 
-_execute(P, A)_
 
-プログラム P に文字列の配列 A を与えて実行します。
+```
+execute(P, A)
+```
 
-具体的には、P を持つアクターを生成し、そのアクターへメッセージ `(main A)` を送信します。
 
-_new Program(F)_
 
-ファイル名 F のファイルを読み、そこで定義された関数からなるプログラムを生成し、戻り値として返します。
+    プログラム P に文字列の配列 A を与えて実行します。 \
+具体的には、P を持つアクターを生成し、そのアクターへメッセージ` (main A)` を送信します。
 
-_new Actor(P)_
 
-プログラム P を持つアクターを生成し、戻り値として返します。
+```
+new Program(F)
+```
 
-_new Task(A, C, S)_
 
-アクター A、関数呼び出し C、ContStack S からなるタスクを生成し、戻り値として返します。
 
-_new ContStack(C, S)_
+    ファイル名 F のファイルを読み、そこで定義された関数からなるプログラムを生成し、戻り値として返します。
 
-継続 C を ContStack S の前に追加した ContStack を生成し、戻り値として返します。
 
-_parse(E)_
+```
+new Actor(P)
+```
 
-S式 E を構文解析し、木構造の配列を戻り値として返します。
 
-[sexpr-plus](https://github.com/anko/sexpr-plus) を使用しています。
 
-_stepTask(T)_
+    プログラム P を持つアクターを生成し、戻り値として返します。
 
-タスク T を一段階実行し、戻り値として以下を返します。
+
+```
+new Task(A, C, S)
+```
+
+
+
+    アクター A、関数呼び出し C、ContStack S からなるタスクを生成し、戻り値として返します。
+
+
+```
+new ContStack(C, S)
+```
+
+
+
+    継続 C を ContStack S の前に追加した ContStack を生成し、戻り値として返します。
+
+
+```
+parse(E)
+```
+
+
+
+    S式 E を構文解析し、木構造の配列を戻り値として返します。
+
+
+    [sexpr-plus](https://github.com/anko/sexpr-plus) を使用しています。
+
+
+```
+stepTask(T)
+```
+
+
+
+    タスク T を一段階実行し、戻り値として以下を返します。
 
 
 
@@ -119,9 +201,7 @@ _stepTask(T)_
 *   T の処理が残っていれば false \
 この場合、残った処理は T に入っています。
 
-具体的には以下の手順を実行します。
-
-
+    具体的には以下の手順を実行します。
 
 1. 現在タスクを T に変更します。
 2. T が持つアクターを A とおきます。
@@ -156,31 +236,52 @@ _stepTask(T)_
         9. T の関数呼び出しを C に置き換えます。
         10. 戻り値として false を返します。
 
-_passArgs(F, R, S)_
-
-無名関数 F の仮引数にリスト R を実引数として渡します。
-
-R が継続の実引数を持つとき、それを ContStack S の先頭に追加した ContStack を継続の実引数として渡します。
-
-R が継続の実引数を持たないとき、ContStack S を継続の実引数として渡します。
-
-_makeArgFunc(R)_
-
-引数として受け取った関数に R を引数として与える無名関数を作り、戻り値として返します。
-
-具体的には、R の前に `^(F) F` を追加した式を返します。
-
-_makeFuncCall(F, R)_
-
-F を関数、R を実引数の列とする関数呼び出しを作り、戻り値として返します。
-
-_stepTaskQueue( )_
-
-TaskQ の先頭のタスクを一段階実行します。
-
-具体的には以下の手順を実行します。
+                ```
+passArgs(F, R, S)
+```
 
 
+
+    無名関数 F の仮引数にリスト R を実引数として渡します。
+
+
+    R が継続の実引数を持つとき、それを ContStack S の先頭に追加した ContStack を継続の実引数として渡します。
+
+
+    R が継続の実引数を持たないとき、ContStack S を継続の実引数として渡します。
+
+
+    ```
+makeArgFunc(R)
+```
+
+
+
+    引数として受け取った関数に R を引数として与える無名関数を作り、戻り値として返します。
+
+
+    具体的には、R の前に` ^(F) F `を追加した式を返します。
+
+
+    ```
+makeFuncCall(F, R)
+```
+
+
+
+    F を関数、R を実引数の列とする関数呼び出しを作り、戻り値として返します。
+
+
+    ```
+stepTaskQueue( )
+```
+
+
+
+    TaskQ の先頭のタスクを一段階実行します。
+
+
+    具体的には以下の手順を実行します。
 
 1. TaskQ の先頭のタスクを取り出し、T とおきます。
 2. T に従って以下を判定します。
@@ -189,67 +290,95 @@ TaskQ の先頭のタスクを一段階実行します。
         *   そうでなければ、T を TaskQ に追加します。
     *   （TaskQ が空で）タスクを取り出せなければ、この関数から戻ります。
 
-_sendMessage(A, M)_
-
-アクター A へメッセージ M を送ります。
-
-具体的には、以下の手順を実行します。
+            ```
+sendMessage(A, M)
+```
 
 
+
+    アクター A へメッセージ M を送ります。
+
+
+    具体的には、以下の手順を実行します。
 
 1. 
 
-具体的には、A のメールボックスに M を追加します。
-
-_readyActor(A)_
-
-アクター A が Mailbox の次のメッセージの処理を始めます。
-
-具体的には、以下の手順を実行します。
+    具体的には、A のメールボックスに M を追加します。
 
 
+    ```
+readyActor(A)
+```
+
+
+
+    アクター A が Mailbox の次のメッセージの処理を始めます。
+
+
+    具体的には、以下の手順を実行します。
 
 1. Mailbox の先頭のメッセージを取り除きます。
 2. もし Mailbox にメッセージが残っていれば、先頭のメッセージの処理を開始します。
 3. 残っていなければ、何もしません。
 
-_getFirst(L)_
+        ```
+getFirst(L)
+```
 
-SList L の先頭の要素を戻り値として返します。
 
-_getRest(L)_
 
-SList L の先頭を除く残りの SList を戻り値として返します。
+    SList L の先頭の要素を戻り値として返します。
+
+
+    ```
+getRest(L)
+```
+
+
+
+    SList L の先頭を除く残りの SList を戻り値として返します。
+
 
 
 ## **Functions of Hat**
 
 This interpreter supports the following functions in Hat.
 
-_getProgram ^(p)_
 
-現在のアクターが持つプログラムを変数 p に渡します。
+```
+getProgram ^(p)
+```
 
-_newActor p ^(a)_
 
-プログラム p を持つアクターを新たに生成し、変数 a に渡します。
+
+    現在のアクターが持つプログラムを変数 p に渡します。
+
+
+```
+newActor p ^(a)
+```
+
+
+
+    プログラム p を持つアクターを新たに生成し、変数 a に渡します。
 
 
 ## **検討事項**
 
 _一つのアクターは複数のメッセージを並行処理するか？_
 
-並行処理する場合、競合状態が起こるという問題がある。
 
-並行処理しない場合、デッドロックが生じるという問題がある。
-
+    並行処理する場合、競合状態が起こるという問題がある。 \
+並行処理しない場合、デッドロックが生じるという問題がある。 \
 例えば、一つのメッセージの処理中に、そのアクター自身または他のアクターへメッセージを送信し、返信を待つと生じる。
 
 _変数に値をどのように代入するか？_
 
-全ての変数を値に置き換えた式を生成する。
 
-必要な変数のみ値に置き換えた式を生成する。
+    全ての変数を値に置き換えた式を生成する。
+
+
+    必要な変数のみ値に置き換えた式を生成する。
 
 
 ## **References**
