@@ -1,49 +1,5 @@
-// const HatInterpreter=(function( ){
-var HatInterpreter=(function( ){
+const HatInterpreter=(function( ){
     /** デバッグ用 **/
-
-    let ua = window.navigator.userAgent.toLowerCase();
-    if(ua.indexOf("iphone")<0 && ua.indexOf("ipad")<0){
-	Object.defineProperty(window, '__STACK__', {
-	    get: function(){
-		let origin = Error.prepareStackTrace;
-		Error.prepareStackTrace = function(_, stack){ return stack; };
-		let err = new Error;
-		if(Error.captureStackTrace)
-		    Error.captureStackTrace(err, arguments.callee);
-		let stack = err.stack;
-		Error.prepareStackTrace = origin;
-		return stack;
-	    }
-	});
-	
-	Object.defineProperty(window, '__FILE__', {
-	    get: function(){
-		let filename = __STACK__[1].getFileName();
-		filename=filename.replace(location.origin, "").
-		    replace(window.location.search, "");
-		if(!filename) filename = "/";
-		return filename;
-	    }
-	});
-	
-	Object.defineProperty(window, '__LINE__', {
-	    get: function(){
-		return __STACK__[1].getLineNumber();
-	    }
-	});
-    }else{
-	Object.defineProperty(window, '__FILE__', {
-	    get: function(){
-		return "unknown";
-	    }
-	});
-	Object.defineProperty(window, '__LINE__', {
-	    get: function(){
-		return 0;
-	    }
-	});
-    }
 
     const I = e=>e;
     let log=I;
@@ -56,6 +12,35 @@ var HatInterpreter=(function( ){
     function logJSON(tag, obj){
 	logString(tag, JSON.stringfy(obj));
     }
+
+    Object.defineProperty(window, '__STACK__', {
+	get: function(){
+            let origin = Error.prepareStackTrace;
+            Error.prepareStackTrace = function(_, stack){ return stack; };
+            let err = new Error;
+	    if(Error.captureStackTrace)
+		Error.captureStackTrace(err, arguments.callee);
+            let stack = err.stack;
+            Error.prepareStackTrace = origin;
+            return stack;
+	}
+    });
+    
+    Object.defineProperty(window, '__FILE__', {
+	get: function(){
+	    let filename = __STACK__[1].getFileName().
+		replace(location.origin, "").
+		replace(window.location.search, "");
+	    if(!filename) filename = "/";
+	    return filename;
+	}
+    });
+
+    Object.defineProperty(window, '__LINE__', {
+	get: function(){
+            return __STACK__[1].getLineNumber();
+	}
+    });
 
     /** データ構造とコンストラクタ **/
     
@@ -131,6 +116,7 @@ var HatInterpreter=(function( ){
     function Str(string, source){
 	HatExp.call(this, source);
 	this.string=string;
+	// console.log(this);
     }
     
     /* ハット関数 */
@@ -145,6 +131,7 @@ var HatInterpreter=(function( ){
     function JSFun(code, source){
 	HatExp.call(this, source);
 	this.string=code.string;
+	// console.log("code.string="+code.string);
 	this.fun=eval(code.string);
     }
 
@@ -201,20 +188,12 @@ var HatInterpreter=(function( ){
     /** トップレベル **/
 
     let running=true, performing=0;
-    // let running=true;
     function performTasks( ){
 	if(performing>0) return;
-	if(!running){
-	    // setTimeout(performTasks, 1000);
-	    return;
-	}
+	console.log("performTasks "+performing);
 	++performing;
-	/*
 	var start=new Date().getTime();
-	*/
-	var start=new Date();
-	// while(running){
-	do{
+	while(running){
 	    var task=TaskQ.shift( );
 	    if(!task) break;
 	    /*
@@ -224,13 +203,11 @@ var HatInterpreter=(function( ){
 	    */
 	    stepTask(task);
 	    if(task.fun) TaskQ.push(task);
-	    /*
 	    if(new Date().getTime()-start>100){
 		setTimeout(performTasks, 0);
 		return;
 	    }
-	    */
-	}while(new Date()-start<1000);
+	}
 	--performing;
 	setTimeout(performTasks, 0);
     }
@@ -249,7 +226,7 @@ var HatInterpreter=(function( ){
 	}
 	setTimeout(performTasks, 1000);
     }
-    // setTimeout(performTasks, 0);
+    setTimeout(performTasks, 0);
     
     /** プロトタイプ **/
     
@@ -275,7 +252,7 @@ var HatInterpreter=(function( ){
 	    console.log(cont.toString( ));
 	    console.trace( );
 	    */
-	    if(this.stack && cont===this.stack.first)
+	    if(cont===this.stack.first)
 		console.warn("Task.pushCont cont="+cont);
 	    this.stack=new ContStack(cont, this.stack);
 	    // log("Task.pushCont this.stack="+this.stack);
@@ -380,8 +357,7 @@ var HatInterpreter=(function( ){
 	__proto__: HatExp.prototype,
 	step(task){
 	    // console.log("Var.step name="+this.name);
-	    // let fun=task.actor.script.getDictionary( )[this.name];
-	    let fun=this.getValue(task);
+	    let fun=task.actor.script.getDictionary( )[this.name];
 	    // console.log("Var.step fun="+fun);
 	    if(fun){
 		task.fun=fun;
@@ -392,9 +368,6 @@ var HatInterpreter=(function( ){
 			      " is undefined.");
 	    }
 	    task.fun=null;
-	},
-	getValue(task){
-	    return task.actor.script.getDictionary( )[this.name];
 	},
 	subst(assignment){
 	    if(assignment==null) return this;
@@ -438,7 +411,7 @@ var HatInterpreter=(function( ){
     Str.prototype={
 	__proto__: HatExp.prototype,
 	step(task){
-	    // console.log("Str.step");
+	    console.log("Str.step");
 	    // log("Str.step this.string="+this.string);
 	    // before
 	    /*
@@ -471,7 +444,7 @@ var HatInterpreter=(function( ){
 		    args[0]=this;
 		    return;
 		}
-		// console.log("HatNumber.step "+this.source);
+		console.log("HatNumber.step "+this.source);
 		args.unshift(this);
 	    }else task.args=[this];
 	    if(task.contarg){
@@ -721,7 +694,7 @@ var HatInterpreter=(function( ){
 	    log("List.step task.contarg="+task.contarg);
 	    */
 	    if(this.array.length==0){ // 空リストならば
-		console.warn("List.step empty "+this.source);
+		console.warn("List.step empty");
 		// 引数を無視して戻る
 		/*
 		task.fun=task.popCont();
@@ -866,10 +839,6 @@ var HatInterpreter=(function( ){
 	    task.stack=this.rest;
 	},
 	subst(assignment){
-	    return this;
-	    /* 2019/12/14 Sat debug
-	       症状：ある関数内で別の関数名と同じ局所変数を使うと戻った後でも、
-	       その局所変数が参照される。
 	    if(assignment==null) return this;
 	    var undefined;
 	    if(assignment===undefined) return this;
@@ -877,7 +846,6 @@ var HatInterpreter=(function( ){
 	    if(first) first=first.subst(assignment);
 	    if(rest) rest=rest.subst(assignment);
 	    return new ContStack(first, rest);
-	    */
 	},
 	toString( ){
 	    var s='(ContStack ';
@@ -1229,7 +1197,7 @@ var HatInterpreter=(function( ){
     }
     
     /** モジュール内変数 **/
-    let tmpVar=new HatVar("__TMP__", new Source(__FILE__, __LINE__));
+    let tmpVar=new HatVar("__TMP__", "hat.js");
     let TaskQ=[ ]; // タスクが実行順に並ぶ待ち行列
     let currentTask=null; // 現在インタプリタが実行しているタスク
     let scriptTable={ }; // path から ScriptRecord への連想配列
@@ -1237,19 +1205,18 @@ var HatInterpreter=(function( ){
     let mainVar=new HatVar('main', new Source(__FILE__, __LINE__));
     let loading=0; // 読込中のスクリプト数
     let pending=[ ]; // スクリプト読込待ちのタスク集合
-    let emptySeq=new HatVar("seq_empty", new Source(__FILE__, __LINE__));
+    let emptySeq=new HatVar("seq_empty", "hat.js");
     let currentSource;
     let animationID;
     let lastTime;
-    let zero=new HatNumber(0, new Source(__FILE__, __LINE__));
     /*
       Hat言語のスクリプトpathで定義された関数mainに引数argsを与えて実行する。
       path: スクリプトのパス
       command: コマンド
     */
     return{
-	True: new HatVar("#t", new Source(__FILE__, __LINE__)),
-	False: new HatVar("#f", new Source(__FILE__, __LINE__)),
+	True: new HatVar("#t", "hat.js"),
+	False: new HatVar("#f", "hat.js"),
 	emptySeq: emptySeq,
 	makePair: makePair,
 	/* ソースファイルpathを読み込み、関数funcを実行する。*/
@@ -1265,7 +1232,7 @@ var HatInterpreter=(function( ){
 	    var list=new List(args, 0, null, null, source);
 	    */
 	    new Actor(getScript(path)).start(func_var, [ ]);
-	    setTimeout(performTasks, 0);
+	    // setTimeout(performTasks, 0);
 	},
 	/* ソースコードcodeを読み込み、コマンドcommandを実行する。
 	   ソースファイル名pathはエラーメッセージなどで使われる。*/
@@ -1274,10 +1241,11 @@ var HatInterpreter=(function( ){
 	    if(animationID) window.cancelAnimationFrame(animationID);
 	    resetCanvas();
 	    TaskQ=[ ];
-	    /*
+	    // console.log("startCode");
 	    var caller=__STACK__[1];
 	    var source=new Source(caller.getFileName( ),
 				  caller.getLineNumber( ));
+	    /*
 	    let fun=SExp2HatExp(a[0], "Command");
 	    for(let i=1, n=a.length; i<n; ++i)
 		args.push(new Str(a[i], source));
@@ -1290,42 +1258,26 @@ var HatInterpreter=(function( ){
 	    scriptTable[path]=script;
 	    script.parse(code);
 	    new Actor(script).start(parse(command, 1), "Command");
-	    setTimeout(performTasks, 0);
 	    // new Actor(script).start(func_var, [ ]);
 	    // new Actor(script).start(fun, argSeq);
 	    // setTimeout(performTasks, 0);
 	},
 	stop: function(){ running=false; },
-	restart: function(){ running=true; setTimeout(performTasks, 0); },
+	restart: function(){ running=true; },
 	makeSequence: makeSequence,
 	log_on: function(){ log = console.log.bind(console, "%s"); },
 	log_off: function(){ log = I; },
 	waitDisplay: function(ret){
 	    // console.log("waitDisplay ret.type="+ret.type);
 	    animationID=window.requestAnimationFrame(function(time){
-		if(lastTime){
-		    dt=new HatNumber((time-lastTime)/1000, ret.source);
-		}else{
-		    // console.log('lastTime='+lastTime);
-		    dt=zero;
-		}
+		let dt=lastTime? time-lastTime: 0;
 		// console.log("waitDisplay dt="+dt);
-		if(running) lastTime=time;
-		else{
-		    let undefined;
-		    lastTime=undefined;
-		}
+		lastTime=time;
+		dt=new HatNumber(dt/1000, ret.source);
 		let task=new Task(currentTask.actor, ret, [dt], null, null);
 		TaskQ.push(task);
-		// setTimeout(performTasks, 0);
 		copyCanvas();
 	    });
-	},
-	valueString: function(exp){
-	    if(!exp) return "undefined";
-	    if(exp.string) return exp.string;
-	    if(exp.type=="HatVar") return exp.getValue(currentTask)+"";
-	    return exp.toString();
 	},
     };
 })();

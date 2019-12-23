@@ -158,14 +158,14 @@ var HatInterpreter=(function( ){
        assignment: 変数への値の割当
        source: ソースファイル中の位置
     */
-    function List(array, start, tail, assignment, source){
+    function HatList(array, start, tail, assignment, source){
 	assignment=Object.assign({ }, assignment);
 	while(array && start>=array.length){
 	    if(tail==null){
 		array=emptyArray;
 		break;
 	    }
-	    if(tail.type!="List") return tail.subst(assignment);
+	    if(tail.type!="HatList") return tail.subst(assignment);
 	    start=start-array.length+tail.start;
 	    array=tail.array;
 	    Object.assign(assignment, tail.assignment);
@@ -703,8 +703,8 @@ var HatInterpreter=(function( ){
     function makeArgFun(args, tail){
 	if(args==null || args.length==0) return tail;
 	var source=args[0].source;
-	var list=new List(args, 0, tail, null, source);
-	var fc=new List([tmpVar], 0, list, null, source);
+	var list=new HatList(args, 0, tail, null, source);
+	var fc=new HatList([tmpVar], 0, list, null, source);
 	return new HatFun([tmpVar], null, fc, source);
     }
 
@@ -712,7 +712,7 @@ var HatInterpreter=(function( ){
 	return Number.isFinite(value);
     }
 
-    List.prototype={
+    HatList.prototype={
 	__proto__: HatExp.prototype,
 	step(task){
 	    /*
@@ -721,7 +721,7 @@ var HatInterpreter=(function( ){
 	    log("List.step task.contarg="+task.contarg);
 	    */
 	    if(this.array.length==0){ // 空リストならば
-		console.warn("List.step empty "+this.source);
+		console.warn("HatList.step empty "+this.source);
 		// 引数を無視して戻る
 		/*
 		task.fun=task.popCont();
@@ -733,11 +733,11 @@ var HatInterpreter=(function( ){
 	    }
 	    task.pushCont(makeArgFun(task.args, task.contarg));
 	    let fun=this.getFirst( );
-	    if(!fun) console.error("List.step fun="+fun);
+	    if(!fun) console.error("HatList.step fun="+fun);
 	    // console.log("List.step assignment="+JSON.stringify(this.assignment));
 	    var list=this.getRest( ), args=[ ];
 	    // while(list!=null && list.type=='List'){
-	    while(list && list instanceof List && list.array){
+	    while(list && list instanceof HatList && list.array){
 		// if(!list.array) break;
 		let first=list.getFirst( );
 		if(first && first.subst) first=first.subst(this.assignment);
@@ -748,7 +748,7 @@ var HatInterpreter=(function( ){
 	    // log("List.step list="+list);
 	    task.contarg=list;
 	    task.fun=fun;
-	    if(!fun.step) console.warn("List.step !fun.step");
+	    if(!fun.step) console.warn("HatList.step !fun.step");
 	    /*
 	    if(fun.step){ // HatExpならば
 		task.fun=fun; // そのまま次に進む
@@ -790,8 +790,10 @@ var HatInterpreter=(function( ){
 	},
 	getRest( ){
 	    var a=this.array, s=this.start+1;
-	    if(s<a.length)
-		return new List(a, s, this.tail, this.assignment, this.source);
+	    if(s<a.length){
+		return new HatList(a, s, this.tail,
+				   this.assignment, this.source);
+	    }
 	    var t=this.tail;
 	    return t!=null? t.subst(this.assignment): null;
 	},
@@ -805,7 +807,8 @@ var HatInterpreter=(function( ){
 	    // console.log(a);
 	    if(this.assignment!=null) a=Object.assign(a, this.assignment);
 	    // console.log("List.subst this.array="+this.array);
-	    return new List(this.array, this.start, this.tail, a, this.source);
+	    return new HatList(this.array, this.start,
+			       this.tail, a, this.source);
 	},
 	toString( ){
 	    // console.log(this);
@@ -827,7 +830,7 @@ var HatInterpreter=(function( ){
 			if(first.isAtom()) str+=' '+first;
 			else str+='('+first+')';
 		    }else{
-			console.warn("List.toString first="+first);
+			console.warn("HatList.toString first="+first);
 			str+='('+first+')';
 		    }
 		}else str+='()';
@@ -840,16 +843,16 @@ var HatInterpreter=(function( ){
 	isAtom( ){
 	    return false;
 	},
-	type: "List"
+	type: "HatList"
     };
 
     function testList(){
 	var source=new Source(__FILE__, __LINE__);
 	var assignment={ };
 	assignment["c"]=new Str("d", source);
-	var list=new List([new Str("a", source), new Str("b", source), new HatVar("c", source)], 1, null, assignment, source);
+	var list=new HatList([new Str("a", source), new Str("b", source), new HatVar("c", source)], 1, null, assignment, source);
 	console.log("testList: list="+list);
-	var list2=new List([new Str("e", source), new Str("f", source), new HatVar("g", source)], 1, list, assignment, source);
+	var list2=new HatList([new Str("e", source), new Str("f", source), new HatVar("g", source)], 1, list, assignment, source);
 	console.log("testList: list2="+list2);
     }
     
@@ -1052,7 +1055,7 @@ var HatInterpreter=(function( ){
 	case 'list':
 	    if(sexp.content.length>0)
 		return Array2HatExp(sexp.content, 0, path);
-	    return new List(null, 0, null, null, source);
+	    return new HatList(null, 0, null, null, source);
 	case 'atom':
 	    if(isSExpAtom(sexp, 'JavaScript'))
 		return new JSVar(source);
@@ -1112,7 +1115,7 @@ var HatInterpreter=(function( ){
 	    array2.push(SExp2HatExp(array[i], path));
 	}
 	var source=new Source(path, array[start].location.start.line);
-	return new List(array2, 0, tail, null, source);
+	return new HatList(array2, 0, tail, null, source);
     }
     
     function readHatCode(code, script, path){
@@ -1216,14 +1219,14 @@ var HatInterpreter=(function( ){
     }
 
     function makePair(first, tail){
-	return new List([first], 0, tail, null, this.source);
+	return new HatList([first], 0, tail, null, this.source);
     }
 
     function makeSequence(array, start){
 	// log("makeSequence:"+array);
 	return new HatFun([tmpVar], null,
-			  new List([tmpVar], 0,
-				   new List(array, start, emptySeq, null,
+			  new HatList([tmpVar], 0,
+				   new HatList(array, start, emptySeq, null,
 					    currentSource),
 				   null, currentSource), currentSource);
     }

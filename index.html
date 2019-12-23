@@ -3,23 +3,50 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Hat (programming language)</title>
+    <link rel="stylesheet" href="github-markdown.css">
+    <script type="text/javascript"
+	    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+	  TeX: { equationNumbers: { autoNumber: "AMS" }},
+	  tex2jax: {
+	      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+	      skipTags: ["script","noscript","style","textarea","kbd"],
+	      processEscapes: true
+	  },
+	  "HTML-CSS": { matchFontHeight: false },
+	  displayAlign: "left",
+	  displayIndent: "2em"
+      });
+    </script>
     <style type="text/css">
-      <!--
       code, pre {
+	  font-style: normal;
+	  font-weight: normal;
 	  font-family: "Courier New", Consolas, monospace;
+	  color: black;
       }
-      -->
     </style>
   </head>
-  <body>
+  <body class="markdown-body">
     <h1>The Hat Programming Language</h1>
     Hat is a programming language that supports functional programming, lambda calculus, continuation passing style, and the actor model.
+    An interpreter <a href="js/">js-hat</a> for the Hat is written in JavaScript.
     <h2>Terms</h2>
     <dl>
       <dt>Functional programming</dt><dd>A programming paradigm that treats computation as the evaluation of mathematical functions.</dd>
       <dt>Lambda calculus</dt><dd>A formal system in mathematical logic for expressing computation based on function abstraction and application using variable binding and substitution.</dd>
       <dt>Continuation Passing Style (CPS)</dt><dd>A style of programming in which control is passed explicitly in the form of a continuation.</dd>
       <dt>Actor model</dt><dd>A mathematical model of concurrent computation that treats "actors" as the universal primitives of concurrent computation.</dd>
+      <dt><a name="actor">アクター (Actor)</a></dt>
+      <dd>An Actor is a computational entity that, in response to a message it receives, can concurrently:
+	<ul>
+	  <li>send a finite number of message to other Actors;</li>
+	  <li>create a finite number of new Actors;</li>
+	  <li>designate the behavior to be used for the next message it receives [Hewitt 2010].</li>
+	</ul>
+      </dd>
     </dl>
     <!--
 	<dt>Variable</dt><dd>A storage location paired with an associated symbolic name, which contains quantity of information referred to as a value.</dd>
@@ -29,57 +56,82 @@
     -->
     <h2>Informal Description</h2>
     この言語では次の形式で関数を定義します。
-    <pre>(define 関数名 無名関数)</pre>
+    <pre>(defineCPS $F$ $E$)</pre>
+    $F$は関数名、$E$は関数の処理を示す無名関数です。
 
     <dl>
-      <dt>関数</dt>
+      <dt>関数 (Function)</dt>
       <dd>0個以上の通常の引数と一つの継続の引数をとり、その継続に戻り値を渡す式です。</dd>
-      <dt>関数名</dt>
+      <dt>関数名 (Function name)</dt>
       <dd>一つ以上の英数字（大文字、小文字、数字）からなる文字列です。</dd>
-      <dt>無名関数</dt>
-      <dd>ハット、ヘッダ、ボディからなる式です。</dd>
-      <dd>名前を付けずに関数の処理を定義します。</dd>
-      <dd><dl>
-	  <dt>ハット（Hat）</dt>
-	  <dd>一つの記号 <code>^</code> です。</dd>
-	  <dd>無名関数の先頭を示します。</dd>
-	  <dt>ヘッダ（Header）</dt>
-	  <dd>0個以上の変数名が空白で区切られ、丸括弧で囲まれた列です。</dd>
-	  <dd>無名関数の仮引数を示します。</dd>
-	  <dt>ボディ（Body）</dt>
-	  <dd>一つの関数呼び出しです。</dd>
-	  <dd>無名関数が呼び出されたときに実行する処理を示します。</dd>
+      <dt><a name="anonymous function">無名関数 (Anonymous Function)</a></dt>
+      <dd>名前をつけずに定義された関数です。<br/>
+	HAT, HEADER, BODYからなります。<dl>
+	  <dt>HAT</dt>
+	  <dd>無名関数の先頭を示す一つの記号<code>^</code>です。</dd>
+	  <dt>HEADER</dt>
+	  <dd>無名関数の仮引数を示す一つのリスト、または変数名です。<ul>
+	      <li>リストの場合、0個以上の変数名が空白で区切られ、丸括弧で囲まれています。<br/>
+		最後の変数名の前にピリオド<code>.</code>がある場合とない場合があります。<ul>
+		  <li>ピリオドがある場合、リスト中で最後の変数名は継続の仮引数、それ以外の変数名は通常の仮引数を示します。</li>
+		  <li>ピリオドがない場合、リスト中の変数名は通常の仮引数を示します。</li>
+	      </ul></li>
+	      <li>変数名の場合、継続の仮引数を示します。</li>
+	  </ul></dd>
+	  <dt>BODY</dt>
+	  <dd>無名関数が呼び出されたときに実行する処理を示す一つの関数呼び出しです。</dd>
       </dl></dd>
-      <dt>関数呼び出し</dt>
-      <dd>一つ以上の式からなる列です。</dd>
-      <dd>先頭の式の値を関数とし、2つ目以降の式を実引数として関数の処理を実行することを示します。</dd>
-      <dt>式の値</dt>
-      <dd>式が丸括弧で囲まれた無名関数ならば、その値はその無名関数そのものです。</dd>
-      <dd>式が関数の名ならば、その値はdefineで定義された無名関数です。</dd>    
-      <dd>式が丸括弧で囲まれた関数呼び出しならば、その値はその関数呼び出しの戻り値です。</dd>
+      <dt>リスト (List)</dt>
+      <dd>0個以上の式からなる列を丸括弧で囲んだ式です。</dd>
+      <dt>変数名 (Variable name)</dt>
+      <dd>一つ以上の英数字（大文字、小文字、数字）からなる文字列です。</dd>
+      <dt><a name="function call">関数呼び出し (Function call)</a></dt>
+      <dd>関数の実行を示す一つ以上の式からなる列です。<br/>
+	先頭の式の値を関数とし、2つ目以降の式を実引数として仮引数に渡してから関数の処理を実行します。</dd>
+      <dt>式 (Expression)</dt>
+      <dd>一つの値を示す一つの変数名、関数名、または、リストです。<ul>
+	  <li>式が変数名ならば、その値は関数呼び出しで渡された実引数です。</li>
+	  <li>式が関数名ならば、その値はdefineCPSで定義された無名関数です。</li>
+	  <li>式が丸括弧で囲まれた無名関数ならば、その値はその無名関数そのものです。</li>
+	  <li>式が丸括弧で囲まれた関数呼び出しならば、その値はその関数呼び出しの戻り値です。</li>
+      </ul></dd>
       <dt></dt>
       <dd></dd>
     </dl>
     
     <h2>Actor model</h2>
-    各アクターは固有のアクター変数を持ち、その値を変更できます。
+    各アクターは固有のプロパティを持ち、自身が持つプロパティの値を変更できます。
+    
+    <!-- 配列の扱いが難しいため保留
     アクター変数の値を変更するには、変更後変数に値を渡した後、関数<code>actorNext</code>を呼び出します。
     変更後変数は、変数名の前に逆シングルクォート ` をつけて表します。
     例えば、アクター変数<code>x</code>の変更後変数は<code>`x</code>です。
     ただし、変更後変数に値を渡しただけではアクター変数の値は変化せず、関数<code>actorNext</code>を呼び出した時点で変化します。
     これは、複数のアクター変数の間に不変条件があるとき、それを常に満たすことができるようにするためです。
     例えば、<code>add x 1 ^(`x) sub y 1 ^(`y) actorNext</code>とすることによって、アクター変数<code>x, y</code>の和が一定という不変条件を満たすことができます。
+    -->
     <script src="sexpr-plus.js"></script>
     <!-- script src="hello.sch" type="text/hat">Hello</script -->
     <!-- script src="hat.js"></script -->
     <script type="text/javascript">
       var list=require("sexpr-plus").parse("`a (b c) 'd");
       log("list=", list);
-    </script -->
+    </script>
+    <h2>検討事項</h2>
+    <dl>
+      <dt>配列</dt>
+      <dd>アクターの一種として表現する。</dd>
+      <dd>get 添字</dd>
+      <dd>set 添字 値</dd>
+    </dl>
     <h2>References</h2>
+    <dl>
+      <dt>[Hewitt 2010]</dt><dd>Carl Hewitt, "ActorScript: discretionary concurrency for privacy-friendly, client-cloud computing", <a href="https://arxiv.org/abs/0907.3330v36">arXiv:0907.3330v36</a>, July 26, 2010.</dd>
+    </dl>
     <ul>
     <li><a href="https://www.kanzaki.com/docs/html/htminfo13.html">リスト：簡潔な情報表現</a> The Web KANZAKI</li>
     <li><a href="https://developer.mozilla.org/ja/docs/Web/HTML/Element/Script">スクリプト要素</a> MDN web docs</li>
+    <li><a href="https://github.com/sindresorhus/github-markdown-css"></a>github-markdown-css</li>
     <!--
     <li><a href=""></a></li>
     -->

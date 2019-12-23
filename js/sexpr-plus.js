@@ -26,112 +26,112 @@ var f=(function() {
       Error.captureStackTrace(this, peg$SyntaxError);
     }
   }
+    
+    peg$subclass(peg$SyntaxError, Error);
 
-  peg$subclass(peg$SyntaxError, Error);
-
-  function peg$parse(input) {
-    var options = arguments.length > 1 ? arguments[1] : {},
-        parser  = this,
-
-        peg$FAILED = {},
-
-        peg$startRuleFunctions = { start: peg$parsestart },
-        peg$startRuleFunction  = peg$parsestart,
-
-        peg$c0 = function(f) { return f },
-        peg$c1 = { type: "other", description: "initial shebang ('#!') line" },
-        peg$c2 = "#!",
-        peg$c3 = { type: "literal", value: "#!", description: "\"#!\"" },
-        peg$c4 = /^[^\n]/,
-        peg$c5 = { type: "class", value: "[^\\n]", description: "[^\\n]" },
-        peg$c6 = "\n",
-        peg$c7 = { type: "literal", value: "\n", description: "\"\\n\"" },
-        peg$c8 = { type: "any", description: "any character" },
-        peg$c9 = { type: "other", description: "whitespace" },
-        peg$c10 = " ",
-        peg$c11 = { type: "literal", value: " ", description: "\" \"" },
-        peg$c12 = "\t",
-        peg$c13 = { type: "literal", value: "\t", description: "\"\\t\"" },
-        peg$c14 = "\r",
-        peg$c15 = { type: "literal", value: "\r", description: "\"\\r\"" },
-        peg$c16 = { type: "other", description: "comment" },
-        peg$c17 = ";",
-        peg$c18 = { type: "literal", value: ";", description: "\";\"" },
-        peg$c19 = function(it) { return it; },
-        peg$c20 = function(q, f) { return outputList([ q, f ], location()) },
-        peg$c21 = "(",
-        peg$c22 = { type: "literal", value: "(", description: "\"(\"" },
-        peg$c23 = ")",
-        peg$c24 = { type: "literal", value: ")", description: "\")\"" },
-        peg$c25 = function(c) { return outputList(c, location()); },
-        peg$c26 = { type: "other", description: "list contents" },
-        peg$c27 = function(first, rest) { return buildList(first, rest, 1) },
-        peg$c28 = "'",
-        peg$c29 = { type: "literal", value: "'", description: "\"'\"" },
-        peg$c30 = function() { return outputAtom("quote", location()) },
-        peg$c31 = "`",
-        peg$c32 = { type: "literal", value: "`", description: "\"`\"" },
-        peg$c33 = function() { return outputAtom("quasiquote", location()) },
-        peg$c34 = ",@",
-        peg$c35 = { type: "literal", value: ",@", description: "\",@\"" },
-        peg$c36 = function() { return outputAtom("unquote-splicing", location()) },
-        peg$c37 = ",",
-        peg$c38 = { type: "literal", value: ",", description: "\",\"" },
-        peg$c39 = function() { return outputAtom("unquote", location()) },
-        peg$c40 = function(c) {
-            return outputString(c.join(""), location())
-          },
-        peg$c41 = "\"",
-        peg$c42 = { type: "literal", value: "\"", description: "\"\\\"\"" },
-        peg$c43 = "\\",
-        peg$c44 = { type: "literal", value: "\\", description: "\"\\\\\"" },
-        peg$c45 = function(c) { return c; },
-        peg$c46 = /^["\\]/,
-        peg$c47 = { type: "class", value: "[\"\\\\]", description: "[\"\\\\]" },
-        peg$c48 = /^[^"\\]/,
-        peg$c49 = { type: "class", value: "[^\"\\\\]", description: "[^\"\\\\]" },
-        peg$c50 = /^[bfnrtv0]/,
-        peg$c51 = { type: "class", value: "[bfnrtv0]", description: "[bfnrtv0]" },
-        peg$c52 = function(c) {
-          switch(c) {
-            case "b": return "\b";
-            case "f": return "\f";
-            case "n": return "\n";
-            case "r": return "\r";
-            case "t": return "\t";
-            case "v": return "\v";
-            case "0": return "\0";
-          }
-        },
-        peg$c53 = function(c) {
-          return c;
-        },
-        peg$c54 = function(c) {
-          return outputAtom(c.join(""), location());
-        },
-        peg$c55 = function(s, c) { return c; },
-        peg$c56 = /^[;"'`,\\()\n\t\r ]/,
-        peg$c57 = { type: "class", value: "[;\"'`,\\\\()\\n\\t\\r ]", description: "[;\"'`,\\\\()\\n\\t\\r ]" },
-        peg$c58 = /^[^;"'`,\\()\n\t\r ]/,
-        peg$c59 = { type: "class", value: "[^;\"'`,\\\\()\\n\\t\\r ]", description: "[^;\"'`,\\\\()\\n\\t\\r ]" },
-
-        peg$currPos          = 0,
-        peg$savedPos         = 0,
-        peg$posDetailsCache  = [{ line: 1, column: 1, seenCR: false }],
-        peg$maxFailPos       = 0,
-        peg$maxFailExpected  = [],
-        peg$silentFails      = 0,
-
-        peg$result;
-
-    if ("startRule" in options) {
-      if (!(options.startRule in peg$startRuleFunctions)) {
-        throw new Error("Can't start parsing from rule \"" + options.startRule + "\".");
-      }
-
-      peg$startRuleFunction = peg$startRuleFunctions[options.startRule];
-    }
-
+    function peg$parse(input, startLine){
+	var options = arguments.length > 2 ? arguments[2] : {},
+            parser  = this,
+	    
+            peg$FAILED = {},
+	    
+            peg$startRuleFunctions = { start: peg$parsestart },
+            peg$startRuleFunction  = peg$parsestart,
+	    
+            peg$c0 = function(f) { return f },
+            peg$c1 = { type: "other", description: "initial shebang ('#!') line" },
+            peg$c2 = "#!",
+            peg$c3 = { type: "literal", value: "#!", description: "\"#!\"" },
+            peg$c4 = /^[^\n]/,
+            peg$c5 = { type: "class", value: "[^\\n]", description: "[^\\n]" },
+            peg$c6 = "\n",
+            peg$c7 = { type: "literal", value: "\n", description: "\"\\n\"" },
+            peg$c8 = { type: "any", description: "any character" },
+            peg$c9 = { type: "other", description: "whitespace" },
+            peg$c10 = " ",
+            peg$c11 = { type: "literal", value: " ", description: "\" \"" },
+            peg$c12 = "\t",
+            peg$c13 = { type: "literal", value: "\t", description: "\"\\t\"" },
+            peg$c14 = "\r",
+            peg$c15 = { type: "literal", value: "\r", description: "\"\\r\"" },
+            peg$c16 = { type: "other", description: "comment" },
+            peg$c17 = ";",
+            peg$c18 = { type: "literal", value: ";", description: "\";\"" },
+            peg$c19 = function(it) { return it; },
+            peg$c20 = function(q, f) { return outputList([ q, f ], location()) },
+            peg$c21 = "(",
+            peg$c22 = { type: "literal", value: "(", description: "\"(\"" },
+            peg$c23 = ")",
+            peg$c24 = { type: "literal", value: ")", description: "\")\"" },
+            peg$c25 = function(c) { return outputList(c, location()); },
+            peg$c26 = { type: "other", description: "list contents" },
+            peg$c27 = function(first, rest) { return buildList(first, rest, 1) },
+            peg$c28 = "'",
+            peg$c29 = { type: "literal", value: "'", description: "\"'\"" },
+            peg$c30 = function() { return outputAtom("quote", location()) },
+            peg$c31 = "`",
+            peg$c32 = { type: "literal", value: "`", description: "\"`\"" },
+            peg$c33 = function() { return outputAtom("quasiquote", location()) },
+            peg$c34 = ",@",
+            peg$c35 = { type: "literal", value: ",@", description: "\",@\"" },
+            peg$c36 = function() { return outputAtom("unquote-splicing", location()) },
+            peg$c37 = ",",
+            peg$c38 = { type: "literal", value: ",", description: "\",\"" },
+            peg$c39 = function() { return outputAtom("unquote", location()) },
+            peg$c40 = function(c) {
+		return outputString(c.join(""), location())
+            },
+            peg$c41 = "\"",
+            peg$c42 = { type: "literal", value: "\"", description: "\"\\\"\"" },
+            peg$c43 = "\\",
+            peg$c44 = { type: "literal", value: "\\", description: "\"\\\\\"" },
+            peg$c45 = function(c) { return c; },
+            peg$c46 = /^["\\]/,
+            peg$c47 = { type: "class", value: "[\"\\\\]", description: "[\"\\\\]" },
+            peg$c48 = /^[^"\\]/,
+            peg$c49 = { type: "class", value: "[^\"\\\\]", description: "[^\"\\\\]" },
+            peg$c50 = /^[bfnrtv0]/,
+            peg$c51 = { type: "class", value: "[bfnrtv0]", description: "[bfnrtv0]" },
+            peg$c52 = function(c) {
+		switch(c) {
+		case "b": return "\b";
+		case "f": return "\f";
+		case "n": return "\n";
+		case "r": return "\r";
+		case "t": return "\t";
+		case "v": return "\v";
+		case "0": return "\0";
+		}
+            },
+            peg$c53 = function(c) {
+		return c;
+            },
+            peg$c54 = function(c) {
+		return outputAtom(c.join(""), location());
+            },
+            peg$c55 = function(s, c) { return c; },
+            peg$c56 = /^[;"'`,\\()\n\t\r ]/,
+            peg$c57 = { type: "class", value: "[;\"'`,\\\\()\\n\\t\\r ]", description: "[;\"'`,\\\\()\\n\\t\\r ]" },
+            peg$c58 = /^[^;"'`,\\()\n\t\r ]/,
+            peg$c59 = { type: "class", value: "[^;\"'`,\\\\()\\n\\t\\r ]", description: "[^;\"'`,\\\\()\\n\\t\\r ]" },
+	    
+            peg$currPos          = 0,
+            peg$savedPos         = 0,
+	    peg$posDetailsCache  = [{ line: 1, column: 1, seenCR: false }],
+            peg$maxFailPos       = 0,
+            peg$maxFailExpected  = [],
+            peg$silentFails      = 0,
+	    
+            peg$result;
+	// peg$posDetailsCache[0].line=startLine;
+	if ("startRule" in options) {
+	    if (!(options.startRule in peg$startRuleFunctions)) {
+		throw new Error("Can't start parsing from rule \"" + options.startRule + "\".");
+	    }
+	    
+	    peg$startRuleFunction = peg$startRuleFunctions[options.startRule];
+	}
+	
     function text() {
       return input.substring(peg$savedPos, peg$currPos);
     }
@@ -1209,10 +1209,10 @@ var f=(function() {
     }
   }
 
-  return {
-    SyntaxError: peg$SyntaxError,
-    parse:       peg$parse
-  };
+    return {
+	SyntaxError: peg$SyntaxError,
+	parse:       peg$parse
+    };
 })();
 
 // by K. Shima

@@ -1,0 +1,36 @@
+<head>
+  <link rel="stylesheet" href="../github-markdown.css">
+</head>
+<body class="markdown-body">
+
+<h2>定番 hello, world</h2>
+<div class="sourcefile right-float">
+  <input type="text" value="sample1.sch" disabled />
+  <input type="button" value="Run"
+	 onclick="window.parent.runCode(this)"/><br>
+  <textarea id="text" class="lined" cols="40" rows="6"
+	    spellcheck="false"></textarea>
+</div>
+sample1.schの右のRunボタンを押して実行してください。
+Terminal:の下の枠内に
+<pre>hello,
+  world</pre>と出力します。
+<br>
+3行目のdefineCPSで関数mainを定義しています。
+4行目と5行目のprint関数で文字列を出力します。
+ダブルクォートで挟まれた部分が文字列です。
+文字列中に改行コード\nがあると改行します。
+改行コードがなければ、そのまま右に続けて出力します。
+<br>
+4行目の"hello,\n"の改行コードを削除してから、もう一度、Runボタンを押してみてください。
+hello, world
+と出力します。
+もし書き換えておかしくなった場合、リロードすれば元に戻ります。
+<br>
+6行目のexit関数でプログラムを終了します。
+引数が0のときは正常終了、0以外のときは異常終了を意味します。
+<br>
+3行目の行末の^( )はmain関数に引数がないことを意味します。
+4行目の5行目の行末の^( )は次の行が別の関数呼び出しであることを意味します。
+これがないと引数が続いているとみなされ、正しく実行できません。
+</body>

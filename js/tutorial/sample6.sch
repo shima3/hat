@@ -1,0 +1,13 @@
+(include "util.sch")
+
+(defineCPS main ^()
+  3 2 ^(a b)
+  a + b ^(c)
+  a - b ^(d)
+  a * b ^(e)
+  a / b ^(f)
+  print(a "+" b "=" c "\n")^()
+  print(a "-" b "=" d "\n")^()
+  print(a "*" b "=" e "\n")^()
+  print(a "/" b "=" f "\n")^()
+  exit 0)
