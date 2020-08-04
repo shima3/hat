@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>test</title>
+  </head>
+  <script src="sexpr-plus.js"></script>
+  <script src="taterm.js"></script>
+  <script src="hat.js"></script>
+  <body>
+    <form action="#">
+      <textarea id="terminal" rows="24" cols="80"></textarea>
+    </form>
+  </body>
+</html>
+<script type="text/javascript">
+  var term=TATerm("terminal");
+  function printPrompt( ){
+      term.print("OK> ");
+  }
+  term.onInput=function(str){
+      this.print(str);
+      this.print("\n");
+      printPrompt( )
+  };
+  printPrompt( );
+</script>

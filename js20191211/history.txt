@@ -1,0 +1,24 @@
+2019/10/26 Sat
+FunCall クラス削除
+List クラスで関数呼び出しを表現する。
+
+2019/10/23 Wed
+hat20191023.js
+変更点
+
+・debug
+hat20191022.js lineno 516
+deleteは配列のメソッドではない。
+
+・includeされたファイルが、さらにincludeするとき、同じディレクトリ名をつける。
+例：native/cui.sch が data.sch を include するとき、native/data.sch とする。
+
+2019/10/22 Tue
+includeして用いる共通コードについて
+インタプリタの実装言語に依存するコードは native
+依存しないコードは hat
+に入れることにする。
+
+hat20191022.js
+includeによる相互参照、循環参照に対応した。
+

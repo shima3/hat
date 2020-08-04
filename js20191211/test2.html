@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>test</title>
+  </head>
+  <script src="sexpr-plus.js"></script>
+  <script src="hat.js"></script>
+  <body>
+    <form action="#">
+      <textarea id="terminal" rows="24" cols="80"></textarea>
+    </form>
+  </body>
+</html>
+<script type="text/javascript">
+  //　console.log("hoge="+("abcabcd".lastIndexOf("d", 3)));
+  var terminal=document.getElementById("terminal");
+  var inputStart=0;
+  function print(str){
+      terminal.value=terminal.value.substr(0, inputStart)+str+
+	  terminal.value.substr(inputStart);
+      inputStart+=str.length;
+      terminal.setSelectionRange(inputStart, inputStart);
+  }
+  function moveCursorToLast( ){
+      var len=terminal.value.length;
+      terminal.setSelectionRange(len, len);
+  }
+  terminal.onkeypress=function(ev){
+      if(ev.metaKey){
+	  switch(ev.code){
+	  case "KeyX":
+	      ev.preventDefault( );
+	      break;
+	  }
+	  return;
+      }
+      switch(ev.code){
+      case "Backspace":
+	  if(terminal.selectionStart<=inputStart)
+	      ev.preventDefault( );
+	  break;
+      case "Enter":
+	  // console.log(ev);
+	  ev.preventDefault( );
+	  console.log("input: "+terminal.value.substr(inputStart));
+	  terminal.value+="\n";
+	  inputStart=terminal.value.length;
+	  print("OK> ");
+	  break;
+      default:
+	  // console.log(ev);
+	  if(terminal.selectionStart<inputStart && ev.code.startsWith("Key"))
+	      moveCursorToLast( );
+      }
+  };
+  terminal.onpaste=function(ev){
+      if(terminal.selectionStart<inputStart)
+	  moveCursorToLast( );
+      setTimeout(function(){
+	  var str=terminal.value;
+	  var start=inputStart;
+	  for(;;){
+	      var i=str.indexOf('\n', start);
+	      if(i<0) break;
+	      var len=i-start;
+	      console.log("input: "+str.substr(start, len));
+	      inputStart+=len+1;
+	      start=i+1;
+	      print("OK> ");
+	  }
+      }, 0);
+      // console.log("paste "+ev);
+      // console.log("inputStart="+inputStart);
+  };
+  print("OK> ");
+</script>

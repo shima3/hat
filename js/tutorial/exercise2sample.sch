@@ -1,0 +1,21 @@
+(include "util.sch")
+
+(defineCPS draw ^(x y dx dy . ret)
+  canvas_size ^(w h)
+  fill_rgb 0 150 0 ^()
+  rect 0 0 w h ^()
+  fill_rgb 250 250 0 ^()
+  circle x y 9 ^()
+  wait_disp ^(dt)
+  x + dx ^(x2)
+  y + dy  ^(y2)
+  if(or(x2 < 0)(x2 > w))
+  (0 - dx) dx ^(dx2)
+  if(or(y2 < 0)(y2 > h))
+  (0 - dy) dy ^(dy2)
+  if(dx <> 0)(dy2 + 0.045) 0 ^(dy2) ;;重力 
+  draw x2 y2 dx2 dy2 . ret)
+
+(defineCPS main ^()
+  draw 100 150 3 4 ^()
+  exit 0)

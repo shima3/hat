@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<!-- !DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <title>Hat: Tutorial</title>
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../github-markdown.css">
+    <!-- script type="text/javascript"
+	 src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script -->
+    <link rel="stylesheet" href="../jquery-linedtextarea.css">
+    <link ref="icon" href="../../favicon.ico">
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+	  TeX: { equationNumbers: { autoNumber: "AMS" }},
+	  tex2jax: {
+	      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+	      skipTags: ["script","noscript","style","textarea","kbd"],
+	      processEscapes: true
+	  },
+	  "HTML-CSS": { matchFontHeight: false },
+	  displayAlign: "left",
+	  displayIndent: "2em"
+      });
+    </script>
+    <style type="text/css">
+      @font-face {
+	  font-family: ipag;
+	  src: url('../../ipag.ttf') format("truetype");
+      }
+      html, body, input, .code{
+	  font-style: normal;
+	  font-weight: normal;
+	  font-family: ipag, Osaka-Mono, "Courier New", monospace;
+	  font-size: 100%;
+	  line-height: 1.2;
+	  box-sizing: border-box;
+	  height: 100%;
+	  padding: 0px;
+	  margin: 0 0 4px 4px;
+      }
+      div{
+	  box-sizing: border-box;
+	  padding: 0px;
+	  margin: 0 0 0px 0px;
+      }
+      /*
+      .code {
+	  font-style: normal;
+	  font-weight: normal;
+	  font-family: ipag, Osaka-Mono, "Courier New", monospace;
+	  font-size: 100%;
+      }
+      */
+      .full {
+	  width: 100%;
+	  height: 100%;
+      }
+      .border {
+	  border: solid 1px black;
+	  // background-color: black;
+      }
+      .stripe {
+	  background: repeating-linear-gradient(
+	      45deg,     /* 角度の指定 */
+	      #fff,      /* 色A ... 開始 */
+	      #fff 3px,  /* 色A ... 終了 */
+	      #000 3px,      /* 色B ... 開始 */
+	      #000 6px   /* 色B ... 終了 */
+	  );
+      }
+      @keyframes move{
+	  from{
+	      background-position: 0px 0px, 5px 5px;
+	  }
+	  to{
+	      background-position: 30px 30px, 35px 35px;
+	  }
+      }
+      .checker {
+	  background-color: #fff;
+	  background-image:
+	      linear-gradient(45deg, #ccc 25%, transparent 25%,
+			      transparent 75%, #ccc 75%, #ccc),
+	      linear-gradient(45deg, #ccc 25%, transparent 25%,
+			      transparent 75%, #ccc 75%, #ccc);
+	  /*
+	      linear-gradient(-135deg, #ccc 25%, transparent 25%,
+			      transparent 75%, #ccc 75%, #ccc),
+	      linear-gradient(-135deg, #ccc 25%, transparent 25%,
+			      transparent 75%, #ccc 75%, #ccc);
+	  	    background-image:
+		    	    	      linear-gradient( 45deg, #ccc 25%, transparent 25%, transpa				rent),
+				      linear-gradient(-45deg, #ccc 25%, transpar    ent 25%, transparent),
+				      linear-gradient( 45deg, transparent 75%, #    ccc 75%),
+				      linear-gradient(-45deg, transparent 75%, #        ccc 75%);
+	 */
+	  // background-position: 0 0, 5px 5px;
+	  background-size: 10px 10px;
+	  animation-name: move;
+	  animation-duration: 1s;
+	  animation-iteration-count: infinite;
+	  animation-timing-function: linear;
+      }
+      .right-float {
+	  float: right;
+      }
+    </style>
+    <script src="../sexpr-plus.js"></script>
+    <script src="../taterm.js"></script>
+    <script src="../hat.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <script type="text/javascript" src="../jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="../jquery-linedtextarea.js"></script>
+  </head>
+  <!-- body id="body" class="markdown-body" -->
+  <body id="body">
+    <!-- body class=full -->
+    <!-- form action="#" -->
+    <div style="width:49%; height:100%; float:left; overflow:scroll;">
+      <h1><img src="../../favicon.ico" height="30" />Hat言語のチュートリアル</h1>
+      このページはGoogle Chromeにしか対応していません。
+      文字の見間違いを減らすため、数字のゼロ0と大文字のオーO、数字のイチ1と大文字のアイIと小文字のエルlの区別が比較的容易なIPAゴシックフォントを用いています。
+      
+      <h2>定番 hello, world</h2>
+      <div class="sourcefile right-float">
+	<input type="text" value="sample1.sch" disabled />
+	<input type="button" value="Run"
+	       onclick="runCode(this);"/><br>
+	<textarea id="text" class="lined" cols="40" rows="6"
+		  spellcheck="false"></textarea>
+      </div>
+      sample1.schの右のRunボタンを押して実行してください。
+      Terminal:の下の枠内にhelloとworldを2行に分けて出力します。
+      <br>
+      sample1.schの3行目のdefineCPSで関数mainを定義しています。
+      4行目と5行目のprint関数で文字列を出力します。
+      ダブルクォートで挟まれた部分が文字列です。
+      文字列中に改行コード\nがあると改行します。
+      改行コードがなければ、そのまま右に続けて出力します。
+      <br>
+      4行目の"hello,\n"の改行コードを削除してから、もう一度、Runボタンを押してみてください。
+      hello,とworldを同じ行に出力します。
+      もし書き換えておかしくなった場合、リロードすれば元に戻ります。
+      <br>
+      6行目のexit関数でプログラムを終了します。
+      引数が0のときは正常終了、0以外のときは異常終了を意味します。
+      <br>
+      3行目の行末の^()はmain関数が引数を受け取らないことを意味します。
+      4行目と5行目の行末の^()は次の行が別の関数呼び出しであることを意味します。
+      これがないと引数が続いているとみなされ、正しく実行できません。
+
+      <h2>矩形の描画と内部の塗りつぶし</h2>
+      <div class="sourcefile right-float">
+	<input type="text" value="sample2.sch" disabled />
+	<input type="button" value="Run"
+	       onclick="runCode(this);"/><br>
+	<textarea id="text" class="lined" cols="40" rows="9"
+		  spellcheck="false"></textarea>
+      </div>
+      sample2.schの右のRunボタンを押して実行してください。
+      Canvas:の下の枠に3つの矩形（正方形や長方形）を描きます。
+      真ん中の長方形の内部を黄色で塗りつぶします。
+      左の正方形と右の長方形の内部は塗りつぶしません。
+      背景で移動している市松模様は透明を意味します。
+      <br>
+      4行目のrect関数で座標(50, 100)から幅と高さが50の正方形を描きます。
+      5行目のfill_rgb関数で図形の内部を塗りつぶす色を設定しています。
+      色は光の三原色（赤緑青）の各256段階（0から255まで）の数値で指定します。
+      ここでは、赤255、緑255、青0を合成した黄色に設定されます。
+      6行目のrect関数で座標(150, 50)から幅50、高さ100の長方形を描き、その内部を黄色で塗りつぶします。
+      7行目のno_fill関数で図形の内部を塗りつぶさないように設定しています。
+      8行目のrect関数で座標(250, 50)から幅100、高さ50の長方形を描きますが、内部を塗りつぶしません。
+      <br>
+      矩形の座標や大きさ、塗りつぶしの色などの数値を変更したり、fill_rgb関数やno_fill関数の行を移動したりして実行し、どのように変わるか確認してください。
+      
+<h2>テキストの描画</h2>
+<div class="sourcefile right-float">
+  <input type="text" value="sample3.sch" disabled />
+  <input type="button" value="Run" onclick="runCode(this);"/><br>
+  <textarea id="text" class="lined" cols="50" rows="9"
+	    spellcheck="false"></textarea>
+</div>
+sample3.schの右のRunボタンを押して実行してください。
+Canvasに文字列helloとworldを描きます。
+<br>
+4行目のtext_size関数で文字の大きさを50pxに設定します。
+5行目のtext_align関数で左揃えに設定します。
+6行目のtext関数で文字列helloを座標(100,100)に描きます。
+左揃えなのでhelloの左端がX座標100になります。
+7行目のtext_align関数で中央揃えに設定します。
+8行目のtext関数で文字列worldを座標(200,150)に描きます。
+中央揃えなのでworldの中心がX座標200になります。
+<br>
+text_size, text_align, text関数の引数を変更し、実行してみてください。
+ただし、text_align関数の引数は"left", "center", "right"のどれかです。
+
+<h2>円弧と直線の描画</h2>
+<div class="sourcefile right-float">
+  <input type="text" value="sample4.sch" disabled />
+  <input type="button" value="Run" onclick="runCode(this);"/><br>
+  <textarea id="text" class="lined" cols="40" rows="9"
+	    spellcheck="false"></textarea>
+</div>
+sample4.schの右のRunボタンを押して実行してください。
+Canvasにハートマークを描き、内部を緑色で塗りつぶします。
+このハートマークは2つの円弧と2本の線分からなります。
+<br>
+4行目のfill_rgb関数で塗りつぶしの色を設定しています。
+5行目のbegin_path関数で図形のパス（輪郭）をリセットします。
+6行目のarc関数で中心(40, 50)、半径10、135度から360度まで時計回りの円弧をパスに追加します。
+同様に7行目のarc関数で中心(60, 50)、半径10、180度から45度まで時計回りの円弧をパスに追加します。
+8行目のline_to関数で座標(50, 75)への線分をパスに追加します。
+9行目のclose_path関数でパスを閉じて内部を塗りつぶします。
+<br>
+円弧の中心、半径、角度などを変更して実行し、どのように変化するか確認してください。
+半径を負にすると反時計回りになります。
+close_pathをend_pathに変更すると、パスを閉じません。
+
+<h2>テキストの回転</h2>
+<div class="sourcefile right-float">
+  <input type="text" value="sample5.sch" disabled />
+  <input type="button" value="Run" onclick="runCode(this);"/><br>
+  <textarea id="text" class="lined" cols="50" rows="9"
+	    spellcheck="false"></textarea>
+</div>
+sample5.schの右のRunボタンを押して実行してください。
+文字列helloとworldを回転して描きます。
+<br>
+4行目のrotate関数で以降の図形を座標(100, 150)を中心として時計回りに-45度（反時計回りに45度）回転します。
+5行目から7行目まではSample3.schと同様に文字列helloを描きます。
+8行目のrotate関数で以降の図形を座標(100, 150)を中心として時計回りに90度回転します。
+ただし、4行目のrotate関数で-45度回転しているので、45度回転することになります。
+9行目のdraw_text関数で文字列worldを描きます。
+<br>
+回転の中心座標や回転角度を変更し、実行結果を確認してください。
+
+<h2>練習課題１</h2>
+<div class="sourcefile right-float">
+  <input type="text" value="exercise1sample.sch" disabled />
+  <input type="button" value="Run" onclick="runCode(this);"/><br>
+  <textarea id="text" class="lined" cols="60" rows="9"
+	    spellcheck="false"></textarea>
+</div>
+exercise1.schを実行してください。
+横114×縦178の矩形を描き、内部を白色で塗りつぶします。
+<br>
+この白い矩形の内部にトランプのカードを描画するプログラムを作成してください。
+トランプのどのカードでも、1枚だけでも良いです。
+2枚以上作成する場合、同じサイズで重ならないように位置をずらしてください。
+<br>
+作成したプログラムをexercise1.schに入力して実行し、表示を確認してください。
+;;で始まる行はコメントですので、処理に影響を与えません。
+入力したプログラムはリロードすると消えてしまうので、エディタなどにコピペして保存してください。
+作成した画像を保存するには、Canvasの上で右クリックし、「名前をつけて画像を保存」を選んでください。
+
+<h2>四則演算と数値出力</h2>
+<div class="sourcefile right-float">
+  <input type="text" value="sample6.sch" disabled />
+  <input type="button" value="Run" onclick="runCode(this);"/><br>
+  <textarea id="text" class="lined" cols="50" rows="9"
+	    spellcheck="false"></textarea>
+</div>
+sample6.schの右のRunボタンを押して実行してください。
+2つの数値3と2の加減乗除を出力します。
+<br>
+4行目の 3 2 ^(a b) で数値3を変数aに渡し、数値2を変数bに渡します。
+5行目の a + b ^(c) でaとbの和を変数cに渡し、- * / についても同様です。
+C言語とは異なり、整数同士の除算 / でも実数になります。
+<br>
+変数、数値、演算子は空白で区切る必要があります。
+カッコの前後は空白で区切る必要はありません。
+<br>
+printのカッコ内に変数や文字列を並べると連続して出力します。
+変数や文字列の間にカンマなどは入れてはいけません。
+4行目の3や2の数値を適当に書き換えて実行し、出力に反映されることを確認してください。
+
+<h2>アニメーションと関数定義</h2>
+<div class="sourcefile right-float">
+  <input type="text" value="sample7.sch" disabled />
+  <input type="button" value="Run" onclick="runCode(this);"/><br>
+  <textarea id="text" class="lined" cols="50" rows="9"
+	    spellcheck="false"></textarea>
+</div>
+sample7.schの右のRunボタンを押して実行してください。
+緑色の光が回転するアニメーションを表示します。
+1秒間に数十枚の少しずつ異なるフレーム（静止画）を連続的に表示しています。
+Canvasの右のStopボタンを押すと一時停止し、Restartボタンを押すと再開します。
+<br>
+3行目から11行目でdraw関数を定義し、13行目から15行目でmain関数を定義しています。
+プログラムを実行すると、最初にmain関数が呼び出されます。
+main関数は14行目で光の角度0を3行目の第1仮引数aに渡してdraw関数を呼び出します。
+仮引数retについては補足１を参照してください。
+draw関数は自分自身を再帰的に呼び出すことによってフレームの描画を繰り返します。
+<br>
+4行目のfill_rgb関数で緑色に設定します。
+5行目のbegin_pathでパスをリセットします。
+6行目のmove_to関数でパスの始点を座標(100, 100)に設定します。
+7行目のarc関数で中心(100, 100)、半径50、a度から(a+5)度まで時計回りの円弧をパスに追加します。
+8行目でパスを描き、内部を塗りつぶします。
+<br>
+プログラムが描画したフレームはブラウザが画面に表示します。
+9行目でwait_disp関数を呼び出し、既に描画したフレームをブラウザが表示するまで待ちます。
+このときの戻り値dtについては補足２を参照してください。
+10行目で角度aに1を加えた値を変数a2に渡し、11行目でa2を引数としてdraw関数自身を呼び出します。
+
+<h3>補足１：再帰呼び出し</h3>
+draw関数のように関数が自分自身を呼び出すことを再帰呼び出しと言います。
+従来の言語では、関数を呼び出すとき、その後で行うべき処理をスタックに積みます。
+そのため、再帰呼び出しを繰り返すとスタックのサイズが増大し、スタックオーバーフローと呼ばれるエラーが発生します。
+それを避けるため、自動的に最適化する処理系もありますが、実際に最適化できるかどうかは処理系に依存します。
+Hat言語では、関数を呼び出すとき、その後で行うべき処理を継続の引数として渡します。
+14行目でmain関数からdraw関数を呼び出すとき、その後で行うべき処理として ^( ) exit 0、すなわち終了処理を3行目のretに渡します。
+11行目でdraw関数を呼び出すとき、その同じretを継続の引数として渡すので、スタックのサイズは増えません。
+
+<h3>補足２：wait_disp関数の戻り値</h3>
+wait_disp関数を呼び出すと、既に描画したフレームをブラウザが表示するまで待ちます。
+このときの待ち時間は戻り値として（9行目のdtに）渡されます。
+この待ち時間に従って物体の移動距離などを求めると、リアルタイムシミュレーションなどが可能です。
+ただし、このサンプルコードでは用いていません。
+
+<h2>Canvasのサイズと変数</h2>
+<div class="sourcefile right-float">
+  <input type="text" value="sample8.sch" disabled />
+  <input type="button" value="Run" onclick="runCode(this);"/><br>
+  <textarea id="text" class="lined" cols="50" rows="9"
+	    spellcheck="false"></textarea>
+</div>
+sample8.schの右のRunボタンを押して実行してください。
+上下左右に10pxの余白をとって緑色の長方形を描画します。
+ブラウザのサイズを変更してから再度実行してみてください。
+Canvasのサイズに応じて長方形の縦横の長さを調整して描画します。
+<br>
+4行目のcanvas_size関数でCanvasの幅を変数w、高さを変数hに渡しています。
+5行目で上下左右の余白の長さ10(px)を変数mに渡しています。
+6, 7行目でCanvasの幅と高さから、mを引き、右端と下端の余白を除くx座標とy座標を求め、変数mx, myに渡しています。
+8行目で緑色の塗りつぶしを設定し、9行目で長方形を描画しています。
+ここで左端と上端の余白を除くため、mx, myからmを引くことによって長方形の幅と高さを求めています。
+<br>
+5行目の数値10を変更して実行し、上下左右の余白が正しく調整されるか確認してください。
+
+<h2>論理演算子と選択処理</h2>
+<div class="sourcefile right-float">
+  <input type="text" value="sample9.sch" disabled />
+  <input type="button" value="Run" onclick="runCode(this);"/><br>
+  <textarea id="text" class="lined" cols="70" rows="9"
+	    spellcheck="false"></textarea>
+</div>
+sample9.schの右のRunボタンを押して実行してください。
+変数p, qの真偽を出力します。
+<br>
+4行目で真trueを変数pに渡し、5行目のif文で判定します。
+if文は3つの引数をとり、第1引数が真のとき第2引数を実行し、第1引数が偽のとき第3引数を実行します。
+6行目で偽falseを変数qに渡し、7行目のif文で判定します。
+qが真のとき文字列"真"を変数sに渡し、qが偽のとき文字列"偽"を変数sに渡し、8行目のprint関数で出力します。
+<br>
+論理関数として、and, or, notがあります。
+10行目のand関数はpとqの論理積をrに渡します。
+11行目のif文は第1引数が偽のとき実行すべき処理がない場合の例です。
+そのような場合は第3引数を nop とします。
+nop は何もしない関数です。
+逆に12行目はif文の第1引数が真のとき実行すべき処理がない場合の例です。
+12行目と13行目のif文は第1引数に論理関数を用いる例です。
+<br>
+4行目のtrueや6行目のfalseを変更し、正しく判定されるか確認してください。
+
+<h2>比較演算子と絶対値</h2>
+<div class="sourcefile right-float">
+  <input type="text" value="sample10.sch" disabled />
+  <input type="button" value="Run" onclick="runCode(this);"/><br>
+  <textarea id="text" class="lined" cols="70" rows="9"
+	    spellcheck="false"></textarea>
+</div>
+sample10.schの右のRunボタンを押して実行してください。
+xと0を比較した結果とxの絶対値を出力します。
+<br>
+比較演算子として &lt;, &gt;, =, &lt;&gt;, &lt;=, &gt;= があります。
+等号 = と不等号 &lt;&gt; がC言語と異なります。
+<br>
+5行目から10行目までで、それぞれの比較演算子を用いて比較した結果を出力します。
+if文で偽のとき何もしない場合、第3引数にnopを指定することに注意してください。
+11行目でxが負のとき(0 - x)、そうでないときxを変数absxに渡します。
+単項演算子のマイナス-がないので、0からxを引くことでxの符号を反転しています。
+これによってxの絶対値をabsxに渡し、12行目で出力します。
+13行目でxが負のとき(x * -1)、そうでないときxを変数xに渡します。
+xに-1を掛けることでxの符号を反転しています。
+これによってxの絶対値をxに渡し、14行目で出力します。
+<br>
+xの値を0や1に書き換えて実行し、出力を確認してください。
+
+<h2>円の描画とアニメーションの背景</h2>
+<div class="sourcefile right-float">
+  <input type="text" value="sample11.sch" disabled />
+  <input type="button" value="Run" onclick="runCode(this);"/><br>
+  <textarea id="text" class="lined" cols="50" rows="9"
+	    spellcheck="false"></textarea>
+</div>
+sample11.schの右のRunボタンを押して実行してください。
+緑色の背景の上で黄色の円が左端から右端まで移動することを繰り返します。
+<br>
+3行目から12行目でdraw関数を定義し、14行目から16行目でmain関数を定義しています。
+プログラムを実行すると、最初にmain関数が呼び出されます。
+main関数は15行目で円の初期x座標0を3行目の第1仮引数xに渡してdraw関数を呼び出します。
+draw関数は自分自身を再帰的に呼び出すことによってフレームの表示を繰り返します。
+<br>
+4行目のcanvas_size関数でsample8.schと同様にCanvasの幅と高さを変数w, hに渡します。
+5行目で緑色の塗りつぶしを設定し、6行目でCanvasと同じ大きさの矩形を描きます。
+7行目で高さhの半分を円のy座標として変数yに渡します。
+8行目で黄色の塗りつぶしを設定し、9行目で座標(x, y)に半径9の円を描きます。
+10行目でフレームが画面に表示されるまで待ちます。
+11行目でx座標がCanvasの幅より小さければ、xに1を加えた値をx2に渡し、そうでなければ0をx2に渡します。
+これによって円の位置が右に移動し、右端に到達すると左端に戻ります。
+12行目でdraw関数が自分自身を呼び出し、引数x2の値は3行目の変数xに渡されます。
+<br>
+6行目の行頭にセミコロンを挿入し、実行してみてください。
+緑色の背景が描かれなくなり、円が移動した跡が残ります。
+このようにアニメーションでは背景の表示が重要です。
+
+<h2>練習課題２</h2>
+<div class="sourcefile right-float">
+  <input type="text" value="exercise2sample.sch" disabled />
+  <input type="button" value="Run" onclick="runCode(this);"/><br>
+  <textarea id="text" class="lined" cols="60" rows="9"
+	    spellcheck="false"></textarea>
+</div>
+exercise2.schを実行してください。
+緑色の背景の上で黄色の円が左右に移動し、左右の端で跳ね返ります。
+<br>
+円が斜めに移動し、上下左右の端で跳ね返るようにしてください。
+余力があれば、重力の影響や障害物を加えてみてください。
+<br>
+作成したプログラムをexercise2.schに入力して実行し、表示を確認してください。
+入力したプログラムはリロードすると消えてしまうので、エディタなどにコピペして保存してください。
+
+	      </div><div id="wrapper" style="width:49%; float:right;"><div id="upper">
+		Terminal:
+	    <input type="button" name="clear" value="Clear"
+		   onclick="terminal.value=''"/>
+	      <textarea class="code full" id="terminal" style="height:10em; box-sizeing:border-box;"></textarea>
+	      Canvas:
+	    <input type="button" id="stop" value="Stop"
+		   onclick="HatInterpreter.stop()"/>
+	    <input type="button" id="restart" value="Restart"
+		   onclick="HatInterpreter.restart()"/>
+	    <input type="button" name="clear" value="Clear"
+		   onclick="resetCanvas()"/></div><div id="wrapper2" style="height:100%;"><canvas id="canvas" class="checker"></canvas><canvas id="canvas2" class="checker" style="display:none;"></div></div>
+    <!-- /form -->
+  </body>
+</html>
+<script type="text/javascript">
+/*
+  function step(timestamp){
+      console.log("step "+timestamp);
+  }
+  window.requestAnimationFrame(step);
+*/
+  $(function(){
+      $(".lined").linedtextarea(
+	  //	      {selectedLine: 1}
+      );
+  });
+  var term=TATerm("terminal");
+  function printPrompt( ){
+      term.print("OK> ");
+  }
+  term.onInput=function(str){
+      this.print(str);
+      this.print("\n");
+      printPrompt( )
+  };
+  function hatPrint(arg){
+      if(arg==null) return;
+      var first=arg.getFirst( );
+      term.print(HatInterpreter.valueString(first));
+      /*
+      if(first){
+	  if(first.string) term.print(first.string);
+	  else if(first.type=="HatVar"){
+	      console.log("hatPrint first="+first);
+	      term.print(first.getValue(currentTask));
+	  }else term.print(first.toString( ));
+      }else term.print("()");
+      */
+      hatPrint(arg.getRest( ));
+  }
+  var splitted_command_line;
+  function hat_get_command_line_args(){
+      return HatInterpreter.makeSequence(splitted_command_line.slice(1), 0);
+  }
+  var exit_status=0;
+  function hatExit(status){
+      // exit_status=parseInt(status.toString());
+      exit_status=status;
+      HatInterpreter.stop();
+      copyCanvas();
+  }
+  function runProgram(){
+      var path=document.getElementById("path");
+      var command=document.getElementById("command");
+      var program=document.getElementById("program");
+      /*
+       console.log("path: "+path.value);
+       console.log("command: "+command.value);
+       console.log("program: "+program.value);
+      */
+      // HatInterpreter.startCode(path.value, program.value, command.value);
+      splitted_command_line=command.value.split(/\s/);
+      HatInterpreter.startCode(path.value, program.value,
+			       command.value);
+      //				  splitted_command_line[0]);
+  }
+  function getTextInput(node){
+      for(let child of node.getElementsByTagName("input")){
+	  if(child.type=="text") return child;
+      }
+      return null;
+  }
+  function getTextArea(node){
+      let list=node.getElementsByTagName("textarea");
+      return list[0];
+  }
+  function runCode(button){
+      let input=getTextInput(button.parentNode);
+      let text=getTextArea(button.parentNode);
+      // console.log("text="+text.value);
+      resetCanvas();
+      HatInterpreter.startCode(input.value, text.value, "main");
+  }
+  function snap(){
+      var image=document.getElementById("image");
+      image.src=canvas.toDataURL("image/png");
+  }
+  var terminal=document.getElementById("terminal");
+  var upper=document.getElementById("upper");
+  var wrapper=document.getElementById("wrapper");
+  var body=document.getElementById("body");
+  let canvas=document.getElementById("canvas");
+  //  var backCanvas=document.createElement('canvas');
+  var backCanvas=document.getElementById("canvas2");
+  var canvases=[ canvas, backCanvas ];
+  let canvas_flip=1;
+  // console.log(canvas.width+", "+canvas.height);
+  // let context2d=canvas.getContext('2d');
+  let context2d=canvases[1-canvas_flip].getContext('2d'); // backCanvas.getContext('2d');
+//  context2d.save();
+//  console.log("save lineWidth="+context2d.lineWidth);
+  let stroke_flag=true, fill_flag=false;
+  let initialStrokeStyle=context2d.strokeStyle;
+  let initialFillStyle=context2d.fillStyle;
+
+  fitCanvas();
+  // setTimeout(fitCanvas, 3000)
+  window.onresize=fitCanvas;
+  
+  function fitCanvas(){
+      // console.log("fitCanvas");
+      canvas.width=upper.clientWidth;
+      canvas.height=body.clientHeight-upper.clientHeight;
+      backCanvas.width=canvas.width;
+      backCanvas.height=canvas.height;
+      /*
+       canvas.width=wrapper.clientWidth;
+       canvas.height=wrapper.clientHeight-upper.clientHeight;
+      */
+  };
+  function resetCanvas(){
+      /*
+      console.log("resetCanvas "+canvas.width+", "+canvas.height);
+       context2d.strokeStyle=initialStrokeStyle;
+       context2d.fillStyle=initialFillStyle;
+      */
+      context2d.clearRect(0, 0, canvas.width, canvas.height);
+      // console.log("reset 1 lineWidth="+context2d.lineWidth);
+      context2d.restore();
+      context2d.save();
+      //  console.log("reset 2 lineWidth="+context2d.lineWidth);
+      stroke_flag=true;
+      fill_flag=false;
+  }
+  function copyCanvas(){
+      /*
+       let c2d=canvas.getContext('2d');
+       let img=context2d.getImageData(0, 0, canvas.width, canvas.height);
+       c2d.putImageData(img, 0, 0);
+       canvases[canvas_flip].style.visibility='hidden';
+       canvases[1-canvas_flip].style.visibility='visible';
+       let d=canvases[canvas_flip].style.display;
+      */
+      /*
+       canvases[canvas_flip].style.display='none';
+       canvases[1-canvas_flip].style.display='';
+       context2d=canvases[canvas_flip].getContext('2d');
+       canvas_flip=1-canvas_flip;
+      */
+  }
+  function hatBeginPath(){
+      context2d.beginPath();
+  }
+  function hatMoveTo(x, y){
+      context2d.moveTo(x, y);
+  }
+  function hatLineTo(x, y){
+      context2d.lineTo(x, y);
+  }
+  function hatClosePath(){
+      context2d.closePath();
+      hatEndPath();
+  }
+  function hatStroke(){
+      context2d.stroke();
+  }
+  function hatFill(){
+      context2d.fill();
+  }
+  function hatEndPath(){
+      //      console.log("fill_stroke stroke="+stroke_flag);
+      if(fill_flag) context2d.fill();
+      if(stroke_flag) context2d.stroke();
+  }
+  function hatRotate(x, y, angle){
+      context2d.translate(x, y);
+      context2d.rotate(angle*Math.PI/180);
+      context2d.translate(-x, -y);
+  }
+  function hatStrokeRGB(red, green, blue){
+      context2d.strokeStyle='rgb('+red+','+green+','+blue+')';
+      stroke_flag=true;
+  }
+  function hatNoStroke(){
+      //      console.log("hatNoStroke");
+      stroke_flag=false;
+  }
+  function hatFillRGB(red, green, blue){
+      context2d.fillStyle='rgb('+red+','+green+','+blue+')';
+      // context2d.globalAlpha=0.4;
+      fill_flag=true;
+  }
+  function hatNoFill(){
+      fill_flag=false;
+  }
+  function fillRect(x, y, w, h){
+      context2d.fillRect(x, y, w, h);
+  }
+  function strokeRect(x, y, w, h){
+      context2d.strokeRect(x, y, w, h);
+  }
+  function hatLine(x1, y1, x2, y2){
+      context2d.beginPath();
+      context2d.moveTo(x1, y1);
+      context2d.lineTo(x2, y2);
+      context2d.stroke();
+  }
+  function hatTriangle(x1, y1, x2, y2, x3, y3){
+      context2d.beginPath();
+      context2d.moveTo(x1, y1);
+      context2d.lineTo(x2, y2);
+      context2d.lineTo(x3, y3);
+      hatClosePath();
+  }
+  function hatRect(x, y, w, h){
+      context2d.beginPath();
+      context2d.rect(x, y, w, h);
+      hatClosePath();
+  }
+  function degree2radian(degree){
+      return degree*Math.PI/180;
+  }
+  function hatEllipse(x, y, w, h, s, e){
+      s=degree2radian(s);
+      e=degree2radian(e);
+      context2d.beginPath();
+      context2d.translate(x, y);
+      if(w<h){
+	  context2d.scale(1, h/w);
+	  context2d.arc(0, 0, w/2, s, e);
+      }else{
+	  context2d.scale(w/h, 1);
+	  context2d.arc(0, 0, h/2, s, e);
+      }
+      hatEndPath();
+      context2d.setTransform(1, 0, 0, 1, 0, 0);
+  }
+  function hatCircle(x, y, r){
+      context2d.beginPath();
+      context2d.arc(x, y, r, 0, 2*Math.PI);
+      hatEndPath();
+  }
+  function hatArc(x, y, r, s, e){
+      let anti=r<0;
+      if(anti) r=-r;
+      context2d.arc(x, y, r, s*Math.PI/180, e*Math.PI/180, anti);
+  }
+  function hatLineWidth(width){
+      if(width>0){
+	  context2d.lineWidth=width;
+	  stroke_flag=true;
+      }else stroke_flag=false;
+  }
+  function hatText(text, x, y){
+      // console.log("hatText "+text+" "+fill_flag+" "+stroke_flag);
+      if(fill_flag) context2d.fillText(text, x, y);
+      if(stroke_flag) context2d.strokeText(text, x, y);
+  }
+  function hatMeasureText(text){
+      console.log(context2d.font);
+      context2d.font=fontStyle+" "+fontSize+"px "+fontFamily;
+      let metrics=context2d.measureText(text);
+      /*
+       console.log("w="+metrics.width);
+       console.log("h="+metrics.actualBoundingBoxAscent);
+      */
+      return [metrics.width, metrics.actualBoundingBoxAscent];
+  }
+  // let fontStyle="normal", fontSize=10, fontFamily="Osaka-Mono";
+  let fontStyle="normal", fontSize=16, fontFamily="ipag";
+  function setFont(){
+      context2d.font=fontStyle+" "+fontSize+"px "+fontFamily;
+  }
+  function hatTextSize(size){
+      fontSize=size;
+      setFont();
+  }
+  function hatTextAlign(align){
+      context2d.textAlign=align;
+  }
+  function hatFillCanvas(){
+      context2d.fillRect(0, 0, canvas.width, canvas.height);
+  }
+  function hatGetCanvasSize(){
+      return [canvas.width, canvas.height];
+  }
+  
+  for(let node of document.getElementsByClassName("sourcefile")){
+      let input;
+      for(input of node.getElementsByTagName("input"))
+	  if(input.type=="text") break;
+      if(!input) break;
+      let path=input.value;
+      let list=node.getElementsByTagName("textarea");
+      let text=list[0];
+      let xmlHttp=new XMLHttpRequest();
+      xmlHttp.onreadystatechange=function(){
+	  if(xmlHttp.readyState == 4 && xmlHttp.status == 200){
+	      text.innerHTML = xmlHttp.responseText;
+	  }
+      };
+      xmlHttp.open("GET", path+"?", true);
+      xmlHttp.send(null);
+  }
+</script>
+ 

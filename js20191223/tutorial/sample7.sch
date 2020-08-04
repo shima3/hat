@@ -1,0 +1,15 @@
+(include "util.sch")
+
+(defineCPS draw ^(a . ret)
+  fill_rgb 0 255 0 ^()
+  begin_path ^()
+  move_to 100 100 ^()
+  arc 100 100 50 a (a + 5)^()
+  end_path ^()
+  wait_disp ^(dt)
+  + a 1 ^(a2)
+  draw a2 . ret)
+
+(defineCPS main ^()
+  draw 0 ^()
+  exit 0)
