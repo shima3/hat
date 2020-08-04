@@ -44,7 +44,7 @@
     print(E "\n")^()
     loop S2
     ) stack1 ^()
-  print("end\n")^()
+  print("End\n")^()
   exit 0)
 
 (defineCPS main3 ^ R
@@ -179,7 +179,8 @@
   ;; println("sendSync 2 from=" from) ^()
   sendAsync actor ( message from return ) ^()
   ;; println("sendSync 3") ^()
-  nop . end )
+  nop . stop )
+;;;  nop . end )
 
 ( defineCPS RplyRqstd ^(message from return context)
   ;; println("RplyRqstd 1 message=" message) ^()

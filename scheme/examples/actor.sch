@@ -33,7 +33,8 @@
 ( defineCPS sendSync ^(actor message . return)
   currentActor ^(from)
   sendAsync actor ( message from return ) ^()
-  nop . end )
+  nop . stop )
+;;;  nop . end )
 
 ( defineCPS RplyRqstd ^(message from return behavior)
   message behavior ^ reply

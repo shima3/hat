@@ -24,7 +24,7 @@
 
 ;; 項 term を値とする変数 var を定義する．
 (define (set-global-var var term)
-  ;; (println "set-global-var " var "=" term)
+;;; (println "set-global-var " var "=" term)
   (hash-table-set! cps-env var term))
 
 ;; インタプリタによる式の評価を繰り返すかどうかを示すフラグ
@@ -84,26 +84,26 @@ built-in function: mailboxRemove ^(isEmpty)
 
 ;; actor を現在のアクターとして設定する
 (define (current-actor-set! actor)
-  ;; (println "current-actor=" actor)
+;;; (println "current-actor=" actor)
   (current-thread-specific-set! actor))
-;;  (thread-specific-set! (current-thread) actor))
+;;;  (thread-specific-set! (current-thread) actor))
 
 ;; 計算過程のキュー
 ;; 計算過程は関数適用とアクターの組で表現される
 (define app-queue (make-queue))
-;; (define app-queue (make-mt-queue))
+;;; (define app-queue (make-mt-queue))
 
 ;; 関数適用 app とアクター actor の組を計算過程のキューに追加する
 (define (app-enqueue! app actor)
-  ;; (println "app-enqueue! 1 app=" app)
+;;; (println "app-enqueue! 1 app=" app)
   (queue-add! app-queue (cons app actor))
-  ;; (mt-enqueue! app-queue (cons app actor))
-  ;; (println "app-enqueue! 2 " app)
+;;; (mt-enqueue! app-queue (cons app actor))
+;;; (println "app-enqueue! 2 " app)
   )
 
 #| 2018/9/25 Tue
 関数 実引数* . 継続実引数
-を command と記述することにする。
+を command と呼び，cmd と略記することにする。
 これまで app と記述していたが、徐々に書き換えて行く。
 |#
 
@@ -376,8 +376,9 @@ built-in function: mailboxRemove ^(isEmpty)
 	    (else ; funcが関数適用
 	      (step-app func (func-with-cont (args-to-func args) defcont)))
 	    )))
-      ;; ((null? func)
+;;; ((null? func)
       ((eq? func 'stop)
+;;;      ((or(eq? func 'stop)(null? func))
 	;; (println "step-app func is null")
 	'( )
 	;; (if (null? defcont) '( )(list defcont))
