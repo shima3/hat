@@ -1,0 +1,1185 @@
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+Exit code = 0
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+Exit code = 0
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+Exit code = 0
+$ test/6.sh gauche/interpret.sh src/hat.scm | diff - test/6.out
+Exit code = 0
+$ test/7.sh gauche/interpret.sh src/hat.scm | diff - test/7.out
+Exit code = 0
+$ test/8.sh gauche/interpret.sh src/hat.scm | diff - test/8.out
+Exit code = 0
+$ test/9.sh gauche/interpret.sh src/hat.scm | diff - test/9.out
+Exit code = 0
+
+real	0m28.223s
+user	0m33.398s
+sys	0m0.819s
+2020年 7月 9日 木曜日 08時00分42秒 JST
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+Exit code = 0
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+Exit code = 0
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+Exit code = 0
+$ test/6.sh gauche/interpret.sh src/hat.scm | diff - test/6.out
+Exit code = 0
+$ test/7.sh gauche/interpret.sh src/hat.scm | diff - test/7.out
+Exit code = 0
+$ test/8.sh gauche/interpret.sh src/hat.scm | diff - test/8.out
+Exit code = 0
+$ test/9.sh gauche/interpret.sh src/hat.scm | diff - test/9.out
+Exit code = 0
+
+real	0m28.236s
+user	0m34.634s
+sys	0m0.761s
+Thu Jul  9 08:02:10 JST 2020
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+Exit code = 0
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+Exit code = 0
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+Exit code = 0
+$ test/6.sh gauche/interpret.sh src/hat.scm | diff - test/6.out
+Exit code = 0
+$ test/7.sh gauche/interpret.sh src/hat.scm | diff - test/7.out
+Exit code = 0
+$ test/8.sh gauche/interpret.sh src/hat.scm | diff - test/8.out
+Exit code = 0
+$ test/9.sh gauche/interpret.sh src/hat.scm | diff - test/9.out
+Exit code = 0
+
+real	0m28.163s
+user	0m34.280s
+sys	0m0.770s
+----------Thu Jul  9 08:03:08 JST 2020
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+Exit code = 0
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+Exit code = 0
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+Exit code = 0
+$ test/6.sh gauche/interpret.sh src/hat.scm | diff - test/6.out
+Exit code = 0
+$ test/7.sh gauche/interpret.sh src/hat.scm | diff - test/7.out
+Exit code = 0
+$ test/8.sh gauche/interpret.sh src/hat.scm | diff - test/8.out
+Exit code = 0
+$ test/9.sh gauche/interpret.sh src/hat.scm | diff - test/9.out
+Exit code = 0
+
+real	0m28.485s
+user	0m34.721s
+sys	0m0.793s
+----------Tue Aug  4 12:33:56 JST 2020
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+----------Tue Aug  4 12:34:45 JST 2020
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+----------Tue Aug  4 12:38:30 JST 2020
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+Exit code = 0
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+Exit code = 0
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+0a1,42
+> 10
+> a
+> 10
+> b
+> 9
+> a
+> 8
+> a
+> 9
+> b
+> 7
+> a
+> 6
+> a
+> 8
+> b
+> 5
+> a
+> 4
+> a
+> 7
+> b
+> 3
+> a
+> 2
+> a
+> 6
+> b
+> 1
+> a
+> 0
+> 5
+> b
+> 4
+> b
+> 3
+> b
+> 2
+> b
+> 1
+> b
+> 0
+Exit code = 1
+$ test/6.sh gauche/interpret.sh src/hat.scm | diff - test/6.out
+3a4,16
+> AckSync Start 2
+> main 3
+> Async End 1
+> AckSync Start 3
+> main 4
+> AckSync End 2
+> RplySync Start 4
+> AckSync End 3
+> RplySync End 4
+> main 5 reply=4
+> RplySync Start 5
+> RplySync End 5
+> main 6 reply=5
+Exit code = 1
+$ test/7.sh gauche/interpret.sh src/hat.scm | diff - test/7.out
+0a1,7
+> main 1 flag=(^ (then else) #t else then)
+> main 2 value=(^ (a) b)
+> main 3 flag=(^ (then else) #t else then)
+> main 4 value=(^ (a) b)
+> main 5 flag=(^ (then else) #t else then)
+> main 6 value=a
+> main 7 flag=(^ (then else) #f else then)
+Exit code = 1
+$ test/8.sh gauche/interpret.sh src/hat.scm | diff - test/8.out
+Exit code = 0
+$ test/9.sh gauche/interpret.sh src/hat.scm | diff - test/9.out
+Exit code = 0
+
+real	0m0.868s
+user	0m0.823s
+sys	0m0.175s
+----------Tue Aug  4 12:39:22 JST 2020
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+Exit code = 0
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+Exit code = 0
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+0a1,42
+> 10
+> a
+> 10
+> b
+> 9
+> a
+> 8
+> a
+> 9
+> b
+> 7
+> a
+> 6
+> a
+> 8
+> b
+> 5
+> a
+> 4
+> a
+> 7
+> b
+> 3
+> a
+> 2
+> a
+> 6
+> b
+> 1
+> a
+> 0
+> 5
+> b
+> 4
+> b
+> 3
+> b
+> 2
+> b
+> 1
+> b
+> 0
+Exit code = 1
+$ test/6.sh gauche/interpret.sh src/hat.scm | diff - test/6.out
+3a4,16
+> AckSync Start 2
+> main 3
+> Async End 1
+> AckSync Start 3
+> main 4
+> AckSync End 2
+> RplySync Start 4
+> AckSync End 3
+> RplySync End 4
+> main 5 reply=4
+> RplySync Start 5
+> RplySync End 5
+> main 6 reply=5
+Exit code = 1
+$ test/7.sh gauche/interpret.sh src/hat.scm | diff - test/7.out
+0a1,7
+> main 1 flag=(^ (then else) #t else then)
+> main 2 value=(^ (a) b)
+> main 3 flag=(^ (then else) #t else then)
+> main 4 value=(^ (a) b)
+> main 5 flag=(^ (then else) #t else then)
+> main 6 value=a
+> main 7 flag=(^ (then else) #f else then)
+Exit code = 1
+$ test/8.sh gauche/interpret.sh src/hat.scm | diff - test/8.out
+Exit code = 0
+$ test/9.sh gauche/interpret.sh src/hat.scm | diff - test/9.out
+Exit code = 0
+
+real	0m0.855s
+user	0m0.831s
+sys	0m0.173s
+----------Tue Aug  4 14:56:24 JST 2020
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+Exit code = 0
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+Exit code = 0
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+0a1,42
+> 10
+> a
+> 10
+> b
+> 9
+> a
+> 8
+> a
+> 9
+> b
+> 7
+> a
+> 6
+> a
+> 8
+> b
+> 5
+> a
+> 4
+> a
+> 7
+> b
+> 3
+> a
+> 2
+> a
+> 6
+> b
+> 1
+> a
+> 0
+> 5
+> b
+> 4
+> b
+> 3
+> b
+> 2
+> b
+> 1
+> b
+> 0
+Exit code = 1
+$ test/6.sh gauche/interpret.sh src/hat.scm | diff - test/6.out
+3a4,16
+> AckSync Start 2
+> main 3
+> Async End 1
+> AckSync Start 3
+> main 4
+> AckSync End 2
+> RplySync Start 4
+> AckSync End 3
+> RplySync End 4
+> main 5 reply=4
+> RplySync Start 5
+> RplySync End 5
+> main 6 reply=5
+Exit code = 1
+$ test/7.sh gauche/interpret.sh src/hat.scm | diff - test/7.out
+0a1,7
+> main 1 flag=(^ (then else) #t else then)
+> main 2 value=(^ (a) b)
+> main 3 flag=(^ (then else) #t else then)
+> main 4 value=(^ (a) b)
+> main 5 flag=(^ (then else) #t else then)
+> main 6 value=a
+> main 7 flag=(^ (then else) #f else then)
+Exit code = 1
+$ test/8.sh gauche/interpret.sh src/hat.scm | diff - test/8.out
+Exit code = 0
+$ test/9.sh gauche/interpret.sh src/hat.scm | diff - test/9.out
+Exit code = 0
+
+real	0m0.947s
+user	0m0.886s
+sys	0m0.188s
+----------Tue Aug  4 14:57:53 JST 2020
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+Exit code = 0
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+Exit code = 0
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+0a1,42
+> 10
+> a
+> 10
+> b
+> 9
+> a
+> 8
+> a
+> 9
+> b
+> 7
+> a
+> 6
+> a
+> 8
+> b
+> 5
+> a
+> 4
+> a
+> 7
+> b
+> 3
+> a
+> 2
+> a
+> 6
+> b
+> 1
+> a
+> 0
+> 5
+> b
+> 4
+> b
+> 3
+> b
+> 2
+> b
+> 1
+> b
+> 0
+Exit code = 1
+$ test/6.sh gauche/interpret.sh src/hat.scm | diff - test/6.out
+3a4,16
+> AckSync Start 2
+> main 3
+> Async End 1
+> AckSync Start 3
+> main 4
+> AckSync End 2
+> RplySync Start 4
+> AckSync End 3
+> RplySync End 4
+> main 5 reply=4
+> RplySync Start 5
+> RplySync End 5
+> main 6 reply=5
+Exit code = 1
+$ test/7.sh gauche/interpret.sh src/hat.scm | diff - test/7.out
+0a1,7
+> main 1 flag=(^ (then else) #t else then)
+> main 2 value=(^ (a) b)
+> main 3 flag=(^ (then else) #t else then)
+> main 4 value=(^ (a) b)
+> main 5 flag=(^ (then else) #t else then)
+> main 6 value=a
+> main 7 flag=(^ (then else) #f else then)
+Exit code = 1
+$ test/8.sh gauche/interpret.sh src/hat.scm | diff - test/8.out
+Exit code = 0
+$ test/9.sh gauche/interpret.sh src/hat.scm | diff - test/9.out
+Exit code = 0
+
+real	0m0.889s
+user	0m0.870s
+sys	0m0.179s
+----------Wed Aug  5 00:24:01 JST 2020
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+Exit code = 0
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+Exit code = 0
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+Exit code = 0
+$ test/6.sh gauche/interpret.sh src/hat.scm | diff - test/6.out
+3,6d2
+< main 3
+< main 4
+< main 5 reply=()
+< main 6 reply=()
+10,12d5
+< main 4
+< main 5 reply=()
+< main 6 reply=()
+16,17d8
+< main 5 reply=()
+< main 6 reply=()
+21d11
+< RplySync Start 5
+24,28c14
+< main 6 reply=()
+< AckSync Start 6
+< main 4
+< main 5 reply=()
+< main 6 reply=()
+---
+> RplySync Start 5
+31,64d16
+< RplySync Start 7
+< AckSync End 6
+< RplySync Start 8
+< RplySync End 7
+< main 5 reply=7
+< main 6 reply=()
+< RplySync Start 9
+< RplySync End 8
+< main 6 reply=8
+< RplySync Start 10
+< RplySync End 9
+< main 5 reply=9
+< main 6 reply=()
+< RplySync Start 11
+< RplySync End 10
+< main 6 reply=10
+< RplySync Start 12
+< RplySync End 11
+< main 6 reply=11
+< RplySync Start 13
+< RplySync End 12
+< main 5 reply=12
+< main 6 reply=()
+< RplySync Start 14
+< RplySync End 13
+< RplySync Start 15
+< main 6 reply=13
+< RplySync End 14
+< main 6 reply=14
+< RplySync Start 16
+< RplySync End 15
+< main 6 reply=15
+< RplySync End 16
+< main 6 reply=16
+Exit code = 1
+$ test/7.sh gauche/interpret.sh src/hat.scm | diff - test/7.out
+*** ERROR: pair required, but got ()
+    While loading "./gauche/aid-interpret.scm" at line 72
+Stack Trace:
+_______________________________________
+  0  (car pair)
+        at "examples/stack.sch":146
+  1  (call-with-values (lambda () (apply (eval1 func) args)) (lamb ...
+        at "./src/hat.scm":524
+  2  (step-app app default-continuation)
+        at "./src/hat.scm":285
+  3  (current-actor-set! actor)
+        at "./src/hat.scm":279
+  4  (step-loop)
+        at "./src/hat.scm":315
+1,42c1,7
+< main 1 flag=()
+< main 2 value=()
+< main 3 flag=()
+< main 4 value=()
+< main 5 flag=()
+< main 6 value=()
+< main 7 flag=()
+< main 1 flag=()
+< main 2 value=()
+< main 3 flag=()
+< main 4 value=()
+< main 5 flag=()
+< main 6 value=()
+< main 7 flag=()
+< main 1 flag=()
+< main 2 value=()
+< main 3 flag=()
+< main 4 value=()
+< main 5 flag=()
+< main 6 value=()
+< main 7 flag=()
+< main 1 flag=()
+< main 2 value=()
+< main 3 flag=()
+< main 4 value=()
+< main 5 flag=()
+< main 6 value=()
+< main 7 flag=()
+< main 1 flag=()
+< main 2 value=()
+< main 3 flag=()
+< main 4 value=()
+< main 5 flag=()
+< main 6 value=()
+< main 7 flag=()
+< main 1 flag=()
+< main 2 value=()
+< main 3 flag=()
+< main 4 value=()
+< main 5 flag=()
+< main 6 value=()
+< main 7 flag=()
+---
+> main 1 flag=(^ (then else) #t else then)
+> main 2 value=(^ (a) b)
+> main 3 flag=(^ (then else) #t else then)
+> main 4 value=(^ (a) b)
+> main 5 flag=(^ (then else) #t else then)
+> main 6 value=a
+> main 7 flag=(^ (then else) #f else then)
+Exit code = 1
+$ test/8.sh gauche/interpret.sh src/hat.scm | diff - test/8.out
+Exit code = 0
+$ test/9.sh gauche/interpret.sh src/hat.scm | diff - test/9.out
+Exit code = 0
+
+real	0m38.812s
+user	0m48.179s
+sys	0m0.992s
+----------Wed Aug  5 00:36:01 JST 2020
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+Exit code = 0
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+Exit code = 0
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+Exit code = 0
+$ test/6.sh gauche/interpret.sh src/hat.scm | diff - test/6.out
+Exit code = 0
+$ test/7.sh gauche/interpret.sh src/hat.scm | diff - test/7.out
+*** ERROR: pair required, but got ()
+    While loading "./gauche/aid-interpret.scm" at line 72
+Stack Trace:
+_______________________________________
+  0  (car pair)
+        at "examples/stack.sch":146
+  1  (call-with-values (lambda () (apply (eval1 func) args)) (lamb ...
+        at "./src/hat.scm":525
+  2  (step-app app default-continuation)
+        at "./src/hat.scm":285
+  3  (current-actor-set! actor)
+        at "./src/hat.scm":279
+  4  (step-loop)
+        at "./src/hat.scm":315
+1,42c1,7
+< main 1 flag=()
+< main 2 value=()
+< main 3 flag=()
+< main 4 value=()
+< main 5 flag=()
+< main 6 value=()
+< main 7 flag=()
+< main 1 flag=()
+< main 2 value=()
+< main 3 flag=()
+< main 4 value=()
+< main 5 flag=()
+< main 6 value=()
+< main 7 flag=()
+< main 1 flag=()
+< main 2 value=()
+< main 3 flag=()
+< main 4 value=()
+< main 5 flag=()
+< main 6 value=()
+< main 7 flag=()
+< main 1 flag=()
+< main 2 value=()
+< main 3 flag=()
+< main 4 value=()
+< main 5 flag=()
+< main 6 value=()
+< main 7 flag=()
+< main 1 flag=()
+< main 2 value=()
+< main 3 flag=()
+< main 4 value=()
+< main 5 flag=()
+< main 6 value=()
+< main 7 flag=()
+< main 1 flag=()
+< main 2 value=()
+< main 3 flag=()
+< main 4 value=()
+< main 5 flag=()
+< main 6 value=()
+< main 7 flag=()
+---
+> main 1 flag=(^ (then else) #t else then)
+> main 2 value=(^ (a) b)
+> main 3 flag=(^ (then else) #t else then)
+> main 4 value=(^ (a) b)
+> main 5 flag=(^ (then else) #t else then)
+> main 6 value=a
+> main 7 flag=(^ (then else) #f else then)
+Exit code = 1
+$ test/8.sh gauche/interpret.sh src/hat.scm | diff - test/8.out
+Exit code = 0
+$ test/9.sh gauche/interpret.sh src/hat.scm | diff - test/9.out
+Exit code = 0
+
+real	0m28.383s
+user	0m33.360s
+sys	0m0.584s
+----------Wed Aug  5 00:38:13 JST 2020
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+Exit code = 0
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+Exit code = 0
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+Exit code = 0
+$ test/6.sh gauche/interpret.sh src/hat.scm | diff - test/6.out
+Exit code = 0
+$ test/7.sh gauche/interpret.sh src/hat.scm | diff - test/7.out
+Exit code = 0
+$ test/8.sh gauche/interpret.sh src/hat.scm | diff - test/8.out
+Exit code = 0
+$ test/9.sh gauche/interpret.sh src/hat.scm | diff - test/9.out
+Exit code = 0
+
+real	0m28.092s
+user	0m34.806s
+sys	0m0.756s
+----------Wed Aug  5 01:33:34 JST 2020
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+Exit code = 0
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+Exit code = 0
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+Exit code = 0
+$ test/6.sh gauche/interpret.sh src/hat.scm | diff - test/6.out
+Exit code = 0
+$ test/7.sh gauche/interpret.sh src/hat.scm | diff - test/7.out
+Exit code = 0
+$ test/8.sh gauche/interpret.sh src/hat.scm | diff - test/8.out
+Exit code = 0
+$ test/9.sh gauche/interpret.sh src/hat.scm | diff - test/9.out
+Exit code = 0
+
+real	0m28.415s
+user	0m35.135s
+sys	0m0.788s
+----------Wed Aug  5 01:44:18 JST 2020
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+Exit code = 0
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+Exit code = 0
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+Exit code = 0
+$ test/6.sh gauche/interpret.sh src/hat.scm | diff - test/6.out
+Exit code = 0
+$ test/7.sh gauche/interpret.sh src/hat.scm | diff - test/7.out
+Exit code = 0
+$ test/8.sh gauche/interpret.sh src/hat.scm | diff - test/8.out
+Exit code = 0
+$ test/9.sh gauche/interpret.sh src/hat.scm | diff - test/9.out
+Exit code = 0
+
+real	0m28.247s
+user	0m34.364s
+sys	0m0.859s
+----------Wed Aug  5 01:48:29 JST 2020
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+Exit code = 0
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+Exit code = 0
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+Exit code = 0
+$ test/6.sh gauche/interpret.sh src/hat.scm | diff - test/6.out
+Exit code = 0
+$ test/7.sh gauche/interpret.sh src/hat.scm | diff - test/7.out
+Exit code = 0
+$ test/8.sh gauche/interpret.sh src/hat.scm | diff - test/8.out
+Exit code = 0
+$ test/9.sh gauche/interpret.sh src/hat.scm | diff - test/9.out
+Exit code = 0
+
+real	0m28.386s
+user	0m35.142s
+sys	0m0.767s
+----------Thu Aug  6 04:18:43 JST 2020
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+Exit code = 0
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+Exit code = 0
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+Exit code = 0
+$ test/6.sh gauche/interpret.sh src/hat.scm | diff - test/6.out
+Exit code = 0
+$ test/7.sh gauche/interpret.sh src/hat.scm | diff - test/7.out
+Exit code = 0
+$ test/8.sh gauche/interpret.sh src/hat.scm | diff - test/8.out
+Exit code = 0
+$ test/9.sh gauche/interpret.sh src/hat.scm | diff - test/9.out
+Exit code = 0
+
+real	0m28.497s
+user	0m34.065s
+sys	0m0.680s
+----------Thu Aug  6 12:59:32 JST 2020
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+3a4,6
+> aho
+> barker
+> End
+Exit code = 1
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+Exit code = 0
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+Exit code = 0
+$ test/6.sh gauche/interpret.sh src/hat.scm | diff - test/6.out
+Exit code = 0
+$ test/7.sh gauche/interpret.sh src/hat.scm | diff - test/7.out
+Exit code = 0
+$ test/8.sh gauche/interpret.sh src/hat.scm | diff - test/8.out
+Exit code = 0
+$ test/9.sh gauche/interpret.sh src/hat.scm | diff - test/9.out
+Exit code = 0
+
+real	0m28.356s
+user	0m35.296s
+sys	0m0.757s
+----------Thu Aug  6 18:09:56 JST 2020
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+Exit code = 0
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+Exit code = 0
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+Exit code = 0
+$ test/6.sh gauche/interpret.sh src/hat.scm | diff - test/6.out
+Exit code = 0
+$ test/7.sh gauche/interpret.sh src/hat.scm | diff - test/7.out
+Exit code = 0
+$ test/8.sh gauche/interpret.sh src/hat.scm | diff - test/8.out
+Exit code = 0
+$ test/9.sh gauche/interpret.sh src/hat.scm | diff - test/9.out
+Exit code = 0
+
+real	0m28.366s
+user	0m35.097s
+sys	0m0.751s
+----------Thu Aug  6 18:32:36 JST 2020
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+Exit code = 0
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+Exit code = 0
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+Exit code = 0
+$ test/6.sh gauche/interpret.sh src/hat.scm | diff - test/6.out
+Exit code = 0
+$ test/7.sh gauche/interpret.sh src/hat.scm | diff - test/7.out
+Exit code = 0
+$ test/8.sh gauche/interpret.sh src/hat.scm | diff - test/8.out
+Exit code = 0
+$ test/9.sh gauche/interpret.sh src/hat.scm | diff - test/9.out
+Exit code = 0
+
+real	0m28.267s
+user	0m34.979s
+sys	0m0.745s
+----------Thu Aug  6 21:27:43 JST 2020
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+Exit code = 0
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+1c1,8
+< Illegal function error: (2 2)
+---
+> 2 is a prime number.
+> 3 is a prime number.
+> 4 can be divied by 2.
+> 5 is a prime number.
+> 6 can be divied by 2.
+> 7 is a prime number.
+> 8 can be divied by 2.
+> 9 can be divied by 3.
+Exit code = 1
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+Exit code = 0
+$ test/6.sh gauche/interpret.sh src/hat.scm | diff - test/6.out
+Exit code = 0
+$ test/7.sh gauche/interpret.sh src/hat.scm | diff - test/7.out
+Exit code = 0
+$ test/8.sh gauche/interpret.sh src/hat.scm | diff - test/8.out
+Exit code = 0
+$ test/9.sh gauche/interpret.sh src/hat.scm | diff - test/9.out
+Exit code = 0
+
+real	0m28.145s
+user	0m35.032s
+sys	0m0.735s
+----------Thu Aug  6 21:32:22 JST 2020
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+Exit code = 0
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+1,2c1,8
+< first=2
+< Illegal function error: (2 2)
+---
+> 2 is a prime number.
+> 3 is a prime number.
+> 4 can be divied by 2.
+> 5 is a prime number.
+> 6 can be divied by 2.
+> 7 is a prime number.
+> 8 can be divied by 2.
+> 9 can be divied by 3.
+Exit code = 1
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+----------Thu Aug  6 21:38:17 JST 2020
+$ test/1.sh gauche/interpret.sh src/hat.scm | diff - test/1.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+Exit code = 0
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+Exit code = 0
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+Exit code = 0
+$ test/6.sh gauche/interpret.sh src/hat.scm | diff - test/6.out
+Exit code = 0
+$ test/7.sh gauche/interpret.sh src/hat.scm | diff - test/7.out
+Exit code = 0
+$ test/8.sh gauche/interpret.sh src/hat.scm | diff - test/8.out
+Exit code = 0
+$ test/9.sh gauche/interpret.sh src/hat.scm | diff - test/9.out
+Exit code = 0
+
+real	0m28.214s
+user	0m35.190s
+sys	0m0.727s
+----------Fri Aug  7 22:43:17 JST 2020
+$ test/01-hello.sh gauche/interpret.sh src/hat.scm | diff - test/01-hello.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+Exit code = 0
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+Exit code = 0
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+*** SYSTEM-ERROR: couldn't open input file: "examples/hat/stack.sch": No such file or directory
+    While loading "./gauche/aid-interpret.scm" at line 72
+Stack Trace:
+_______________________________________
+  0  (interpret-command (car sexp) (cdr sexp))
+        at "./src/hat.scm":346
+  1  (interpret-sexp (read port))
+        at "./src/hat.scm":338
+  2  sch-load-path
+        [unknown location]
+  3  (load-sch-script (car args))
+        at "./src/hat.scm":314
+0a1,42
+> 10
+> a
+> 10
+> b
+> 9
+> a
+> 8
+> a
+> 9
+> b
+> 7
+> a
+> 6
+> a
+> 8
+> b
+> 5
+> a
+> 4
+> a
+> 7
+> b
+> 3
+> a
+> 2
+> a
+> 6
+> b
+> 1
+> a
+> 0
+> 5
+> b
+> 4
+> b
+> 3
+> b
+> 2
+> b
+> 1
+> b
+> 0
+Exit code = 1
+$ test/6.sh gauche/interpret.sh src/hat.scm | diff - test/6.out
+Exit code = 0
+$ test/7.sh gauche/interpret.sh src/hat.scm | diff - test/7.out
+Exit code = 0
+$ test/8.sh gauche/interpret.sh src/hat.scm | diff - test/8.out
+Exit code = 0
+$ test/9.sh gauche/interpret.sh src/hat.scm | diff - test/9.out
+Exit code = 0
+
+real	0m8.315s
+user	0m10.114s
+sys	0m0.320s
+----------Fri Aug  7 22:45:34 JST 2020
+$ test/01-hello.sh gauche/interpret.sh src/hat.scm | diff - test/01-hello.out
+Exit code = 0
+$ test/10.sh gauche/interpret.sh src/hat.scm | diff - test/10.out
+Exit code = 0
+$ test/2.sh gauche/interpret.sh src/hat.scm | diff - test/2.out
+Exit code = 0
+$ test/3.sh gauche/interpret.sh src/hat.scm | diff - test/3.out
+Exit code = 0
+$ test/4.sh gauche/interpret.sh src/hat.scm | diff - test/4.out
+Exit code = 0
+$ test/5.sh gauche/interpret.sh src/hat.scm | diff - test/5.out
+Exit code = 0
+$ test/6.sh gauche/interpret.sh src/hat.scm | diff - test/6.out
+Exit code = 0
+$ test/7.sh gauche/interpret.sh src/hat.scm | diff - test/7.out
+Exit code = 0
+$ test/8.sh gauche/interpret.sh src/hat.scm | diff - test/8.out
+Exit code = 0
+$ test/9.sh gauche/interpret.sh src/hat.scm | diff - test/9.out
+Exit code = 0
+
+real	0m28.123s
+user	0m33.344s
+sys	0m0.570s
+----------Sat Aug  8 00:29:21 JST 2020
+$ test/01-hello/1.sh gauche/interpret.sh src/hat.scm | diff - test/01-hello/1.out
+Exit code = 0
+$ test/02-prime/1.sh gauche/interpret.sh src/hat.scm | diff - test/02-prime/1.out
+Exit code = 0
+$ test/03-list/1.sh gauche/interpret.sh src/hat.scm | diff - test/03-list/1.out
+Exit code = 0
+$ test/04-stream/1.sh gauche/interpret.sh src/hat.scm | diff - test/04-stream/1.out
+Exit code = 0
+$ test/05-concurrent/1.sh gauche/interpret.sh src/hat.scm | diff - test/05-concurrent/1.out
+Exit code = 0
+$ test/06-actor/1.sh gauche/interpret.sh src/hat.scm | diff - test/06-actor/1.out
+Exit code = 0
+$ test/07-stack/1.sh gauche/interpret.sh src/hat.scm | diff - test/07-stack/1.out
+Exit code = 0
+$ test/08-non-detereministic/1.sh gauche/interpret.sh src/hat.scm | diff - test/08-non-detereministic/1.out
+Exit code = 0
+$ test/09-group-stage/1.sh gauche/interpret.sh src/hat.scm | diff - test/09-group-stage/1.out
+Exit code = 0
+$ test/10-delay/1.sh gauche/interpret.sh src/hat.scm | diff - test/10-delay/1.out
+test/10-delay/1.sh: line 2: test/10.in: No such file or directory
+0a1,6
+> Start
+> aho
+> barker
+> aho
+> barker
+> End
+Exit code = 1
+
+real	0m28.372s
+user	0m34.764s
+sys	0m0.589s
+----------Sat Aug  8 00:30:29 JST 2020
+$ test/01-hello/1.sh gauche/interpret.sh src/hat.scm | diff - test/01-hello/1.out
+Exit code = 0
+$ test/02-prime/1.sh gauche/interpret.sh src/hat.scm | diff - test/02-prime/1.out
+Exit code = 0
+$ test/03-list/1.sh gauche/interpret.sh src/hat.scm | diff - test/03-list/1.out
+Exit code = 0
+$ test/04-stream/1.sh gauche/interpret.sh src/hat.scm | diff - test/04-stream/1.out
+Exit code = 0
+$ test/05-concurrent/1.sh gauche/interpret.sh src/hat.scm | diff - test/05-concurrent/1.out
+Exit code = 0
+$ test/06-actor/1.sh gauche/interpret.sh src/hat.scm | diff - test/06-actor/1.out
+Exit code = 0
+$ test/07-stack/1.sh gauche/interpret.sh src/hat.scm | diff - test/07-stack/1.out
+Exit code = 0
+$ test/08-non-detereministic/1.sh gauche/interpret.sh src/hat.scm | diff - test/08-non-detereministic/1.out
+Exit code = 0
+$ test/09-group-stage/1.sh gauche/interpret.sh src/hat.scm | diff - test/09-group-stage/1.out
+Exit code = 0
+$ test/10-delay/1.sh gauche/interpret.sh src/hat.scm | diff - test/10-delay/1.out
+test/10-delay/1.sh: line 2: test/1.in: No such file or directory
+0a1,6
+> Start
+> aho
+> barker
+> aho
+> barker
+> End
+Exit code = 1
+
+real	0m28.265s
+user	0m33.386s
+sys	0m0.563s
+----------Sat Aug  8 00:37:28 JST 2020
+$ test/01-hello/1.sh gauche/interpret.sh src/hat.scm | diff - test/01-hello/1.out
+Exit code = 0
+$ test/02-prime/1.sh gauche/interpret.sh src/hat.scm | diff - test/02-prime/1.out
+Exit code = 0
+$ test/03-list/1.sh gauche/interpret.sh src/hat.scm | diff - test/03-list/1.out
+Exit code = 0
+$ test/04-stream/1.sh gauche/interpret.sh src/hat.scm | diff - test/04-stream/1.out
+Exit code = 0
+$ test/05-concurrent/1.sh gauche/interpret.sh src/hat.scm | diff - test/05-concurrent/1.out
+Exit code = 0
+$ test/06-actor/1.sh gauche/interpret.sh src/hat.scm | diff - test/06-actor/1.out
+Exit code = 0
+$ test/07-stack/1.sh gauche/interpret.sh src/hat.scm | diff - test/07-stack/1.out
+Exit code = 0
+$ test/08-non-detereministic/1.sh gauche/interpret.sh src/hat.scm | diff - test/08-non-detereministic/1.out
+Exit code = 0
+$ test/09-group-stage/1.sh gauche/interpret.sh src/hat.scm | diff - test/09-group-stage/1.out
+Exit code = 0
+$ test/10-delay/1.sh gauche/interpret.sh src/hat.scm | diff - test/10-delay/1.out
+Exit code = 0
+
+real	0m28.317s
+user	0m33.474s
+sys	0m0.571s

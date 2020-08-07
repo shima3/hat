@@ -1,0 +1,7 @@
+main 1 flag=(^ (then else) #t else then)
+main 2 value=(^ (a) b)
+main 3 flag=(^ (then else) #t else then)
+main 4 value=(^ (a) b)
+main 5 flag=(^ (then else) #t else then)
+main 6 value=a
+main 7 flag=(^ (then else) #f else then)
