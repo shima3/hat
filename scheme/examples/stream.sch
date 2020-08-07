@@ -61,17 +61,17 @@
 (defineCPS main ^()
 ;;  seq_arith 0 1 ^(s) s ^
   fibonacci 0 1 ^(s)
-  seq_get s ^(e s)
+  seq_pop s ^(e s)
   print("e=" e "\n")^()
-  seq_get s ^(e s)
+  seq_pop s ^(e s)
   print("e=" e "\n")^()
-  seq_get s ^(e s)
+  seq_pop s ^(e s)
   print("e=" e "\n")^()
-  seq_get s ^(e s)
+  seq_pop s ^(e s)
   print("e=" e "\n")^()
-  seq_get s ^(e s)
+  seq_pop s ^(e s)
   print("e=" e "\n")^()
-  seq_get s ^(e s)
+  seq_pop s ^(e s)
   print("e=" e "\n")^()
   exit 0)
 
@@ -107,10 +107,35 @@
   exit 0)
 
 (defineCPS main7 ^()
-  list_seq(1 2 3) seq_end ^($seq1)
+  list_seq(1 2 3) end ^($seq1)
+;;;  list_seq(1 2 3) seq_end ^($seq1)
+  print("seq1=" $seq1 "\n")^()
   seq_append $seq1 seq456 ^($seq2)
+  print("seq2=" $seq2 "\n")^()
   seq_print $seq2 "\n" ^()
   exit 0)
+
+(defineCPS finish ^()
+  print("finish\n")^()
+  exit 0)
+
+(defineCPS handler ^ S
+  stack_pop S ^(S R)
+  print("S=" S "\n")^()
+  end? S ^(flag)
+  print("flag=" flag "\n")^()
+  seq_print S "\n" . R)
+
+(defineCPS main72 ^()
+  seq_print (^ R R 1 ^ R R 2 ^ R R 3 . end) "\n" ^()
+;;;  (handler 1 2 3 . end)^()
+;;;  (handler 1 2 3 . end)^()
+  print("End\n"))
+
+(defineCPS main73 ^()
+  seq_end? (^ R R 1 ^ R R 2 ^ R R 3 . end)^(flag)
+  print(flag)^()
+  stop)
 
 (defineCPS main8 ^()
   I #f ^($flag)
@@ -122,7 +147,7 @@
   #|
   seq_stdin_line ^($seq . $close)
   seq_tokenize_line $seq ^($seq)
-  seq_get $seq ^($first $rest)
+  seq_pop $seq ^($first $rest)
   print("first=" $first "\n")^()
   |#
   case (object_eq? 2 2)
@@ -147,7 +172,7 @@
 
 (defineCPS tokenizeCLNSeq ^(seq . return)
   if(seq_end? in)(return seq_end)^()
-  seq_get in ^(ch in2)
+  seq_pop in ^(ch in2)
   if(char=? ch #\n)
   ( + line_no 1 ^(line_no2)
     tokenizeIn in2 line_no2 . return
@@ -170,7 +195,7 @@ in2 は一致しない文字以降の文字列
     if(>= idx len)(return #t in)^()
     if(seq_end? in)(return #f in)^()
     string-ref prefix idx ^(ch)
-    seq_get in ^(ch2 in2)
+    seq_pop in ^(ch2 in2)
     unless(char=? ch ch2)(return #f in)^()
     + idx 1 ^(idx2)
     loop idx2 in2
@@ -187,14 +212,14 @@ in2 は一致しない文字以降の文字列
 (defineCPS seq_read_sexp ^($in $on_empty on_fail on_error . return)
   seq_skip_spaces $in char_space? ^($in)
   if(seq_end? $in)($on_empty . end)^()
-  seq_get $in ^($ch $in2)
+  seq_pop $in ^($ch $in2)
   case $ch
   (() )
   ^($)
   if(char=? $ch #\()
   (fix
     (^($loop)
-      ) seq_get $in2 ^(ch $in3)
+      ) seq_pop $in2 ^(ch $in3)
     if(char=? ch #\))
     )
   )

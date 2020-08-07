@@ -1,6 +1,7 @@
 #|
 Hat言語のユーティリティ関数
 |#
+#|
 (include "native/char.sch")
 (include "native/list.sch")
 (include "native/number.sch")
@@ -9,28 +10,9 @@ Hat言語のユーティリティ関数
 (include "native/string.sch")
 (include "hat/seq.sch")
 (include "hat/stack.sch")
-
-(defineCPS true ^(a b . ret) ret a)
-(defineCPS false ^(a b . ret) ret b)
-
-(defineCPS memory_gc ^ return
-  (lambda()
-    (gc)
-    )^(dummy)
-  return)
-
-(defineCPS memory_used ^ return
-  (lambda()
-    (let([stat (gc-stat)])
-      (- (cadr (assq :total-heap-size stat))
-	(cadr (assq :free-bytes stat))
-	))))
-
-(defineCPS print ^($list . $return)
-  (lambda (list)
-    (display (string-concatenate (map x->string list)))
-    ) $list ^($dummy)
-  $return)
+|#
+(include "../lib/scheme.sch")
+(include "../lib/hat.sch")
 
 #; ( defineCPS print ^(list . return)
   ( lambda (list)
@@ -38,32 +20,38 @@ Hat言語のユーティリティ関数
     ) list ^(dummy)
   return )
 
-( defineCPS debug_print ^(tag value . return)
-  ( lambda(T V)
-    (display T)
-    (write V)
-    (newline) ) tag value ^(dummy)
-  return )
-
+#|
+and_begin test1 test2 ... testN end ^(bool)
+|#
 (defineCPS and_begin ^ $tests
-  seq_get $tests ^($first $rest)
-  if(object_eq? End $first)($rest #t)^()
+  seq_pop $tests ^($first $rest)
+  if(object_eq? end $first)($rest #t)^()
   if $first (and_begin . $rest)^()
   seq_find $rest (object_eq? End)^($last)
   seq_rest $last ^($rest)
   $rest #f
   )
 
+#|
+or_begin test1 test2 ... testN end ^(bool)
+|#
 (defineCPS or_begin ^ $tests
-  seq_get $tests ^($first $rest)
+  seq_pop $tests ^($first $rest)
   if(object_eq? end $first)($rest #f)^()
   unless $first (or_begin . $rest)^()
   seq_find $rest (object_eq? end)^($last)
   seq_rest $last #t
   )
 
+#|
+cond
+(test1 then1-app ...)
+(test2 then2-app ...)
+...
+(else else-app ...)
+|#
 (defineCPS cond ^ $clauses
-  seq_get $clauses ^($first $rest)
+  seq_pop $clauses ^($first $rest)
   list_split $first ^($head $body)
   if(object_eq? else $head)($body . $rest)^()
   unless $head ($rest cond)^()
@@ -79,7 +67,7 @@ Hat言語のユーティリティ関数
   $key ^(key)
   fix
   (^($loop $seq . $break)
-    seq_get $seq ^($first $rest)
+    seq_pop $seq ^($first $rest)
     list_split $first ^($head $body)
     if(list_or
 	( (list_and
@@ -97,7 +85,7 @@ Hat言語のユーティリティ関数
     ) $clauses ^($clauses)
   fix
   (^($loop $seq . $break)
-    seq_get $seq ^($first $rest)
+    seq_pop $seq ^($first $rest)
     list_split $first ^($head $body)
     if(object_eq? $head else)($break $rest)^()
     $loop $rest . $break
@@ -105,27 +93,12 @@ Hat言語のユーティリティ関数
   $rest
   )
 
-( defineCPS fix ^(f) f (fix f) )
-
-;; ( defineCPS #t ^($x $y . $return) $return $x )
-;; ( defineCPS #f ^($x $y . $return) $return $y )
-( defineCPS #t true)
-( defineCPS #f false)
-
 ( defineCPS ifThenElse ^(condition then else)
   condition then else ^(action)
   action )
 
 ( defineCPS not ^(condition then else)
   condition else then )
-
-( defineCPS nop ^ return return )
-
-(defineCPS if ^(P A . R) P A R ^(B) B)
-
-( defineCPS unless ^($test $body . $return)
-  $test $return $body ^($action)
-  $action )
 
 ( defineCPS moveAll ^(back rest . return)
   unless (isPair back)(return rest) ^()
@@ -177,5 +150,3 @@ list の要素を非決定的に一つ選び、その要素を第1戻り値、
 ( defineCPS gcd ^(a b . return) a ^(a) b ^(b)
   if (= b 0) (return a) ^()
   gcd b (modulo a b) . return )
-
-( defineCPS I ^(x . r) r x)

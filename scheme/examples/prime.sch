@@ -13,8 +13,11 @@
 
 ( defineCPS test ^(args)
   list_car args ^(first)
+;;;  print("first=" first "\n")^()
   string_to_number first ^(n)
+;;;  print("n=" n "\n")^()
   find_divisor n 2 ^(d)
+;;;  print("d=" d "\n")^()
   (= n d)
   ( print(n " is a prime number.\n") )
   ( print(n " can be divied by " d ".\n") ) )

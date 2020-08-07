@@ -7,14 +7,14 @@
   fix
   (^(loop seq . break)
     if(seq_end? seq) break ^()
-    seq_get seq ^(first rest)
+    seq_pop seq ^(first rest)
     print(first "\n")^()
     loop rest . break
     ) seq ^()
   fix
   (^(loop2 seq . break)
     if(seq_end? seq) break ^()
-    seq_get seq ^(first rest)
+    seq_pop seq ^(first rest)
     print(first "\n")^()
     loop2 rest . break
     ) seq ^()
@@ -33,10 +33,10 @@
   print("v2=" v2 "\n")^()
   nop )
 
-(defineCPS seq_end? ^(aSeq . return)
+#; (defineCPS seq_end? ^(aSeq . return)
   aSeq (return #f) . return)
 
-(defineCPS seq_get ^(aSeq . return)
+#; (defineCPS seq_get ^(aSeq . return)
   aSeq
   (^(first . restSeq)
     return first restSeq

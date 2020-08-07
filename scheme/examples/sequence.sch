@@ -1,18 +1,18 @@
 (include "util.sch")
 
 ( defineCPS seq1 ^(r)
-  r 3 1 4 . endSeq )
+  r 3 1 4 . seq_end )
 
 (defineCPS seq2 ^(r)
   r 3 1 4
   )
 
 (defineCPS main7 ^(args)
-  seq_get seq2 ^(el seq)
+  seq_pop seq2 ^(el seq)
   print("el=" el "\n")^()
-  seq_get seq ^(el seq)
+  seq_pop seq ^(el seq)
   print("el=" el "\n")^()
-  seq_get seq ^(el seq)
+  seq_pop seq ^(el seq)
   print("el=" el "\n")^()
   print("seq=" seq "\n")^()
   print("End\n"))

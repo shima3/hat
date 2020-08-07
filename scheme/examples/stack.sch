@@ -89,7 +89,7 @@
 (defineCPS seq_print2 ^(S . R)
   ;; print("seq_print2 S=" S "\n")^()
   if(stack_empty S)(print("stack_empty\n")^() R)^()
-  seq_get S ^(E S)
+  seq_pop S ^(E S)
   print(E "\n")^()
   seq_print2 S . R)
 
@@ -98,7 +98,7 @@
   fix
   (^(L S . break)
     if(stack_empty S) break ^()
-    seq_get S ^(E S)
+    seq_pop S ^(E S)
     print(E "\n")^()
     L S) seq1 ^()
   print("End\n")^()
@@ -118,11 +118,11 @@
 (defineCPS hoge ^ R
   stack_pop R ^(S R)
   print("S=" S "\n")^()
-  seq_get S ^(E S)
+  seq_pop S ^(E S)
   print("E1=" E "\n")^()
-  seq_get S ^(E S)
+  seq_pop S ^(E S)
   print("E2=" E "\n")^()
-  seq_get S ^(E S)
+  seq_pop S ^(E S)
   print("E3=" E "\n")^()
   print("S=" S "\n") . R)
 

@@ -1,4 +1,4 @@
-(include "hat/stack.sch")
+(include "util.sch")
 
 ( defineCPS main ^(args)
   start ( repeat_at_interval ( println "a" ) 1 ) ^()

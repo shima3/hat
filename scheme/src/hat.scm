@@ -269,7 +269,8 @@ built-in function: mailboxRemove ^(isEmpty)
 ;; (define default-continuation '(F.C (exit 0) . stack_end))
 ;; (define default-continuation '(^ R R ^(F . C) C))
 ;; (define default-continuation '(^ R R end . stack_end))
-(define default-continuation '(^ R R stop . stack_end))
+;;; (define default-continuation '(^ R R stop . stack_end))
+(define default-continuation '(^ seq seq stop . cont_end))
 
 (define (step-loop)
   (let loop ( [app-actor (app-dequeue!)] )
@@ -613,14 +614,14 @@ promiseを生成し、変数Pに渡す。
      (lambda(e)
        (cons 'PROMISE (list e))) E))
 
-(set-global-var 'cont_push
+#; (set-global-var 'cont_push
   '(^($cont $func)
      (lambda(cont func)
        (func-with-cont func cont)
        ) $cont $func)
   )
 
-(set-global-var 'cont_pop
+#; (set-global-var 'cont_pop
   '(^($cont . $return)
      (lambda(cont)
        (cadr cont)

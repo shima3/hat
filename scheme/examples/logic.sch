@@ -28,12 +28,6 @@
     infix_begin $value)
   )
 
-(defineCPS and ^($flag1 $flag2)
-  $flag1 $flag2 #f)
-
-(defineCPS or ^($flag1 $flag2)
-  $flag1 #t $flag2)
-
 (defineCPS main ^()
   and_begin #t #f #t end ^($flag)
   print("flag=" $flag "\n")^()
@@ -49,3 +43,7 @@
     print("Else\n"))^()
   print("exit\n")^()
   exit 0)
+
+(defineCPS main3 ^()
+  (and... true true false)^(flag)
+  print("flag=" flag "\n"))
