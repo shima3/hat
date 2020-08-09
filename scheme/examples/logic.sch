@@ -49,7 +49,7 @@
   print("flag=" flag "\n"))
 
 (defineCPS main4 ^()
-  (when true ^(out) print("hello\n") ^() out 1 2)^(flag . seq)
+  (when false ^ return print("hello\n") ^() return 1 2)^(flag . seq)
   print("flag=" flag "\n")^()
   print("seq=" seq "\n")^()
   if flag
