@@ -1,12 +1,12 @@
 (include "util.sch")
 
-(defineCPS True ^(Op)
+#; (defineCPS True ^(Op)
   Op #t)
 
-(defineCPS False ^(Op)
+#; (defineCPS False ^(Op)
   Op #f)
 
-(defineCPS Not ^(Flag)
+#; (defineCPS Not ^(Flag)
   Flag (^(flag) flag False True))
 
 (defineCPS And ^(flag Flag)
@@ -45,5 +45,18 @@
   exit 0)
 
 (defineCPS main3 ^()
-  (and... true true false)^(flag)
+  (and~ true true true)^(flag)
   print("flag=" flag "\n"))
+
+(defineCPS main4 ^()
+  (when true ^(out) print("hello\n") ^() out 1 2)^(flag . seq)
+  print("flag=" flag "\n")^()
+  print("seq=" seq "\n")^()
+  if flag
+  (seq
+    (^(value1 value2)
+      print("value1=" value1 "\n")^()
+      print("value2=" value2 "\n")
+      )
+    )^()
+  print("End\n"))

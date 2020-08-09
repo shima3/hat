@@ -2,9 +2,6 @@
 Hat言語のみで定義された関数群
 |#
 
-(defineCPS true ^(a b . ret) ret a)
-(defineCPS false ^(a b . ret) ret b)
-
 (defineCPS I ^(x . r) r x)
 
 ;; seq ------------------------------------
@@ -312,6 +309,11 @@ $end?を満たす要素を先頭とする列を返す。
 (defineCPS seq_join ^(seq1 seq2 . return)
   return (^(handler) seq1 handler . seq2))
 
+(defineCPS seq~ ^ cont
+  cont_pop cont ^(seq return)
+  seq_join seq seq_end ^(seq)
+  return seq)
+
 ;; stack ---------------------------------
 
 #| スタック関連
@@ -398,17 +400,23 @@ pop: 要素を削除する。
   test return body ^(action)
   action)
 
-(defineCPS foldl ^(f z seq . return)
+(defineCPS fold_left ^(f z seq . return)
   if(seq_end? seq)(return z)^()
   seq_pop seq ^(first rest)
   f z first ^(z2)
-  foldl f z2 rest)
+  fold_left f z2 rest)
 
-(defineCPS foldl... ^(f z . cont)
+(defineCPS fold_left~ ^(f z . cont)
   cont_pop cont ^(seq return)
-  foldl f z seq . return)
+  fold_left f z seq . return)
 
 ;; logic ----------------------------------
+
+(defineCPS true ^(then else . return)
+  return then)
+
+(defineCPS false ^(then else . return)
+  return else)
 
 (defineCPS and ^(test1 test2)
   test1 test2 false)
@@ -416,5 +424,18 @@ pop: 要素を削除する。
 (defineCPS or ^(test1 test2)
   test1 true test2)
 
-(defineCPS and... ^(test1 . cont)
-  foldl... and test1 . cont)
+( defineCPS not ^(test then else)
+  condition else then )
+
+(defineCPS and~ ^(test1 . cont)
+  fold_left~ and test1 . cont)
+
+(defineCPS when ^(test . cont)
+  print("cont=" cont "\n")^()
+  cont_pop cont ^(seq return)
+  print("seq=" seq "\n")^()
+  print("return=" return "\n")^()
+  test
+  (return true . seq)
+  (return false)^(action)
+  action)

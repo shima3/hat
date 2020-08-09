@@ -4,8 +4,8 @@ Scheme依存の関数群
 
 ;; ( defineCPS #t ^($x $y . $return) $return $x )
 ;; ( defineCPS #f ^($x $y . $return) $return $y )
-( defineCPS #t true)
-( defineCPS #f false)
+(defineCPS #t true)
+(defineCPS #f false)
 
 (defineCPS print ^($list . $return)
   (lambda (list)

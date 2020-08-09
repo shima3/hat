@@ -270,7 +270,8 @@ built-in function: mailboxRemove ^(isEmpty)
 ;; (define default-continuation '(^ R R ^(F . C) C))
 ;; (define default-continuation '(^ R R end . stack_end))
 ;;; (define default-continuation '(^ R R stop . stack_end))
-(define default-continuation '(^ seq seq stop . cont_end))
+;;; (define default-continuation '(^ seq seq stop . cont_end))
+(define default-continuation '(^ F$C F$C stop . cont_end))
 
 (define (step-loop)
   (let loop ( [app-actor (app-dequeue!)] )
@@ -365,7 +366,11 @@ built-in function: mailboxRemove ^(isEmpty)
 	(let ((first (car func))(rest (cdr func)))
 	  (case first
 	    ((^)
-	      (step-abs (car rest)(cdr rest) args '( ) defcont))
+	      (if(equal? (car rest) 'F$C)
+		(step-app (cons (car (cdr (cdr rest))) args)(cdr (cdr (cdr rest)))) ; 2020/8/9 bug
+		(step-abs (car rest)(cdr rest) args '( ) defcont)
+		)
+	      )
 	    ((lambda)
 	      (apply-func func (pickup-cont-arg args) defcont))
 	    ((quote)
@@ -472,14 +477,18 @@ built-in function: mailboxRemove ^(isEmpty)
       S return)
   )
 
-(define (func-with-cont? func)
+#; (define (func-with-cont? func)
   (and (pair? func) (equal? (car func) 'F.C))
+  )
+(define (func-with-cont? func)
+  (and (pair? func)(pair? (cdr func))
+    (equal? (car (cdr func)) 'F$C))
   )
 
 (define hoge-count 0)
 
 ;; 継続付き関数を返す。
-(define (func-with-cont func cont)
+#; (define (func-with-cont func cont)
   (if (null? func)
     cont
     (if (or (null? cont)
@@ -493,12 +502,22 @@ built-in function: mailboxRemove ^(isEmpty)
       func
       (cons 'F.C (cons func cont))
       )))
+(define (func-with-cont func cont)
+  (if (null? func)
+    cont
+    (if (or (null? cont)(func-with-cont? func))
+      func
+      (cons '^ (cons 'F$C (cons 'F$C (cons func cont))))
+      )
+    )
+  )
 
 ;; termがpairならば #t、そうでなければ #f を返す。
 (define (pair-terms? term)
   (and (pair? term)
     (case (car term)
-      ((^ lambda quote F.C PROMISE) #f)
+;;;      ((^ lambda quote F.C PROMISE) #f)
+      ((^ lambda quote PROMISE) #f)
       (else #t)))
   )
 
@@ -530,13 +549,15 @@ built-in function: mailboxRemove ^(isEmpty)
 ;; 項 term に含まれる変数を env で対応づけられた値に置き換える。
 ;; env 環境（変数と値との対応）
 (define (substitute-term term env)
-  ;; (println "substitute-term " term " env=" env)
+;;;  (println "substitute-term " term " env=" env)
   (cond
+;;;    ((func-with-cont? term) term)
     ((pair? term)
       (let ((first (car term))(rest (cdr term)))
 	(case first
 	  ((^)(substitute-abs (car rest)(cdr rest) env))
-	  ((lambda quote F.C PROMISE) term)
+;;;	  ((lambda quote F.C PROMISE) term)
+	  ((lambda quote PROMISE) term)
 	  (else
 	    ;; (println "substitute-term else")
 	    (cons (substitute-term first env)
