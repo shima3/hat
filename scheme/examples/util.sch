@@ -11,8 +11,8 @@ Hat言語のユーティリティ関数
 (include "hat/seq.sch")
 (include "hat/stack.sch")
 |#
-(include "../lib/scheme.sch")
-(include "../lib/hat.sch")
+(include "../include/scheme.sch")
+(include "../include/hat.sch")
 
 #; ( defineCPS print ^(list . return)
   ( lambda (list)

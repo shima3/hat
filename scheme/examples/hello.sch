@@ -1,3 +1,3 @@
 (include "util.sch")
-(defineCPS main ^(args)
-  print("Hello World!!\n"))
+(defineCPS main ^()
+  print("Hello World!!"))
