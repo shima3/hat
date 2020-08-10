@@ -1,31 +1,9 @@
-(defineCPS #t ^(then else) then)
-(defineCPS #f ^(then else) else)
-
-(defineCPS nop ^ cont cont)
-
-( defineCPS if ^(condition then)
-  condition then nop
-  )
-
-( defineCPS println ^(list . return)
-  ( lambda (list)
-    (display (string-append (string-concatenate (map x->string list)) "\n"))
-    ) list ^(dummy)
-  return
-  )
-
-( defineCPS print ^(value . return)
-  ( lambda(value)
-    (display value)
-    ) value ^(dummy)
-  return
-  ;; nop
-  )
+(include "util.sch")
 
 ( defineCPS sendAsync ^(actor message)
   let actor
   ( mailboxAdd message ^(isFirst)
-    if isFirst
+    when isFirst
     ( getBehavior ^(behavior)
       message behavior
       ) ) )
@@ -34,7 +12,6 @@
   currentActor ^(from)
   sendAsync actor ( message from return ) ^()
   nop . stop )
-;;;  nop . end )
 
 ( defineCPS RplyRqstd ^(message from return behavior)
   message behavior ^ reply
@@ -54,72 +31,64 @@
   sendSync actor ( AckRqstd message )
   )
 
-( defineCPS + ^(a b)
-  (lambda (a b)(+ a b)) a b )
-
 ( defineCPS counter ^(count arg . return)
   + count 1 ^(count)
-  println(arg " Start " count) ^()
+  (print~ arg " Start " count) ^()
   sleepSec 1 ^()
   actorBecome (counter count) ^()
   actorNext ^()
   sleepSec 1 ^()
-  println(arg " End " count) ^()
+  (print~ arg " End " count) ^()
   return count ^()
   nop )
 
 ( defineCPS print.reply ^(reply)
-  println("reply=" reply) )
+  (print~ "reply=" reply) )
 
 ( defineCPS main ^(args)
   makeActor ( counter 0 ) ^(a)
-  ;; sendAsync a {^(b) println("Async") ^() actorNext} ^()
-  println("main 1") ^()
+  (print~ "main 1") ^()
   sendAsync a (^(b) b "Async") ^()
-  println("main 2") ^( )
+  (print~ "main 2") ^( )
   sendAckSync a (^(b) b "AckSync") ^()
-  println("main 3") ^( )
+  (print~ "main 3") ^( )
   sendAckSync a (^(b) b "AckSync") ^()
-  println("main 4") ^( )
+  (print~ "main 4") ^( )
   sendRplySync a (^(b) b "RplySync") ^(r)
-  println("main 5 reply=" r) ^()
+  (print~ "main 5 reply=" r) ^()
   sendRplySync a (^(b) b "RplySync") ^(r)
-  println("main 6 reply=" r)
+  (print~ "main 6 reply=" r)
   )
 
-( defineCPS main1 ^(args)
-  println("main 1") ^()
+(defineCPS main1 ^(args)
+  (print~ "main 1") ^()
   makeActor ( counter 0 ) ^(a)
-  println("main 2") ^()
-  ;; sendAsync a {^(b) b "Async"} ^( )
-  ;; sendAckSync a {^(b) b "AckSync"} ^( )
+  (print~ "main 2") ^()
   sendRplySync a (^(b) b "RplySync") ^(r)
-  println("main 3")
-  )
+  (print~ "main 3") )
 
-( defineCPS main2 ^(args)
-  counter 0 "Async"
-  )
+(defineCPS main2 ^(args)
+  counter 0 "Async")
 
-( defineCPS main3 ^(args)
-  println("a") ^( )
-  println("b") ^( )
-  println("c")
-  )
+(defineCPS main3 ^(args)
+  (print~ "a") ^( )
+  (print~ "b") ^( )
+  (print~ "c"))
 
-( defineCPS main4 ^(args)
+(defineCPS main4 ^(args)
   main3 ( ) ^( )
-  print "d"
-)
+  (print~ "d"))
 
 (defineCPS beforeTime ^(time)
-  (lambda (time)(time<? (current-time) time)) time)
+  (lambda(time)
+    (time<? (current-time) time)) time)
 
 ;;  (lambda (condition then else)(if condition then else)) condition then else
 ;;  ^(thenorelse) thenorelse)
 
 (defineCPS sleepUntil ^(timeout)
-  (beforeTime timeout)(sleepUntil timeout)( ))
+  when(beforeTime timeout)(sleepUntil timeout))
+;;;  if(beforeTime timeout)(sleepUntil timeout)( ))
   ;; if (beforeTime timeout)(sleepUntil timeout))
 
 (defineCPS sleepSec ^(sec) sec ^(sec)

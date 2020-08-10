@@ -29,7 +29,7 @@
   contend)
 
 (defineCPS contexec ^(cont . return)
-  if(contend? cont) return ^()
+  when(contend? cont) return ^()
   contpop cont ^(first rest)
   first ^()
   contexec rest . return
@@ -62,17 +62,17 @@
 ;;  seq_arith 0 1 ^(s) s ^
   fibonacci 0 1 ^(s)
   seq_pop s ^(e s)
-  print("e=" e)^()
+  (print~ "e=" e)^()
   seq_pop s ^(e s)
-  print("e=" e)^()
+  (print~ "e=" e)^()
   seq_pop s ^(e s)
-  print("e=" e)^()
+  (print~ "e=" e)^()
   seq_pop s ^(e s)
-  print("e=" e)^()
+  (print~ "e=" e)^()
   seq_pop s ^(e s)
-  print("e=" e)^()
+  (print~ "e=" e)^()
   seq_pop s ^(e s)
-  print("e=" e)^()
+  (print~ "e=" e)^()
   exit 0)
 
 (defineCPS main3 ^()
@@ -134,7 +134,7 @@
 
 (defineCPS main73 ^()
   seq_end? (^ R R 1 ^ R R 2 ^ R R 3 . end)^(flag)
-  print(flag)^()
+  (print~ flag)^()
   stop)
 
 (defineCPS main8 ^()
@@ -171,13 +171,13 @@
   )
 
 (defineCPS tokenizeCLNSeq ^(seq . return)
-  if(seq_end? in)(return seq_end)^()
+  when(seq_end? in)(return seq_end)^()
   seq_pop in ^(ch in2)
-  if(char=? ch #\n)
+  when(char=? ch #\n)
   ( + line_no 1 ^(line_no2)
     tokenizeIn in2 line_no2 . return
     )^()
-  if(char=? ch #\Space)
+  when(char=? ch #\Space)
   (tokenizeIn in2 line_no . return)^()
   
   )
@@ -192,8 +192,8 @@ in2 は一致しない文字以降の文字列
   string-length prefix ^(len)
   fix
   (^(loop idx in)
-    if(>= idx len)(return #t in)^()
-    if(seq_end? in)(return #f in)^()
+    when(>= idx len)(return #t in)^()
+    when(seq_end? in)(return #f in)^()
     string-ref prefix idx ^(ch)
     seq_pop in ^(ch2 in2)
     unless(char=? ch ch2)(return #f in)^()
@@ -206,27 +206,21 @@ in2 は一致しない文字以降の文字列
 
 ;; (defineCPS char2sexpSeq ^(char_seq))
 
+;;; 未完成
 ;; on_empty 入力の終わりで、これ以上読めないとき、呼び出す関数
 ;; on_fail 構文の推定に失敗したが、別の構文に合う可能性があるとき、呼び出す関数
 ;; on_error 構文エラーのとき、呼び出す関数
-(defineCPS seq_read_sexp ^($in $on_empty on_fail on_error . return)
+#; (defineCPS seq_read_sexp ^($in $on_empty on_fail on_error . return)
   seq_skip_spaces $in char_space? ^($in)
-  if(seq_end? $in)($on_empty . end)^()
+  when(seq_end? $in)($on_empty . end)^()
   seq_pop $in ^($ch $in2)
   case $ch
   (() )
   ^($)
-  if(char=? $ch #\()
+  when(char=? $ch #\()
   (fix
     (^($loop)
       ) seq_pop $in2 ^(ch $in3)
     if(char=? ch #\))
     )
   )
-
-#; (defineCPS debugPrint ^(tag value)
-  (lambda (tag value)(display tag)(display value)(newline))
-  tag value ^(dummy)( ))
-
-;; (defineCPS #t ^(x y) x)
-;; (defineCPS #f ^(x y) y)

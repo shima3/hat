@@ -15,12 +15,12 @@
   list_car args ^(first)
 ;;;  print("first=" first "\n")^()
   string_to_number first ^(n)
-;;;  print("n=" n)^()
+;;;  (print~ "n=" n)^()
   find_divisor n 2 ^(d)
-;;;  print("d=" d)^()
-  (= n d)
-  ( print(n " is a prime number.") )
-  ( print(n " can be divied by " d ".") ) )
+;;;  (print~ "d=" d)^()
+  if(= n d)
+  (print~ n " is a prime number.")
+  (print~ n " can be divied by " d ".") )
 
 (defineCPS main1 ^(args)
   print(args "\n"))
@@ -45,7 +45,7 @@
   print(f "\n"))
 
 (defineCPS main6 ^(args)
-  ifthenelse (< 13 4) "aho" "boke" ^(msg)
+  (< 13 4) "aho" "boke" ^(msg)
   print(msg "\n"))
 
 (defineCPS main7 ^(args)
@@ -57,9 +57,6 @@
   string_to_number first ^(n)
   find_divisor n 2 ^(d)
   print(d "\n"))
-
-(defineCPS #t ^(a b) a)
-(defineCPS #f ^(a b) b)
 
 #; (defineCPS println ^(value)
   (lambda (value)(display value)(newline)) value ^(dummy)( ))
@@ -91,19 +88,10 @@
 #; (defineCPS remainder ^(a b) a ^(a) b ^(b)
   (lambda (A B)(remainder A B)) a b)
 
-#; (defineCPS ifthenelse ^(condition then else)
-  condition then else)
-
-#; (defineCPS if ^(condition then else) condition ^(condition)
-  (lambda (condition then else)(if condition then else)) condition then else
-  ^(thenorelse) thenorelse)
-
-(defineCPS find_divisor ^(n d) d ^(d)
-  cond((< n (* d d)) n)
-  (else cond((= (remainder n d) 0) d)
-    (else find_divisor n (+ d 1))
-    )
-  )
+(defineCPS find_divisor ^(n d . return) d ^(d)
+  when(< n (* d d))(return n)^()
+  when(= (remainder n d) 0)(return d)^()
+  find_divisor n (+ d 1). return)
 
 #; (defineCPS string_to_number ^(str)
   (lambda (str)(string->number str)) str)

@@ -144,7 +144,7 @@ seqの各要素をconvertの引数として与え、その戻り値からなる�
 |#
 ( defineCPS seq_map ^(convert seq return)
   fix( ^(loop S R)
-       if(seq_end? S)(seq_end R)^()
+       (when(seq_end? S) seq_end R)^()
        seq_pop S ^(v s)
        convert v ^(V)
        R V ^(r)
@@ -175,7 +175,7 @@ r0: 数列を受け取る関数
 seqのN個までの数列を返す。
 |#
 ( defineCPS seq_finite ^(seq n r . return)
-  if(<= n 0)(seq_end r . return)^()
+  (when(<= n 0) seq_end r . return)^()
   seq_enum (seq_end r) seq ^(first . rest)
   r first ^(r)
   - n 1 ^(n)
@@ -186,11 +186,10 @@ $seqの先頭から条件$skip?を満たす要素を読み飛ばし、
 $skip?を満たさない要素を先頭とする列を返す。
 |#
 (defineCPS seq_skip ^($seq $skip? . $return)
-  if(seq_end? $seq)($return $seq)^()
+  when(seq_end? $seq)($return $seq)^()
   seq_pop $seq ^($ch $rest)
   unless($skip? $ch)($return $seq)^()
-  seq_skip $rest $skip? . $return
-  )
+  seq_skip $rest $skip? . $return)
 
 #|
 列$seqの先頭から条件$match?を満たす要素を探す。
@@ -198,9 +197,9 @@ $skip?を満たさない要素を先頭とする列を返す。
 条件を満たす要素が見つからなかったとき、列の終端を返す。
 |#
 (defineCPS seq_find ^($seq $match? . $return)
-  if(seq_end? $seq)($return seq_end)^()
+  (when(seq_end? $seq) $return seq_end)^()
   seq_pop $seq ^($el $rest)
-  if($match? $el)($return $seq)^()
+  (when($match? $el) $return $seq)^()
   seq_find $rest $match? . $return
   )
 
@@ -235,7 +234,7 @@ $skip?を満たさない要素を先頭とする列を返す。
   print("close\n"))
 
 (defineCPS seq_tokenize_line ^($seq . $return)
-  if(seq_end? $seq)($return seq_end)^()
+  (when(seq_end? $seq) $return seq_end)^()
   seq_pop $seq ^($line $seq2)
   list_split $line ^($str $no)
   string_tokenize $str ^($list)
@@ -257,16 +256,16 @@ $seqの先頭から条件$end?を満たさない要素からなるリストと�
 $end?を満たす要素を先頭とする列を返す。
 |#
 (defineCPS seq_get_list ^($seq $end? . $return)
-  if(seq_end? $seq)($return () $seq)^()
+  (when(seq_end? $seq) $return () $seq)^()
   seq_pop $seq ^($first $rest)
-  if($end? $first)($return () $seq . $end)^()
+  (when($end? $first) $return () $seq . $end)^()
   seq_get_list $rest $end? ^($list $rest)
   list_cons $first $list ^($list)
   $return $list $rest
   )
 
 (defineCPS seq_list ^($seq . $return)
-  if(seq_end? $seq)($return '())^()
+  (when(seq_end? $seq) $return ())^()
   seq_pop $seq ^($first $seq2)
   seq_list $seq2 ^($list)
   list_cons $first $list ^($list2)
@@ -293,6 +292,10 @@ $end?を満たす要素を先頭とする列を返す。
   cont_pop cont ^(seq return)
   seq_join seq seq_end ^(seq)
   return seq)
+
+;; 列の先頭の要素を関数，残りの要素を引数として関数適用を実行する
+(defineCPS seq_app ^(seq . return)
+  seq (^(f) f). return)
 
 ;; stack ---------------------------------
 
@@ -322,7 +325,7 @@ pop: 要素を削除する。
   R F C)
 
 (defineCPS stack_print ^(S . R)
-  if(stack_empty S) R ^()
+  (when(stack_empty S) R)^()
   stack_pop S ^(E S2)
   print(E "\n")^()
   stack_print S2)
@@ -375,38 +378,6 @@ pop: 要素を削除する。
 (defineCPS cont_end seq_end)
 |#
 
-;; control --------------------------------
-
-(defineCPS fix ^(f) f (fix f))
-
-(defineCPS nop ^ return return)
-
-#; (defineCPS if ^(test then else)
-  test then else ^(action)
-action)
-
-(defineCPS if ^(test body . return)
-  test body return ^(action)
-  action)
-
-(defineCPS unless ^(test body . return)
-  test return body ^(action)
-  action)
-
-(defineCPS fold_left ^(f z seq . return)
-  (when(seq_end? seq) return z)^()
-;;;  if(seq_end? seq)(return z)^()
-;;;  print("seq=" seq)^()
-  seq_pop seq ^(first rest)
-  f z first ^(z2)
-  fold_left f z2 rest)
-
-(defineCPS fold_left~ ^(f z . cont)
-  cont_pop cont ^(seq return)
-;;;  print("seq=" seq)^()
-;;;  print("return=" return)^()
-  fold_left f z seq . return)
-
 ;; logic ----------------------------------
 
 (defineCPS true ^(then else . return)
@@ -422,21 +393,82 @@ action)
 (defineCPS or ^(test1 test2)
   test1 true test2)
 
-( defineCPS not ^(test then else)
-  condition else then )
+(defineCPS not ^(test then else)
+  test else then)
 
 (defineCPS and~ ^(test1 . cont)
   fold_left~ and test1 . cont)
 
-(defineCPS when ^(test . cont)
-;;;  print("cont=" cont)^()
-;;;  print("test=" test)^()
+;; control --------------------------------
+
+(defineCPS fix ^(f) f (fix f))
+
+(defineCPS nop ^ return return)
+
+(defineCPS if ^(test then else)
+  test then else ^(action)
+  action)
+
+(defineCPS when ^(test body . return)
+  test body return ^(action)
+  action)
+
+(defineCPS unless ^(test body . return)
+  test return body ^(action)
+  action)
+
+(defineCPS when~ ^(test . cont)
+  cont_pop cont ^(seq return)
+  test (seq_app seq) return ^(action)
+  action)
+
+(defineCPS unless~ ^(test . cont)
+  cont_pop cont ^(seq return)
+  test return (seq_app seq)^(action)
+  action)
+
+(defineCPS if~ ^(test . cont)
+;;;  (print~ "cont=" cont)^()
+  cont_pop cont ^(seq return)
+  seq_join seq seq_end ^(seq)
+;;;  (print~ "seq=" seq)^()
+  seq_pop seq ^(then seq)
+;;;  (print~ "test=" test)^()
+;;;  (print~ "then=" then)^()
+;;;  (print~ "return=" return)^()
+  when test (then . return)^()
+;;;  (print~ "seq=" seq)^()
+  when(seq_end? seq) return ^()
+  seq_pop seq ^(first rest)
+;;;  (print~ "first=" first)^()
+  unless(object_eq? first else)(first . return)^()
+;;;  (print~ "rest=" rest)^()
+  seq_app rest . return)
+
+#; (defineCPS if ^(test body . return)
+  test body return ^(action)
+  action)
+
+(defineCPS fold_left ^(f z seq . return)
+  when(seq_end? seq)(return z)^()
+;;;  if(seq_end? seq)(return z)^()
+;;;  print("seq=" seq)^()
+  seq_pop seq ^(first rest)
+  f z first ^(z2)
+  fold_left f z2 rest)
+
+(defineCPS fold_left~ ^(f z . cont)
   cont_pop cont ^(seq return)
 ;;;  print("seq=" seq)^()
 ;;;  print("return=" return)^()
-  test (seq I) return ^(action)
-  action)
+  fold_left f z seq . return)
 
 (defineCPS test2 ^(args)
-  (when true print("hi true"))^()
-  print("end"))
+  when true (print~ "hi true")^()
+  (print~ "end"))
+
+(defineCPS test3 ^(args)
+  (print~ "Begin")^()
+  if true (print~ "then")#;else(print~ "else")^()
+;;;  if false (print~ "then")(print~ "else")^()
+  (print~ "End"))

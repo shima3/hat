@@ -25,8 +25,8 @@ and_begin test1 test2 ... testN end ^(bool)
 |#
 (defineCPS and_begin ^ $tests
   seq_pop $tests ^($first $rest)
-  if(object_eq? end $first)($rest #t)^()
-  if $first (and_begin . $rest)^()
+  when(object_eq? end $first)($rest #t)^()
+  when $first (and_begin . $rest)^()
   seq_find $rest (object_eq? End)^($last)
   seq_rest $last ^($rest)
   $rest #f
@@ -37,7 +37,7 @@ or_begin test1 test2 ... testN end ^(bool)
 |#
 (defineCPS or_begin ^ $tests
   seq_pop $tests ^($first $rest)
-  if(object_eq? end $first)($rest #f)^()
+  when(object_eq? end $first)($rest #f)^()
   unless $first (or_begin . $rest)^()
   seq_find $rest (object_eq? end)^($last)
   seq_rest $last #t
@@ -53,7 +53,7 @@ cond
 (defineCPS cond ^ $clauses
   seq_pop $clauses ^($first $rest)
   list_split $first ^($head $body)
-  if(object_eq? else $head)($body . $rest)^()
+  when(object_eq? else $head)($body . $rest)^()
   unless $head ($rest cond)^()
   seq_find $rest
   (^($clause)
@@ -69,7 +69,7 @@ cond
   (^($loop $seq . $break)
     seq_pop $seq ^($first $rest)
     list_split $first ^($head $body)
-    if(list_or
+    when(list_or
 	( (list_and
 	    ( (object_eq? $head then)
 	      (object_eq? key #t)
@@ -87,24 +87,26 @@ cond
   (^($loop $seq . $break)
     seq_pop $seq ^($first $rest)
     list_split $first ^($head $body)
-    if(object_eq? $head else)($break $rest)^()
+    when(object_eq? $head else)($break $rest)^()
     $loop $rest . $break
     ) $clauses ^($rest)
   $rest
   )
 
-( defineCPS ifThenElse ^(condition then else)
+#; ( defineCPS ifThenElse ^(condition then else)
   condition then else ^(action)
   action )
 
-( defineCPS not ^(condition then else)
+#; ( defineCPS not ^(condition then else)
   condition else then )
 
 ( defineCPS moveAll ^(back rest . return)
-  unless (isPair back)(return rest) ^()
-  getFirst back ^(el)
-  getRest back ^(back)
-  makePair el rest ^(rest)
+  unless(list_pair? back)(return rest) ^()
+;;;  getFirst back ^(el)
+;;;  getRest back ^(back)
+  list_split back ^(el back)
+;;;  makePair el rest ^(rest)
+  list_cons el rest ^(rest)
   moveAll back rest )
 
 #|
@@ -114,14 +116,15 @@ action を呼び出す。
 |#
 ( defineCPS forEach ^(list action . return)
   fix
-  ( ^(loop back rest)
-    unless (isPair rest) return ^()
-    splitPair rest ^(el rest)
+  (^(loop back rest)
+    unless(list_pair? rest) return ^()
+    list_split rest ^(el rest)
 ;;    getFirst rest ^(el)
 ;;    getRest rest ^(rest)
     moveAll back rest ^(others)
     action el others ^()
-    makePair el back ^(back)
+;;;    makePair el back ^(back)
+    list_cons el back ^(back)
     loop back rest)
   ( ) list )
 ;;  ( ) list . end ) 2019/7/10 修正
@@ -148,5 +151,24 @@ list の要素を非決定的に一つ選び、その要素を第1戻り値、
   exp )
 
 ( defineCPS gcd ^(a b . return) a ^(a) b ^(b)
-  if (= b 0) (return a) ^()
+  when(= b 0)(return a)^()
   gcd b (modulo a b) . return )
+
+(defineCPS hoge ^(a . c)
+  (print~ "a=" a)^()
+  (print~ "c=" c))
+
+(defineCPS test1sub ^(test)
+  (print~ "if1 ")^()
+  (if~ test (print~ "then1"))^()
+  (print~ "if2 ")^()
+  (if~ test (print~ "then2")(print~ "else2"))^()
+  (print~ "if3 ")^()
+  (if~ test (print~ "then3")else(print~ "else3")))
+
+(defineCPS test1util ^(args)
+  (print~ "if true")^()
+  test1sub true ^()
+  (print~ "if false")^()
+  test1sub false ^()
+  (print~ "End"))

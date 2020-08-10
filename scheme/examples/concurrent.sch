@@ -1,31 +1,31 @@
 (include "util.sch")
 
 ( defineCPS main ^(args)
-  start ( repeat_at_interval ( println "a" ) 1 ) ^()
-  start ( repeat_at_interval ( println "b" ) 2 ) ^()
+  start ( repeat_at_interval ( print~ "a" ) 1 ) ^()
+  start ( repeat_at_interval ( print~ "b" ) 2 ) ^()
   wait)
 
 (defineCPS main1 ^(args)
-  repeat_at_interval (println "a") 1)
+  repeat_at_interval (print~ "a") 1)
 
 (defineCPS main2 ^(args)
-  println "a" ^( )
-  println "b")
+  print~ "a" ^( )
+  print~ "b")
 
 ( defineCPS main3 ^(args)
-  start ( println "a" ) ^()
+  start ( print~ "a" ) ^()
   wait )
 
 ( defineCPS main4 ^(args)
   makeQueue ^(queue)
-  repeatConcurrentStep queue ( println "a" ) )
+  repeatConcurrentStep queue ( print~ "a" ) )
 
 ( defineCPS main5 ^(args)
-  stepCommand ( println "a" ) ^(value)
+  stepCommand ( print~ "a" ) ^(value)
   print("main5 value=" value "\n") )
 
 ( defineCPS main6 ^(args)
-  stepCommand ( println "a" ) ^(value)
+  stepCommand ( print~ "a" ) ^(value)
   isCommand value ^(flag)
   print("main6 flag=" flag "\n") )
 
@@ -38,14 +38,15 @@
   makeQueue ^(queue)
   repeatConcurrentStep queue
   ( enqueue queue
-    ( println "a" ^()
-      println "b" ^()
-      println "c" ) ^()
+    ( (print~ "a")^()
+      (print~ "b")^()
+      (print~ "c") ) ^()
     enqueue queue
-    ( println "d" ^()
-      println "e" ^()
-      println "f" ) ) )
+    ( (print~ "d")^()
+      (print~ "e")^()
+      (print~ "f") ) ) )
 
+#|
 ( defineCPS print ^(list . return)
   ( lambda (list)
     (display (string-append (string-concatenate (map x->string list))))
@@ -53,18 +54,19 @@
   return )
 
 ( defineCPS fix ^(x) x (fix x) )
+|#
 
 ( defineCPS repeatStep ^(command)
   stepCommand command ^(value)
   ;; isCommand value ^(flag)
-  if ( isCommand value )( repeatStep value ) )
+  when( isCommand value )( repeatStep value ) )
 
 ( defineCPS repeatConcurrentStep ^(queue command . return)
   stepCommand command ^(value)
   ;; isCommand value ^(flag)
-  if ( isCommand value )( enqueue queue value ) ^()
+  when( isCommand value )( enqueue queue value ) ^()
   ;; isEmptyQueue queue ^(flag)
-  if ( isEmptyQueue queue ) return ^()
+  when( isEmptyQueue queue ) return ^()
   dequeue queue ^(command)
   repeatConcurrentStep queue command )
 
@@ -116,8 +118,8 @@
   (lambda (a b)(- a b)) a b)
 
 ( defineCPS repeat_at_interval_duration ^(exp duration count) count ^(count)
-  println count ^( )
-  if (= count 0) stop ^( )
+  (print~ count)^( )
+  when(= count 0) stop ^( )
   (lambda (d)(add-duration (current-time) d)) duration ^(timeout)
   exp ^( )
   sleep_until timeout ^( )
@@ -133,7 +135,7 @@
   (lambda (sec)(seconds->duration sec)) sec ^(duration)
   repeat_at_interval_duration exp duration 10)
 
-(defineCPS println ^(value . return)
+#; (defineCPS println ^(value . return)
   (lambda(value)(display value)(newline)) value ^(dummy)
   return)
 
@@ -141,12 +143,6 @@
   (display value)
   (newline)
   '( ))
-
-(defineCPS #t ^(then else) then)
-(defineCPS #f ^(then else) else)
-
-( defineCPS if ^(condition then . return) ; condition ^(condition)
-  condition (then . return) return )
 
 #; (defineCPS if ^(condition then else) condition ^(condition)
   (lambda (condition then else)(if condition then else)) condition then else
@@ -157,7 +153,7 @@
 
 ( defineCPS sleep_until ^(timeout)
   before_time timeout ^(flag)
-  if flag ( sleep_until timeout )
+  when flag ( sleep_until timeout )
   )
 
 (defineCPS sleep_sec ^(sec) sec ^(sec)

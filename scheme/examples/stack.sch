@@ -36,7 +36,7 @@
   (^(loop S . break)
     stack_empty S ^(P)
     ;; S が空のとき，stack_pop S ^(el S2) すると loop を抜ける。
-    if P
+    when P
     ( print("(break)")^()
       break
       )^()
@@ -88,7 +88,7 @@
 
 (defineCPS seq_print2 ^(S . R)
   ;; print("seq_print2 S=" S "\n")^()
-  if(stack_empty S)(print("stack_empty\n")^() R)^()
+  when(stack_empty S)(print("stack_empty\n")^() R)^()
   seq_pop S ^(E S)
   print(E "\n")^()
   seq_print2 S . R)
@@ -97,7 +97,7 @@
   print("Start\n")^()
   fix
   (^(L S . break)
-    if(stack_empty S) break ^()
+    when(stack_empty S) break ^()
     seq_pop S ^(E S)
     print(E "\n")^()
     L S) seq1 ^()
@@ -150,7 +150,7 @@
 #; ( defineCPS sendAsync ^(actor message)
   let actor
   ( mailboxAdd message ^(isFirst)
-    if isFirst
+    when isFirst
     ( getBehavior ^(behavior)
       message behavior
       ) ) )
@@ -160,7 +160,7 @@
   let actor
   ( mailboxAdd message ^(isFirst)
     ;; println("sendAsync 2") ^()
-    if isFirst
+    when isFirst
     (
       ;; println("sendAsync 3 message=" message) ^()
       getBehavior ^(behavior)
@@ -262,23 +262,23 @@
   stackPush stack (^(a) b) ^( )
   stackPush stack c ^( )
   stackIsEmpty stack ^(flag)
-  println("main 1 flag=" flag) ^()
+  (print~ "main 1 flag=" flag) ^()
   stackPop stack ^(value)
-  println("main 2 value=" value) ^()
+  (print~ "main 2 value=" value) ^()
   stackIsEmpty stack ^(flag)
-  println("main 3 flag=" flag) ^()
+  (print~ "main 3 flag=" flag) ^()
   stackPop stack ^(value)
-  println("main 4 value=" value) ^()
+  (print~ "main 4 value=" value) ^()
   stackIsEmpty stack ^(flag)
-  println("main 5 flag=" flag) ^()
+  (print~ "main 5 flag=" flag) ^()
   stackPop stack ^(value)
-  println("main 6 value=" value) ^()
+  (print~ "main 6 value=" value) ^()
   stackIsEmpty stack ^(flag)
-  println("main 7 flag=" flag) ;; ^()
+  (print~ "main 7 flag=" flag) ;; ^()
   ;; nop
   )
 
-( defineCPS println ^(list . return)
+#; ( defineCPS println ^(list . return)
   ( lambda (list)
     ; (display (string-append (string-concatenate (map x->string list)) "\n"))
     ; (map write list)(newline)
@@ -287,4 +287,4 @@
   return ;; バグ . end　混入日不明、2019/7/8発見
   )
 
-(defineCPS nop ^ cont cont)
+#; (defineCPS nop ^ cont cont)

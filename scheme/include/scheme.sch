@@ -11,15 +11,26 @@ Scheme依存の関数群
 
 (defineCPS print ^(list . return)
   (lambda(L)
-    (let loop ([list L])
-      (if(pair? list)
-	(let ([first (car list)])
-	  (if(string? first)
-	    (display first)
-	    (write first))
-	  (loop (cdr list)))
-	(newline)))) list ^(dummy)
+    (apply print L)) list ^(dummy)
   return)
+
+(defineCPS newline ^ return
+  (lambda()
+    (newline))^(dummy)
+  return)
+
+(defineCPS print~ ^ cont
+  cont_pop cont ^(seq return)
+  seq_join seq seq_end ^(seq)
+;;;  print("seq=" seq "\n")^()
+  fix
+  (^(loop seq)
+    seq_pop seq ^(first rest)
+    print(first)^()
+    loop rest) seq ^()
+  newline . return)
+;;;  seq_list seq ^(list)
+;;;  print list ^()
 
 ( defineCPS debug_print ^(tag value . return)
   ( lambda(T V)
@@ -264,6 +275,13 @@ char_seq_stdout ^(out . close)
   (lambda(a b)
     (eq? a b)
     ) $a $b)
+
+(defineCPS object_print ^(obj . return)
+  (lambda(Obj)
+    (if(string? Obj)
+      (display Obj)
+      (write Obj))) obj ^(dummy)
+  return)
 
 ;; port -----------------------------------
 

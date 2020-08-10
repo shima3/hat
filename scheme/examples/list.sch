@@ -1,3 +1,6 @@
+(include "util.sch")
+
+#|
 (defineCPS fix ^(f) f (fix f))
 
 (defineCPS + ^(left right) left ^(left) right ^(right)
@@ -36,12 +39,12 @@
 (defineCPS unless ^(condition action . return)
   condition return action)
 
-#; (defineCPS isEmpty ^(list . return)
+(defineCPS isEmpty ^(list . return)
   list (^ c eq? c end ^(flag) return flag) ^(a) a . end)
 
-;; (defineCPS getFirst ^(list . return) list (^(a . c) return a))
+(defineCPS getFirst ^(list . return) list (^(a . c) return a))
 
-;; (defineCPS getRest ^(list) (^(a2 . c2) list (^(a . c) c a2 . c2)))
+(defineCPS getRest ^(list) (^(a2 . c2) list (^(a . c) c a2 . c2)))
 
 (defineCPS append ^(list1 list2)
   (^(a . c) list1 a ^(a2) list2 a2 . c))
@@ -62,12 +65,13 @@
   (lambda (value)(display value)(newline)) value ^(dummy)())
 
 (defineCPS I ^(x . return) return x)
+|#
 
-( defineCPS main ^()
+( defineCPS main ^(args)
   I () ^(list)
-  cons 1 list ^(list)
-  cons 2 list ^(list)
-  cons 3 list ^(list)
+  list_cons 1 list ^(list)
+  list_cons 2 list ^(list)
+  list_cons 3 list ^(list)
   print(list "\n") ^()
   moveAll list () ^(list)
   print(list "\n")^()
