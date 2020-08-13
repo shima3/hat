@@ -1,4 +1,4 @@
-----------Thu Aug 13 20:04:32 UTC 2020
+----------Thu Aug 13 21:07:27 UTC 2020
 $ test/01-hello/1.sh guile/interpret.sh src/hat.scm | diff - test/01-hello/1.out
 Exit code = 0
 $ test/02-prime/1.sh guile/interpret.sh src/hat.scm | diff - test/02-prime/1.out
@@ -20,6 +20,6 @@ Exit code = 0
 $ test/10-delay/1.sh guile/interpret.sh src/hat.scm | diff - test/10-delay/1.out
 Exit code = 0
 
-real	0m28.495s
-user	0m20.410s
-sys	0m7.940s
+real	0m28.518s
+user	0m20.270s
+sys	0m8.070s

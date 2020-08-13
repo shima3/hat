@@ -292,13 +292,13 @@ char_seq_stdout ^(out . close)
 
 (defineCPS port_stdin ^()
   (lambda()
-    (current-input-port)))
-;;;    (standard-input-port)))
+    (standard-input-port)))
+;;;    (current-input-port)))
 
 (defineCPS port_stdout ^()
   (lambda()
-    (current-output-port)))
-;;;    (standard-output-port)))
+    (standard-output-port)))
+;;;    (current-output-port)))
 
 (defineCPS port_in ^($port)
   delay
@@ -324,9 +324,7 @@ char_seq_stdout ^(out . close)
 
 (defineCPS port_read_line ^($port)
   (lambda(port)
-    (set-readline-input-port! port)
-    (readline)
-;;;    (read-line port)
+    (read-line port)
     ) $port)
 
 (defineCPS port_line_seq ^($port $start)
