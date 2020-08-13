@@ -15,8 +15,8 @@ Scheme依存の関数群
   return)
 
 (defineCPS newline ^ return
-  (lambda()
-    (newline))^(dummy)
+;;;  (lambda(dummy)(newline)) "dummy" ^(dummy)
+  (lambda()(newline))^(dummy)
   return)
 
 (defineCPS print~ ^ cont
@@ -24,10 +24,11 @@ Scheme依存の関数群
   seq_join seq seq_end ^(seq)
 ;;;  print("seq=" seq "\n")^()
   fix
-  (^(loop seq)
+  (^(loop seq . break)
+    when(seq_end? seq) break ^()
     seq_pop seq ^(first rest)
     print(first)^()
-    loop rest) seq ^()
+    loop rest . break) seq ^()
   newline . return)
 ;;;  seq_list seq ^(list)
 ;;;  print list ^()
@@ -252,11 +253,10 @@ char_seq_stdout ^(out . close)
     (remainder A B)
     ) $a $b)
 
-(defineCPS modulo ^(a b)
-  a ^($a) b ^($b)
-  (lambda(A B)
-    (modulo A B)
-    ) $a $b)
+;;; (defineCPS modulo ^(a b)
+(defineCPS mod ^(dividend divisor)
+  dividend ^(a) divisor ^(b)
+  (lambda(A B)(modulo A B)) a b)
 
 (defineCPS div-and-mod ^(a b)
   a ^($a) b ^($b)
@@ -372,7 +372,10 @@ char_seq_stdout ^(out . close)
   (lambda (S I C)(string-set! S I C)) str index char ^(dummy)
   return )
 
-( defineCPS stringToNumber ^(str)
+( defineCPS str_num ^(str)
+  (lambda (str)(string->number str)) str )
+
+#; ( defineCPS stringToNumber ^(str)
   (lambda (str)(string->number str)) str )
 
 ;; memory ------------------------------

@@ -332,27 +332,48 @@ pop: 要素を削除する。
 
 ;; cont ----------------------------------
 
-(defineCPS cont_push ^(cont func . return)
-  return(^ seq seq func . cont))
+(defineCPS cont_push ^(cont func)
+  (lambda(C F)
+    (func-with-cont F C)
+    ) cont func)
 
 (defineCPS cont_pop ^(cont . return)
+  (lambda(C)
+    (cadr C)
+    ) cont ^(first)
+  (lambda(C)
+    (cddr C)
+    ) cont ^(rest)
+  return first rest)
+
+(defineCPS cont_end ())
+
+(defineCPS cont_end? ^(cont)
+  (lambda(C)
+    (null? C)
+    ) cont)
+
+#; (defineCPS cont_push ^(cont func . return)
+  return(^ seq seq func . cont))
+
+#; (defineCPS cont_pop ^(cont . return)
   cont ^(func . cont)
   return func cont)
 
-(defineCPS cont_end ^ return
+#; (defineCPS cont_end ^ return
   return . seq_end)
 
-(defineCPS cont_end? ^(cont . return)
+#; (defineCPS cont_end? ^(cont . return)
   cont ^ seq
   seq_end? seq . return)
 
-(defineCPS test ^ cont
-  print("cont=" cont)^()
+#; (defineCPS test ^ cont
+  print("cont=" cont "\n")^()
   cont_pop cont ^(first rest)
-  print("first=" first)^()
-  print("rest=" rest)^()
+  print("first=" first "\n")^()
+  print("rest=" rest "\n")^()
   + 1 2 ^(a)
-  print("a=" a)^()
+  print("a=" a "\n")^()
   exit 0)
 
 #| cont_end, cont_end? のその他の定義
@@ -463,12 +484,31 @@ pop: 要素を削除する。
 ;;;  print("return=" return)^()
   fold_left f z seq . return)
 
-(defineCPS test2 ^(args)
+;; test ------------------------------------
+
+(defineCPS hat_test1 ^()
+  if~ true (print~"then1")^()
+  if~ true (print~"then2") else (print~"else2")^()
+  print("End\n"))
+
+(defineCPS hat_test2 ^(args)
   when true (print~ "hi true")^()
   (print~ "end"))
 
-(defineCPS test3 ^(args)
+(defineCPS hat_test3 ^(args)
   (print~ "Begin")^()
   if true (print~ "then")#;else(print~ "else")^()
 ;;;  if false (print~ "then")(print~ "else")^()
   (print~ "End"))
+
+(defineCPS hat_test4 ^(args)
+  list_car args ^(arg1)
+  str_num arg1 ^(year)
+  (^ break
+    when(= (mod year 400) 0)(break "400で割り切れる" true)^()
+    when(= (mod year 100) 0)(break "100で割り切れる" false)^()
+    when(= (mod year 4) 0)(break "4で割り切れる" true)^()
+    break "4で割り切れない" false
+    )^(reason leap?)
+  leap? "です" "ではありません" ^(ending)
+  print(year "年は" reason "ので，うるう年" ending "\n"))
