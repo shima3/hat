@@ -2,7 +2,10 @@
 インタプリタ本体
 シングルスレッド版
 |#
+
+;; -------------------------------------
 ;; Scheme処理系依存を吸収するためのユーティリティ関数
+
 (define (cons-alist key datum alist)(cons (cons key datum) alist))
 (define (eval1 expr)(eval expr (interaction-environment)))
 (define (print . list)
@@ -16,6 +19,7 @@
   (apply print list)
   (newline))
 
+;; --------------------------------------
 ;; 大域変数用ハッシュ表
 (define cps-env (make-eqv-hashtable))
 ;; (define cps-env (make-hash-table)) ;; 2017/7/13 bug 
@@ -104,23 +108,16 @@ built-in function: mailboxRemove ^(isEmpty)
 ;;; (println "app-enqueue! 2 " app)
   )
 
-#| 2018/9/25 Tue
-関数 実引数* . 継続実引数
-を command と呼び，cmd と略記することにする。
-これまで app と記述していたが、徐々に書き換えて行く。
-|#
+(define (start-fap fap)
+  (app-enqueue! fap (current-actor)))
 
-;; command: 
-(define (start-command command)
-  (app-enqueue! command (current-actor)))
-
-;; built-in function: start command ^( )
-;; 関数適用 command の計算を開始する
+;; built-in function: start fap ^( )
+;; 関数適用 fap の計算を開始する
 (set-global-var 'start
-  '(lambda (command)
+  '(lambda(fap)
      ;; (println "start 1")
      ;; (app-enqueue! app (current-actor))
-     (start-command command)
+     (start-fap fap)
      ;; (println "start 2")
      '( )))
 
