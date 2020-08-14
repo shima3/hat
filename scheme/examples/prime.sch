@@ -14,7 +14,7 @@
 ( defineCPS test ^(args)
   list_car args ^(first)
 ;;;  print("first=" first "\n")^()
-  string_to_number first ^(n)
+  string->number first ^(n)
 ;;;  (print~ "n=" n)^()
   find_divisor n 2 ^(d)
 ;;;  (print~ "d=" d)^()
@@ -31,12 +31,12 @@
 
 (defineCPS main3 ^(args)
   get_first args ^(first)
-  string_to_number first ^(n)
+  string->number first ^(n)
   print(n "\n"))
 
 (defineCPS main4 ^(args)
   get_first args ^(first)
-  string_to_number first ^(n)
+  string->number first ^(n)
   n ^(n)
   print(n "\n"))
 
@@ -54,7 +54,7 @@
 
 (defineCPS main8 ^(args)
   car args ^(first)
-  string_to_number first ^(n)
+  string->number first ^(n)
   find_divisor n 2 ^(d)
   print(d "\n"))
 
