@@ -505,9 +505,9 @@ pop: 要素を削除する。
   list_car args ^(arg1)
   str_num arg1 ^(year)
   (^ break
-    when(= (mod year 400) 0)(break "400で割り切れる" true)^()
-    when(= (mod year 100) 0)(break "100で割り切れる" false)^()
-    when(= (mod year 4) 0)(break "4で割り切れる" true)^()
+    when(= (modulo year 400) 0)(break "400で割り切れる" true)^()
+    when(= (modulo year 100) 0)(break "100で割り切れる" false)^()
+    when(= (modulo year 4) 0)(break "4で割り切れる" true)^()
     break "4で割り切れない" false
     )^(reason leap?)
   leap? "です" "ではありません" ^(ending)

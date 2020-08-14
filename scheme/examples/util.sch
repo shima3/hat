@@ -136,27 +136,13 @@ list の要素を非決定的に一つ選び、その要素を第1戻り値、
 ( defineCPS amb ^(list . cont)
   forEach list cont )
 
-( defineCPS makeString ^(len) len ^(len)
-  (lambda (len)(make-string len)) len )
-
-( defineCPS stringSet! ^(str index char . return) index ^(index)
-  (lambda (S I C)(string-set! S I C)) str index char ^(dummy)
-  return )
-
-( defineCPS string_to_number ^(str)
-  (lambda (str)(string->number str)) str )
-
-( defineCPS listToValues ^(list . return)
-  (lambda(L R) (cons R L)) list return ^(exp)
-  exp )
-
 #|
 整数aとbの最大公約数を返す関数
 |#
-(defineCPS gcd ^(a b . c)
-  a ^(a) b ^(b)
-  when(= b 0)(c a)^()
-  gcd b (mod a b). c)
+(defineCPS gcd ^(a b) a ^(a) b ^(b)
+  if(= b 0) a (gcd b (modulo a b)))
+
+;; test ---------------------------------
 
 (defineCPS hoge ^(a . c)
   (print~ "a=" a)^()
