@@ -23,7 +23,7 @@ SCHEME="$3"
 for TEST in $TESTS
 do
     BASE="${TEST%.*}"
-    test/${OUT}.sh "$BASE" "$TEST" "$SCHEME/interpret.sh" "$SRC"
+    test/${OUT}.sh "$BASE" "$TEST" "$SCHEME/interpret.sh" "$SRC" -I include
     echo "Exit code = $?"
 done
 exit 0

@@ -367,44 +367,62 @@ built-in function: mailboxRemove ^(isEmpty)
 	(if (equal? (string-ref arg 0) #\-)
 	  (let ((opt (string-ref arg 1)))
 	    (case opt
-	      ((#\e)
+	      ([#\e]
 		(set! entry-point (substring arg 2 (string-length arg)))
 		(if (equal? entry-point "")
 		  (begin
 		    (set! args (cdr args))
 		    (set! entry-point (car args))))
 		(set! entry-point (string->symbol entry-point)))
+	      ([#\I]
+		(set! args (cdr args))
+		(let([dir (car args)])
+		  (unless(eq? (string-ref dir (- (string-length dir) 1)) #\/)
+		    (set! dir (string-append dir "/")))
+		  (set! sch-load-path (cons dir sch-load-path))))
 	      )
 	    (set! args (cdr args))
 	    (loop))))))
-  (load-sch-script (car args))
+  (set! sch-load-path (cons "" sch-load-path))
+;;;  (println "sch-load-path=" sch-load-path)
+  (load-sch-script (car args) sch-load-path)
   (app-enqueue! (list entry-point (cdr args))(new-actor "main"))
   (step-loop)
   (exit exit-code))
 
-(define sch-load-path "")
+(define sch-load-path ())
 
-(define (get-path filename)
-  (let ([index (string-index-right filename #\/)])
-    (if (number? index)
+(define(get-path filename)
+  (let([index (string-index-right filename #\/)])
+    (if(number? index)
       (substring filename 0 (+ index 1))
       #f
       )))
 
 ;; sch-script 言語のファイル filename を読み込む
-(define (load-sch-script filename)
-  (let ([filepath (string-append sch-load-path filename)])
-    (call-with-input-file filepath
-      (lambda (port)
-	(let ( [previous sch-load-path]
-	       [next (get-path filepath)] )
-	  (if (string? next)
-	    (set! sch-load-path next))
-	  (let loop ( )
-	    (if (interpret-sexp (read port))
+(define(load-sch-script filename path)
+  (if(pair? path)
+    (let([filepath (string-append (car path) filename)])
+;;;      (println "filepath=" filepath)
+      (call-with-input-file filepath
+	(lambda(port)
+	  (if port
+	    (let( [previous sch-load-path]
+		  [next (get-path filepath)] )
+	      (if (string? next)
+		(set! sch-load-path (cons next sch-load-path)))
+	      (while(interpret-sexp (read port))())
+	      #; (let loop ( )
+	      (if (interpret-sexp (read port))
 	      (loop)))
-	  (set! sch-load-path previous)
-	  )))))
+	      (set! sch-load-path previous)
+	      )
+	    (load-sch-script filename (cdr path))))
+	:if-does-not-exist #f))
+    (begin
+      (println "*** ERROR: cannot find \"" filename "\" in " sch-load-path)
+      (exit 1))
+    ))
 
 ;; S式 sexp を解釈し，実行する．
 (define (interpret-sexp sexp)
@@ -416,8 +434,8 @@ built-in function: mailboxRemove ^(isEmpty)
 ;; コマンド cmd，引数 args を解釈し，実行する．
 (define (interpret-command cmd args)
   (case cmd
-    ((defineCPS)(set-global-var (car args)(cdr args)))
-    ((include)(load-sch-script (car args)))
+    ([defineCPS](set-global-var (car args)(cdr args)))
+    ([include](load-sch-script (car args) sch-load-path))
     ))
 
 (define (arg-seq? func)

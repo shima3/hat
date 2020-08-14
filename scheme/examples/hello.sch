@@ -1,3 +1,4 @@
+#!/usr/local/bin/hat
 (include "util.sch")
-(defineCPS main ^()
+(defineCPS main ^(args)
   print("Hello World!!\n"))
