@@ -1,4 +1,4 @@
-----------Sat Aug 15 04:12:43 JST 2020
+----------Sat Aug 15 04:43:39 JST 2020
 $ test/01-hello/1.sh gauche/interpret.sh src/hat.scm | diff - test/01-hello/1.out
 Exit code = 0
 $ test/02-prime/1.sh gauche/interpret.sh src/hat.scm | diff - test/02-prime/1.out
@@ -20,6 +20,6 @@ Exit code = 0
 $ test/10-delay/1.sh gauche/interpret.sh src/hat.scm | diff - test/10-delay/1.out
 Exit code = 0
 
-real	0m28.251s
-user	0m31.722s
-sys	0m0.637s
+real	0m28.398s
+user	0m31.958s
+sys	0m0.646s
