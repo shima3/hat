@@ -19,6 +19,70 @@
   (apply print list)
   (newline))
 
+;; -------------------------------------
+;; データ構造
+
+;; (cons key value) ; key-value pair
+;; (list kv1 kv2 ...) ; list of key-value pairs
+
+(define-record-type vtb #t #t ; 変数表 variable table
+  kvld ; キーと値の対の降順リスト list of key-value pairs in descending order
+  kvla ; キーと値の対の昇順リスト list of key-value pairs in ascending order
+  )
+
+;; 空の変数表を作って返す
+(define (new-vtb)(make-vtb ()()))
+
+(define (print-vtb t)
+  (println (vtb-kvld t))
+  (println (vtb-kvla t)))
+
+;; 次のような降順リストと昇順リストからなる変数表を返す。
+;;   降順リスト：指定されたキー以下
+;;   昇順リスト：指定されたキーより大きい
+(define (move-vtb
+	  kvld ; 降順リスト
+	  kvla ; 昇順リスト
+	  key ; キー
+	  )
+  (cond
+    [(and(pair? kvld)(> (compare (car (car kvld)) key) 0))
+      (move-vtb (cdr kvld)(cons (car kvld) kvla) key)]
+    [(and(pair? kvla)(<= (compare (car (car kvla)) key) 0))
+      (move-vtb (cons (car kvla) kvld)(cdr kvla) key)]
+    [else (make-vtb kvld kvla)]
+    )
+  )
+
+(define (remove-vtb ; 指定されたキーの対を変数表から取り除く
+	  t ; 変数表
+	  key ; キー
+	  )
+  (let([t (move-vtb (vtb-kvld t)(vtb-kvla t) key)])
+    (if(and(pair? (vtb-kvld t))(eq? (car (car (vtb-kvld t))) key))
+      (make-vtb (cdr (vtb-kvld t))(vtb-kvla t))
+      t)))
+
+(define (put-vtb ; 指定されたキーと値の対を変数表に登録する
+	  t ; 変数表
+	  key ; キー
+	  value ; 値
+	  )
+  (let ([t (remove-vtb t key)])
+    (make-vtb (cons (cons key value)(vtb-kvld t))(vtb-kvla t))))
+
+(define-record-type fap #t #t ; 関数適用 function application
+  func ; 関数
+  args ; 通常の実引数のリスト
+  cont ; 継続の実引数
+  )
+
+(define-record-type fab #t #t ; 関数抽象 function abstraction
+  pars ; 仮引数のリスト 
+  fap  ; 関数適用
+  vars ; 変数表
+  )
+
 ;; --------------------------------------
 ;; 大域変数用ハッシュ表
 (define cps-env (make-eqv-hashtable))

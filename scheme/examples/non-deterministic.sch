@@ -178,7 +178,7 @@
 ( defineCPS stackPop ^(stack)
   sendRplySync stack
   ( ^(list . return)
-    list_split list ^(value list)
+    list_pop list ^(value list)
     actorBecome list ^()
     actorNext ^()
     return value ) )
@@ -217,7 +217,7 @@ listから１つ要素を選び、その要素と残りのリストを返す。
     ;; print("amb2 5\n") ^()
     return2 "dummy" ) ^(p)
   ;; print("amb2 6\n") ^()
-  list_split p ^(first rest)
+  list_pop p ^(first rest)
   return first rest )
 
 ( defineCPS main4 ^(args)

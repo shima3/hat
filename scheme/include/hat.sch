@@ -236,13 +236,13 @@ $skip?を満たさない要素を先頭とする列を返す。
 (defineCPS seq_tokenize_line ^($seq . $return)
   (when(seq_end? $seq) $return seq_end)^()
   seq_pop $seq ^($line $seq2)
-  list_split $line ^($str $no)
+  list_pop $line ^($str $no)
   string_tokenize $str ^($list)
   fix
   (^($loop $list)
     (list_pair? $list)
     (^($out)
-      list_split $list ^($first $rest)
+      list_pop $list ^($first $rest)
       $out ($first . $no)^($out2)
       $loop $rest $out2
       )

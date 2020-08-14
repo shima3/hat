@@ -52,7 +52,7 @@ cond
 |#
 (defineCPS cond ^ $clauses
   seq_pop $clauses ^($first $rest)
-  list_split $first ^($head $body)
+  list_pop $first ^($head $body)
   when(object_eq? else $head)($body . $rest)^()
   unless $head ($rest cond)^()
   seq_find $rest
@@ -68,7 +68,7 @@ cond
   fix
   (^($loop $seq . $break)
     seq_pop $seq ^($first $rest)
-    list_split $first ^($head $body)
+    list_pop $first ^($head $body)
     when(list_or
 	( (list_and
 	    ( (object_eq? $head then)
@@ -86,7 +86,7 @@ cond
   fix
   (^($loop $seq . $break)
     seq_pop $seq ^($first $rest)
-    list_split $first ^($head $body)
+    list_pop $first ^($head $body)
     when(object_eq? $head else)($break $rest)^()
     $loop $rest . $break
     ) $clauses ^($rest)
@@ -104,7 +104,7 @@ cond
   unless(list_pair? back)(return rest) ^()
 ;;;  getFirst back ^(el)
 ;;;  getRest back ^(back)
-  list_split back ^(el back)
+  list_pop back ^(el back)
 ;;;  makePair el rest ^(rest)
   list_cons el rest ^(rest)
   moveAll back rest )
@@ -118,7 +118,7 @@ action を呼び出す。
   fix
   (^(loop back rest)
     unless(list_pair? rest) return ^()
-    list_split rest ^(el rest)
+    list_pop rest ^(el rest)
 ;;    getFirst rest ^(el)
 ;;    getRest rest ^(rest)
     moveAll back rest ^(others)
@@ -150,9 +150,13 @@ list の要素を非決定的に一つ選び、その要素を第1戻り値、
   (lambda(L R) (cons R L)) list return ^(exp)
   exp )
 
-( defineCPS gcd ^(a b . return) a ^(a) b ^(b)
-  when(= b 0)(return a)^()
-  gcd b (modulo a b) . return )
+#|
+整数aとbの最大公約数を返す関数
+|#
+(defineCPS gcd ^(a b . c)
+  a ^(a) b ^(b)
+  when(= b 0)(c a)^()
+  gcd b (mod a b). c)
 
 (defineCPS hoge ^(a . c)
   (print~ "a=" a)^()

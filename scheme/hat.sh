@@ -4,4 +4,5 @@
 # func: 最初に呼び出す関数
 # Example: ./hat.sh sample/hello.sch
 dir=${0%/*}
-$dir/gauche/interpret.sh $dir/src/hat.scm $*
+# $dir/gauche/interpret.sh $dir/src/hat.scm $*
+$dir/gauche/hat.sh $*

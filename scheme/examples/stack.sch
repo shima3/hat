@@ -3,7 +3,7 @@
 (defineCPS list2stack ^(list . return)
   cond
   ((list_pair? list)
-    list_split list ^(first rest)
+    list_pop list ^(first rest)
     return first ^()
     list2stack rest
     )
