@@ -59,37 +59,32 @@ var HatInterpreter=(function( ){
 
     /** データ構造とコンストラクタ **/
     
-    /* タスク
-       actor: Actor
-       fun: HatExp
-       args: 配列
-       stack: ContStack
-    */
+    /* タスク */
     function Task(actor, fun, args, contarg, stack){
 	// var obj=Object.create(Task.prototype);
 	// if(!args) console.log("Task args is undefined.");
-	this.actor=actor;
-	this.fun=fun;
-	this.args=args;
-	this.contarg=contarg;
-	this.stack=stack;
+	this.actor=actor; // アクター
+	this.fun=fun; // 関数 HatExp
+	this.args=args; // 通常の実引数の配列
+	this.contarg=contarg; // 継続の実引数
+	this.stack=stack; // 継続スタック
 	// return obj;
     }
     
     /* アクター */
     function Actor(script){
 	// var obj=Object.create(Actor.prototype);
-	this.mailbox=[ ];
-	this.script=script;
-	this.plist=[ ];
+	this.mailbox=[ ]; // メッセージの配列
+	this.script=script; // 関数定義
+	this.plist=[ ]; // 属性リスト
 	// return obj;
     }
     
     /* ソースファイル名と行番号 */
     function Source(filename, lineno){
 	// var src=Object.create(Source.prototype);
-	this.filename=filename;
-	this.lineno=lineno;
+	this.filename=filename; // ファイル名
+	this.lineno=lineno; // 行番号
 	// return src;
     }
     
@@ -101,13 +96,13 @@ var HatInterpreter=(function( ){
     /* 変数 */
     function HatVar(name, source){
 	HatExp.call(this, source);
-	this.name=name;
+	this.name=name; // 変数名
     }
 
     /* 数値 */
     function HatNumber(value, source){
 	HatExp.call(this, source);
-	this.value=value;
+	this.value=value; // 値
     }
 
     /* 論理値
@@ -136,15 +131,16 @@ var HatInterpreter=(function( ){
     /* ハット関数 */
     function HatFun(pars, contpar, funcall, source){
 	HatExp.call(this, source);
-	this.pars=pars;
-	this.contpar=contpar;
-	this.funcall=funcall;
+	this.pars=pars; // 通常の仮引数の配列
+	this.contpar=contpar; // 継続の仮引数
+	this.funcall=funcall; // 関数適用
     }
     
     /* JavaScript関数 */
     function JSFun(code, source){
 	HatExp.call(this, source);
-	this.string=code.string;
+	this.string=code.string; // JavaScriptコード
+	// 2020/8/17 セキュリティリスクあり
 	this.fun=eval(code.string);
     }
 
@@ -175,9 +171,10 @@ var HatInterpreter=(function( ){
 	    source=array[start].source;
 	HatExp.call(this, source);
 	var obj=this;
-	obj.array=array? array: emptyArray;
-	obj.start=start;
-	obj.tail=tail;
+	obj.array=array? array: emptyArray; // 要素の配列
+	obj.start=start; // 先頭の要素の添字
+	obj.tail=tail; // 末尾のList
+	// 変数の名前と値の対応関係
 	obj.assignment=Object.keys(assignment).length>0? assignment: null;
 	if(obj.array==null) console.warn("obj.array=null");
     }
@@ -185,17 +182,17 @@ var HatInterpreter=(function( ){
     /* 継続スタック */
     function ContStack(first, rest){
 	HatExp.call(this, first.source);
-	this.first=first;
-	this.rest=rest;
-	this.size=rest? rest.size+1: 1;
+	this.first=first; // 先頭の継続
+	this.rest=rest; // 先頭を除く継続スタック
+	this.size=rest? rest.size+1: 1; // 継続の個数
     }
     
     /* スクリプト */
     function Script(path){
-	this.path=path;
-	this.included=[ ];
-	this.defined={ };
-	this.dictionary=null;
+	this.path=path; // ファイルのパス名
+	this.included=[ ]; // インクルードファイルの配列
+	this.defined={ }; // このファイル自身（インクルードファイルは除く）で定義された関数の集合
+	this.dictionary=null; // このファイル（インクルードファイルも含め）で定義された全ての関数の集合
     }
 
     /** トップレベル **/
@@ -623,28 +620,30 @@ var HatInterpreter=(function( ){
 	    }else task.fun=task.popCont( );
 	    let args=[ ];
 	    for(let arg of task.args){
-		switch(arg.type){
-		case 'HatVar':
-		    switch(arg.name){
-		    case 'true':
-			args.push(true);
+		if(arg){ // 2020/12/24 add for debug
+		    switch(arg.type){
+		    case 'HatVar':
+			switch(arg.name){
+			case 'true':
+			    args.push(true);
+			    break;
+			case 'false':
+			    args.push(false);
+			    break;
+			default:
+			    args.push(arg);
+			}
 			break;
-		    case 'false':
-			args.push(false);
+		    case 'Number':
+			args.push(arg.value);
+			break;
+		    case 'String':
+			args.push(arg.string);
 			break;
 		    default:
 			args.push(arg);
 		    }
-		    break;
-		case 'Number':
-		    args.push(arg.value);
-		    break;
-		case 'String':
-		    args.push(arg.string);
-		    break;
-		default:
-		    args.push(arg);
-		}
+		}else args.push(arg);
 	    }
 	    let value=this.fun.apply(this, args);
 	    task.args=[this.js2hatdata(value)];
@@ -1114,7 +1113,8 @@ var HatInterpreter=(function( ){
 	var source=new Source(path, array[start].location.start.line);
 	return new List(array2, 0, tail, null, source);
     }
-    
+
+    // 2020/8/17 呼び出されてないので，そのうち削除する。
     function readHatCode(code, script, path){
 	// console.log("readHatCode 1: code="+code);
 	// code=code.replace(/#\|([^|]*\|[^#])*\|#/gu, function(str){
