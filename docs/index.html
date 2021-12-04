@@ -59,7 +59,9 @@ layout: default
     -->
   <h2>非形式的説明 (Informal Description)</h2>
   この言語では次の形式で関数を定義します。
-  <pre>(defineCPS $F$ $E$)</pre>
+  <pre>
+    (defineCPS $F$ $E$)
+  </pre>
   $F$は関数名、$E$は関数の処理を示す無名関数です。
   <dl>
     <dt>関数 (Function)</dt>
@@ -70,67 +72,65 @@ layout: default
     <dd>名前をつけずに定義された関数です。<br/>
       HAT, HEADER, BODYからなります。
       <dl>
-      <dt>HAT</dt>
-      <dd>無名関数の先頭を示す一つの記号<code>^</code>です。</dd>
-      <dt>HEADER</dt>
-      <dd>無名関数の仮引数を示す一つのリスト、または変数名です。
-        <ul>
-          <li>リストの場合、0個以上の変数名が空白で区切られ、丸括弧で囲まれています。<br/>
-            最後の変数名の前にピリオド<code>.</code>がある場合とない場合があります。
-            <ul>
-              <li>ピリオドがある場合、リスト中で最後の変数名は継続の仮引数、それ以外の変数名は通常の仮引数を示します。</li>
-              <li>ピリオドがない場合、リスト中の変数名は通常の仮引数を示します。</li>
-            </ul>
-          </li>
-          <li>変数名の場合、継続の仮引数を示します。</li>
-        </ul>
-      </dd>
-      <dt>BODY</dt>
-      <dd>無名関数が呼び出されたときに実行する処理を示す一つの関数呼び出しです。</dd>
-      </dl></dd>
-      <dt>リスト (List)</dt>
-      <dd>0個以上の式からなる列を丸括弧で囲んだ式です。</dd>
-      <dt>変数名 (Variable name)</dt>
-      <dd>一つ以上の英数字（大文字、小文字、数字）からなる文字列です。</dd>
-      <dt><a name="function call">関数呼び出し (Function call)</a></dt>
-      <dd>関数の実行を示す一つ以上の式からなる列です。<br/>
-	先頭の式の値を関数とし、2つ目以降の式を実引数として仮引数に渡してから関数の処理を実行します。</dd>
-      <dt>式 (Expression)</dt>
-      <dd>一つの値を示す一つの変数名、関数名、または、リストです。<ul>
-	  <li>式が変数名ならば、その値は関数呼び出しで渡された実引数です。</li>
-	  <li>式が関数名ならば、その値はdefineCPSで定義された無名関数です。</li>
-	  <li>式が丸括弧で囲まれた無名関数ならば、その値はその無名関数そのものです。</li>
-	  <li>式が丸括弧で囲まれた関数呼び出しならば、その値はその関数呼び出しの戻り値です。</li>
-      </ul></dd>
-      <dt></dt>
-      <dd></dd>
-    </dl>
-    
+        <dt>HAT</dt>
+        <dd>無名関数の先頭を示す一つの記号<code>^</code>です。</dd>
+        <dt>HEADER</dt>
+        <dd>無名関数の仮引数を示す一つのリスト、または変数名です。
+          <ul>
+            <li>リストの場合、0個以上の変数名が空白で区切られ、丸括弧で囲まれています。<br/>
+              最後の変数名の前にピリオド<code>.</code>がある場合とない場合があります。
+              <ul>
+                <li>ピリオドがある場合、リスト中で最後の変数名は継続の仮引数、それ以外の変数名は通常の仮引数を示します。</li>
+                <li>ピリオドがない場合、リスト中の変数名は通常の仮引数を示します。</li>
+              </ul>
+            </li>
+            <li>変数名の場合、継続の仮引数を示します。</li>
+          </ul>
+        </dd>
+        <dt>BODY</dt>
+        <dd>無名関数が呼び出されたときに実行する処理を示す一つの関数呼び出しです。</dd>
+      </dl>
+    </dd>
+    <dt>リスト (List)</dt>
+    <dd>0個以上の式からなる列を丸括弧で囲んだ式です。</dd>
+    <dt>変数名 (Variable name)</dt>
+    <dd>一つ以上の英数字（大文字、小文字、数字）からなる文字列です。</dd>
+    <dt><a name="function call">関数呼び出し (Function call)</a></dt>
+    <dd>関数の実行を示す一つ以上の式からなる列です。<br/>
+      先頭の式の値を関数とし、2つ目以降の式を実引数として仮引数に渡してから関数の処理を実行します。</dd>
+    <dt>式 (Expression)</dt>
+    <dd>一つの値を示す一つの変数名、関数名、または、リストです。
+      <ul>
+	<li>式が変数名ならば、その値は関数呼び出しで渡された実引数です。</li>
+	<li>式が関数名ならば、その値はdefineCPSで定義された無名関数です。</li>
+	<li>式が丸括弧で囲まれた無名関数ならば、その値はその無名関数そのものです。</li>
+	<li>式が丸括弧で囲まれた関数呼び出しならば、その値はその関数呼び出しの戻り値です。</li>
+      </ul>
+    </dd>
+    <dt></dt>
+    <dd></dd>
+  </dl>
     <h2>Actor model</h2>
     各アクターは固有のプロパティを持ち、自身が持つプロパティの値を変更できます。
     
-    <!-- 配列の扱いが難しいため保留
+    <!--
+ 配列の扱いが難しいため保留
     アクター変数の値を変更するには、変更後変数に値を渡した後、関数<code>actorNext</code>を呼び出します。
     変更後変数は、変数名の前に逆シングルクォート ` をつけて表します。
     例えば、アクター変数<code>x</code>の変更後変数は<code>`x</code>です。
     ただし、変更後変数に値を渡しただけではアクター変数の値は変化せず、関数<code>actorNext</code>を呼び出した時点で変化します。
     これは、複数のアクター変数の間に不変条件があるとき、それを常に満たすことができるようにするためです。
     例えば、<code>add x 1 ^(`x) sub y 1 ^(`y) actorNext</code>とすることによって、アクター変数<code>x, y</code>の和が一定という不変条件を満たすことができます。
-    -->
-    <script src="sexpr-plus.js"></script>
-    <!-- script src="hello.sch" type="text/hat">Hello</script -->
-    <!-- script src="hat.js"></script -->
-    <script type="text/javascript">
-      var list=require("sexpr-plus").parse("`a (b c) 'd");
-      log("list=", list);
-    </script>
-    <h2>検討事項</h2>
+      -->
+    <!--
+ <h2>検討事項</h2>
     <dl>
       <dt>配列</dt>
       <dd>アクターの一種として表現する。</dd>
       <dd>get 添字</dd>
       <dd>set 添字 値</dd>
     </dl>
+    -->
     <h2>References</h2>
     <dl>
       <dt>[Hewitt 2010]</dt><dd>Carl Hewitt, "ActorScript: discretionary concurrency for privacy-friendly, client-cloud computing", <a href="https://arxiv.org/abs/0907.3330v36">arXiv:0907.3330v36</a>, July 26, 2010.</dd>
@@ -147,5 +147,5 @@ layout: default
     <dl>
       <dt>2019-3-10</dt><dd>開発開始</dd>
     </dl>
-	  Last update: {{ site.time }}
-  </body>
+    Last update: {{ site.time }}
+</body>
