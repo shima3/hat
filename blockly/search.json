@@ -1,0 +1,16 @@
+{
+	"message": null,
+	"results": [
+		{
+			"address1": "広島県",
+			"address2": "広島市西区",
+			"address3": "横川町",
+			"kana1": "ﾋﾛｼﾏｹﾝ",
+			"kana2": "ﾋﾛｼﾏｼﾆｼｸ",
+			"kana3": "ﾖｺｶﾞﾜﾁｮｳ",
+			"prefcode": "34",
+			"zipcode": "7330011"
+		}
+	],
+	"status": 200
+}
