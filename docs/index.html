@@ -1,48 +1,48 @@
 ---
 layout: default
 ---
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Hat (programming language)</title>
-    <link rel="stylesheet" href="github-markdown.css">
-    <script type="text/javascript"
-	    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-    </script>
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-	  TeX: { equationNumbers: { autoNumber: "AMS" }},
-	  tex2jax: {
-	      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-	      skipTags: ["script","noscript","style","textarea","kbd"],
-	      processEscapes: true
-	  },
-	  "HTML-CSS": { matchFontHeight: false },
-	  displayAlign: "left",
-	  displayIndent: "2em"
-      });
-    </script>
-    <style type="text/css">
-      code, pre {
-	  font-style: normal;
-	  font-weight: normal;
-	  font-family: "Courier New", Consolas, monospace;
-	  color: black;
-      }
-    </style>
-  </head>
-  <body class="markdown-body">
-    <h1>The Hat Programming Language</h1>
-    Hat is a programming language that supports functional programming, lambda calculus, continuation passing style, and the actor model.
-    An interpreter <a href="js/">js-hat</a> for the Hat is written in JavaScript.
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Hat (programming language)</title>
+  <link rel="stylesheet" href="github-markdown.css">
+  <script type="text/javascript"
+          src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" }},
+  tex2jax: {
+  inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+  skipTags: ["script","noscript","style","textarea","kbd"],
+  processEscapes: true
+  },
+  "HTML-CSS": { matchFontHeight: false },
+  displayAlign: "left",
+  displayIndent: "2em"
+  });
+  </script>
+  <style type="text/css">
+    code, pre {
+      font-style: normal;
+      font-weight: normal;
+      font-family: "Courier New", Consolas, monospace;
+      color: black;
+    }
+  </style>
+</head>
+<body class="markdown-body">
+  <h1>Hatプログラミング言語（The Hat Programming Language）</h1>
+  Hatは関数型プログラミング、ラムダ計算、継続渡しスタイル、アクターモデルをサポートするプログラミング言語です。
+  Hat is a programming language that supports functional programming, lambda calculus, continuation passing style, and the actor model.
+  Hatインタプリタ　<a href="js/">js-hat</a>　がJavaScriptで記述されています。
+  An interpreter <a href="js/">js-hat</a> for the Hat is written in JavaScript.
     <h2>Terms</h2>
     <dl>
       <dt>Functional programming</dt><dd>A programming paradigm that treats computation as the evaluation of mathematical functions.</dd>
       <dt>Lambda calculus</dt><dd>A formal system in mathematical logic for expressing computation based on function abstraction and application using variable binding and substitution.</dd>
       <dt>Continuation Passing Style (CPS)</dt><dd>A style of programming in which control is passed explicitly in the form of a continuation.</dd>
       <dt>Actor model</dt><dd>A mathematical model of concurrent computation that treats "actors" as the universal primitives of concurrent computation.</dd>
-      <dt><a name="actor">アクター (Actor)</a></dt>
+      <dt><a name="actor">Actor</a></dt>
       <dd>An Actor is a computational entity that, in response to a message it receives, can concurrently:
 	<ul>
 	  <li>send a finite number of message to other Actors;</li>
@@ -145,4 +145,3 @@ layout: default
     </dl>
 	  Last update: {{ site.time }}
   </body>
-</html>
