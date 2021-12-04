@@ -57,28 +57,22 @@ layout: default
     <dt></dt><dd></dd>
     -->
 	<h2>非形式的説明 (Informal Description)</h2>
-	<pre>hello</pre>
-	この言語では
-  <p><pre>hello</pre></p>
-  次の形式で
-	<pre>hello</pre>
-  関数を定義します。<br>
-	<pre>hello</pre>
-	<pre>(defineCPS F E)</pre>
-
-	$F$は関数名、$E$は関数の処理を示す無名関数です。
+	この言語では次の形式で関数を定義します。
+  <p><pre>(defineCPS FunctionName AnonymousFunction)</pre></p>
+	ここで、FunctionNameは関数名、AnonymousFunctionは関数の処理を示す無名関数です。
   <dl>
     <dt>関数 (Function)</dt>
-    <dd>0個以上の通常の引数と一つの継続の引数をとり、その継続に戻り値を渡す式です。</dd>
+    <dd>この言語では、0個以上の通常の引数と一つの継続の引数を与えて呼び出します。
+      ほとんどの関数は何らかの処理を行い、与えられた継続に戻り値を渡します。
+      戻り値を渡さない関数や継続に呼ばない場合もあります。</dd>
     <dt>関数名 (Function name)</dt>
     <dd>一つ以上の英数字（大文字、小文字、数字）からなる文字列です。</dd>
     <dt><a name="anonymous function">無名関数 (Anonymous Function)</a></dt>
-    <dd>名前をつけずに定義された関数です。<br/>
-      HAT, HEADER, BODYからなります。
+    <dd>名前をつけずに定義された関数です。
+      この言語では次の形式で無名関数を定義します。
+      <p><pre>^ Header Body</pre></p>
       <dl>
-        <dt>HAT</dt>
-        <dd>無名関数の先頭を示す一つの記号<code>^</code>です。</dd>
-        <dt>HEADER</dt>
+        <dt>Header</dt>
         <dd>無名関数の仮引数を示す一つのリスト、または変数名です。
           <ul>
             <li>リストの場合、0個以上の変数名が空白で区切られ、丸括弧で囲まれています。<br/>
@@ -91,7 +85,7 @@ layout: default
             <li>変数名の場合、継続の仮引数を示します。</li>
           </ul>
         </dd>
-        <dt>BODY</dt>
+        <dt>Body</dt>
         <dd>無名関数が呼び出されたときに実行する処理を示す一つの関数呼び出しです。</dd>
       </dl>
     </dd>
