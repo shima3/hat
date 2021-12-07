@@ -44,42 +44,42 @@ layout: default
   (An interpreter <a href="js/">js-hat</a> for the Hat is written in JavaScript.)
   <h2>用語 (Terms)</h2>
   <dl>
-    <dt>関数型プログラミング (Functional programming)</dt><dd>A programming paradigm that treats computation as the evaluation of mathematical functions.</dd>
-    <dt>ラムダ計算 (Lambda calculus)</dt><dd>A formal system in mathematical logic for expressing computation based on function abstraction and application using variable binding and substitution.</dd>
-    <dt>継続渡しスタイル (Continuation Passing Style, CPS)</dt><dd>A style of programming in which control is passed explicitly in the form of a continuation.</dd>
-    <dt>アクターモデル (Actor model)</dt><dd>A mathematical model of concurrent computation that treats "actors" as the universal primitives of concurrent computation.</dd>
-    <dt>アクター (<a name="actor">Actor</a>)</dt>
+    <div><dt>関数型プログラミング (Functional programming)</dt><dd>A programming paradigm that treats computation as the evaluation of mathematical functions.</dd></div></div>
+    <div><dt>ラムダ計算 (Lambda calculus)</dt><dd>A formal system in mathematical logic for expressing computation based on function abstraction and application using variable binding and substitution.</dd></div>
+    <div><dt>継続渡しスタイル (Continuation Passing Style, CPS)</dt><dd>A style of programming in which control is passed explicitly in the form of a continuation.</dd></div>
+    <div><dt>アクターモデル (Actor model)</dt><dd>A mathematical model of concurrent computation that treats "actors" as the universal primitives of concurrent computation.</dd></div>
+    <div><dt>アクター (<a name="actor">Actor</a>)</dt>
     <dd>An Actor is a computational entity that, in response to a message it receives, can concurrently:
       <ul>
         <li>send a finite number of message to other Actors;</li>
         <li>create a finite number of new Actors;</li>
         <li>designate the behavior to be used for the next message it receives [Hewitt 2010].</li>
       </ul>
-    </dd>
+    </dd></div>
   </dl>
     <!--
-	<dt>Variable</dt><dd>A storage location paired with an associated symbolic name, which contains quantity of information referred to as a value.</dd>
-    <dt>Bound variable</dt><dd></dd>
-    <dt>Free variable</dt><dd></dd>
-    <dt></dt><dd></dd>
+	<div><dt>Variable</dt><dd>A storage location paired with an associated symbolic name, which contains quantity of information referred to as a value.</dd></div>
+    <div><dt>Bound variable</dt><dd></dd></div>
+    <div><dt>Free variable</dt><dd></dd></div>
+    <div><dt></dt><dd></dd></div>
     -->
 	<h2>非形式的説明 (Informal Description)</h2>
 	この言語では次の形式で関数を定義します。
   <p><pre>(defineCPS FunctionName AnonymousFunction)</pre></p>
 	ここで、FunctionNameは関数名、AnonymousFunctionは関数の処理を示す無名関数です。
   <dl>
-    <dt>関数 (Function)</dt>
+    <div><dt>関数 (Function)</dt>
     <dd>この言語では、0個以上の通常の引数と一つの継続の引数を与えて呼び出します。
       ほとんどの関数は何らかの処理を行い、与えられた継続に戻り値を渡します。
-      戻り値を渡さない関数や継続に呼ばない場合もあります。</dd>
-    <dt>関数名 (Function name)</dt>
-    <dd>一つ以上の英数字（大文字、小文字、数字）からなる文字列です。</dd>
-    <dt><a name="anonymous function">無名関数 (Anonymous Function)</a></dt>
+      戻り値を渡さない関数や継続に呼ばない場合もあります。</dd></div>
+    <div><dt>関数名 (Function name)</dt>
+    <dd>一つ以上の英数字（大文字、小文字、数字）からなる文字列です。</dd></div>
+    <div><dt><a name="anonymous function">無名関数 (Anonymous Function)</a></dt>
     <dd>名前をつけずに定義された関数です。
       この言語では次の形式で無名関数を定義します。
       <p><pre>^ Header Body</pre></p>
       <dl>
-        <dt>Header</dt>
+        <div><dt>Header</dt>
         <dd>無名関数の仮引数を示す一つのリスト、または変数名です。
           <ul>
             <li>リストの場合、0個以上の変数名が空白で区切られ、丸括弧で囲まれています。<br/>
@@ -91,19 +91,19 @@ layout: default
             </li>
             <li>変数名の場合、継続の仮引数を示します。</li>
           </ul>
-        </dd>
-        <dt>Body</dt>
-        <dd>無名関数が呼び出されたときに実行する処理を示す一つの関数呼び出しです。</dd>
+        </dd></div>
+        <div><dt>Body</dt>
+        <dd>無名関数が呼び出されたときに実行する処理を示す一つの関数呼び出しです。</dd></div>
       </dl>
-    </dd>
-    <dt>リスト (List)</dt>
-    <dd>0個以上の式からなる列を丸括弧で囲んだ式です。</dd>
-    <dt>変数名 (Variable name)</dt>
-    <dd>一つ以上の英数字（大文字、小文字、数字）からなる文字列です。</dd>
-    <dt><a name="function call">関数呼び出し (Function call)</a></dt>
+    </dd></div>
+    <div><dt>リスト (List)</dt>
+    <dd>0個以上の式からなる列を丸括弧で囲んだ式です。</dd></div>
+    <div><dt>変数名 (Variable name)</dt>
+    <dd>一つ以上の英数字（大文字、小文字、数字）からなる文字列です。</dd></div>
+    <div><dt><a name="function call">関数呼び出し (Function call)</a></dt>
     <dd>関数の実行を示す一つ以上の式からなる列です。<br/>
-      先頭の式の値を関数とし、2つ目以降の式を実引数として仮引数に渡してから関数の処理を実行します。</dd>
-    <dt>式 (Expression)</dt>
+      先頭の式の値を関数とし、2つ目以降の式を実引数として仮引数に渡してから関数の処理を実行します。</dd></div>
+    <div><dt>式 (Expression)</dt>
     <dd>一つの値を示す一つの変数名、関数名、または、リストです。
       <ul>
 	<li>式が変数名ならば、その値は関数呼び出しで渡された実引数です。</li>
@@ -111,9 +111,9 @@ layout: default
 	<li>式が丸括弧で囲まれた無名関数ならば、その値はその無名関数そのものです。</li>
 	<li>式が丸括弧で囲まれた関数呼び出しならば、その値はその関数呼び出しの戻り値です。</li>
       </ul>
-    </dd>
-    <dt></dt>
-    <dd></dd>
+    </dd></div>
+    <div><dt></dt>
+    <dd></dd></div>
   </dl>
     <h2>Actor model</h2>
     各アクターは固有のプロパティを持ち、自身が持つプロパティの値を変更できます。
@@ -130,15 +130,15 @@ layout: default
     <!--
  <h2>検討事項</h2>
     <dl>
-      <dt>配列</dt>
-      <dd>アクターの一種として表現する。</dd>
-      <dd>get 添字</dd>
-      <dd>set 添字 値</dd>
+      <div><dt>配列</dt>
+      <dd>アクターの一種として表現する。</dd></div>
+      <dd>get 添字</dd></div>
+      <dd>set 添字 値</dd></div>
     </dl>
     -->
     <h2>References</h2>
     <dl>
-      <dt>[Hewitt 2010]</dt><dd>Carl Hewitt, "ActorScript: discretionary concurrency for privacy-friendly, client-cloud computing", <a href="https://arxiv.org/abs/0907.3330v36">arXiv:0907.3330v36</a>, July 26, 2010.</dd>
+      <div><dt>[Hewitt 2010]</dt><dd>Carl Hewitt, "ActorScript: discretionary concurrency for privacy-friendly, client-cloud computing", <a href="https://arxiv.org/abs/0907.3330v36">arXiv:0907.3330v36</a>, July 26, 2010.</dd></div>
     </dl>
     <ul>
     <li><a href="https://www.kanzaki.com/docs/html/htminfo13.html">リスト：簡潔な情報表現</a> The Web KANZAKI</li>
@@ -150,7 +150,7 @@ layout: default
     </ul>
     <h2>History</h2>
     <dl>
-      <dt>2019-3-10</dt><dd>開発開始</dd>
+      <div><dt>2019-3-10</dt><dd>開発開始</dd></div>
     </dl>
     Last update: {{ site.time }}
 </body>
