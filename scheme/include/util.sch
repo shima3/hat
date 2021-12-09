@@ -142,7 +142,7 @@ list の要素を非決定的に一つ選び、その要素を第1戻り値、
 整数aとbの最大公約数を返す関数
 |#
 (defineCPS gcd ^(a b) a ^(a) b ^(b)
-  if(= b 0) a (gcd b (modulo a b)))
+  ifelse(= b 0) a (gcd b (modulo a b)))
 
 ;; test ---------------------------------
 
