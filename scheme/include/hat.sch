@@ -66,6 +66,13 @@ seq_end (return false)(return true)
 |#
 
 #|
+seq_push el seq ^(seq2)
+数列seqの先頭にelを追加した数列seq2を返す。
+|#
+(defineCPS seq_push ^(el seq . return)
+  return (^(h) h el . seq))
+
+#|
 seq_pop seq ^(first rest)
 数列seqの先頭firstと残りの数列restを返す。
 |#
