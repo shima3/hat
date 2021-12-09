@@ -426,7 +426,7 @@ pop: 要素を削除する。
 
 (defineCPS nop ^ return return)
 
-(defineCPS if ^(test then else)
+(defineCPS ifelse ^(test then else)
   test then else ^(action)
   action)
 
@@ -472,8 +472,6 @@ pop: 要素を削除する。
 
 (defineCPS fold_left ^(f z seq . return)
   when(seq_end? seq)(return z)^()
-;;;  if(seq_end? seq)(return z)^()
-;;;  print("seq=" seq)^()
   seq_pop seq ^(first rest)
   f z first ^(z2)
   fold_left f z2 rest)
