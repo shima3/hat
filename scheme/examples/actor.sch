@@ -88,8 +88,6 @@
 
 (defineCPS sleepUntil ^(timeout)
   when(beforeTime timeout)(sleepUntil timeout))
-;;;  if(beforeTime timeout)(sleepUntil timeout)( ))
-  ;; if (beforeTime timeout)(sleepUntil timeout))
 
 (defineCPS sleepSec ^(sec) sec ^(sec)
   (lambda (sec)(add-duration (current-time)(seconds->duration sec)))
