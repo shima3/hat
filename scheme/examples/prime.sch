@@ -18,7 +18,7 @@
 ;;;  (print~ "n=" n)^()
   find_divisor n 2 ^(d)
 ;;;  (print~ "d=" d)^()
-  if(= n d)
+  ifelse(= n d)
   (print~ n " is a prime number.")
   (print~ n " can be divied by " d ".") )
 
