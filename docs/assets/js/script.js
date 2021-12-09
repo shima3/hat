@@ -11,7 +11,7 @@ $(document).ready(function(){
         lines.splice(i, 1);
       } else {
           lines[i] = i+1;
-/*        for(var j = 0; j < wrap; j++) {
+        /* for(var j = 0; j < wrap; j++) {
           lines[i] += "\n";
         }*/
       }
