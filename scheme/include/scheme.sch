@@ -50,14 +50,19 @@ Scheme依存の関数群
 
 #|
 列の要素を出力する。
-S 列
-D 境界
+seq 列
+delimit 境界
 |#
 (defineCPS seq_print ^(seq delimit . return)
-  if(seq_end? seq) return ^()
-  seq_pop seq ^(first rest)
-  print(first delimit)^()
-  seq_print rest delimit . return)
+  when(seq_end? seq) return ^()
+  fix
+  (^(loop seq)
+    seq_pop seq ^(first rest)
+    print(first)^()
+    when(seq_end? rest) return ^()
+    print(delimit)^()
+    loop rest
+    ) seq)
 
 ;; char --------------------------------
 
@@ -180,14 +185,14 @@ char_seq_stdout ^(out . close)
 (defineCPS list_or ^($list . $return)
   unless(list_pair? $list)($return #f)^()
   list_pop $list ^($first $rest)
-  if($first)($return #t)^()
+  when($first)($return #t)^()
   list_or $rest . $return
   )
 
 (defineCPS list_contains? ^($list $obj . $return)
   unless(list_pair? $list)($return #f)^()
   list_pop $list ^($first $rest)
-  if(object_eq? $first $obj)($return #t)^()
+  when(object_eq? $first $obj)($return #t)^()
   list_contains? $rest $obj . $return
   )
 
@@ -277,7 +282,7 @@ char_seq_stdout ^(out . close)
 
 (defineCPS object_print ^(obj . return)
   (lambda(Obj)
-    (if(string? Obj)
+    (ifelse(string? Obj)
       (display Obj)
       (write Obj))) obj ^(dummy)
   return)
