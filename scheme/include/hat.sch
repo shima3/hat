@@ -13,53 +13,57 @@ Hat言語のみで定義された関数群
 |#
 
 #|
-数列の終端
-例：(^(handler) handler 1 2 3 . seq_end)
+空列 or 数列の終端
+例：(^(handler) handler 1 2 3 . empty_seq)
 |#
-(defineCPS seq_end ^(handler . return)
+(defineCPS empty_seq ^(handler . return)
   return)
+#; (defineCPS seq_empty ^(R . return)
+  return true)
 
 #|
-seq_end? seq ^(flag)
+seq_empty? seq ^(flag)
 数列seqが空ならばflagは真 #t、
 そうでなければflagは偽 #f
 |#
-(defineCPS seq_end? ^(seq . return)
+(defineCPS seq_empty? ^(seq . return)
   seq (return false)^()
   return true)
+#; (defineCPS seq_empty? ^(seq . return)
+  seq (return false). return)
 
-#| seq_endとseq_end?のその他の定義
+#| empty_seqとseq_empty?のその他の定義
 
-(defineCPS seq_end ^(out . return)
+(defineCPS empty_seq ^(out . return)
   return true . end)
 
-(defineCPS seq_end? ^(seq . return)
+(defineCPS seq_empty? ^(seq . return)
   seq (return false) . return)
 
-(defineCPS seq_end ^(func1 func2)
+(defineCPS empty_seq ^(func1 func2)
   func2)
 
-(defineCPS seq_end? ^(seq . return)
+(defineCPS seq_empty? ^(seq . return)
   seq(return false)(return true))
 
-(defineCPS seq_end ^ return
+(defineCPS empty_seq ^ return
   return ^(func . cont)
   cont)
 
-(defineCPS seq_end? ^(seq . return)
+(defineCPS seq_empty? ^(seq . return)
   seq ^ cont
   cont (return false)^()
   return true)
 |#
 
 #|
-seq_end?(^(handler) handler 1 . seq_end)
-(^(handler) handler 1 . seq_end)^ seq seq (return false)^() return true
-(^ seq seq (return false)^() return true)(^(handler) handler 1 . seq_end)
-(^(I$0) I$0 (^(handler) handler 1 . seq_end))
+seq_empty?(^(handler) handler 1 . empty_seq)
+(^(handler) handler 1 . empty_seq)^ seq seq (return false)^() return true
+(^ seq seq (return false)^() return true)(^(handler) handler 1 . empty_seq)
+(^(I$0) I$0 (^(handler) handler 1 . empty_seq))
 
-seq_end? seq_end
-seq_end (return false)(return true)
+seq_empty? empty_seq
+empty_seq (return false)(return true)
 (^ return return ^(func1 func2) func2)(return false)(return true)
 (^(H)H(return false)(return true))^(func1 func2)func2
 
@@ -151,7 +155,7 @@ seqの各要素をconvertの引数として与え、その戻り値からなる�
 |#
 ( defineCPS seq_map ^(convert seq return)
   fix( ^(loop S R)
-       (when(seq_end? S) seq_end R)^()
+       (when(seq_empty? S) empty_seq R)^()
        seq_pop S ^(v s)
        convert v ^(V)
        R V ^(r)
@@ -182,8 +186,8 @@ r0: 数列を受け取る関数
 seqのN個までの数列を返す。
 |#
 ( defineCPS seq_finite ^(seq n r . return)
-  (when(<= n 0) seq_end r . return)^()
-  seq_enum (seq_end r) seq ^(first . rest)
+  (when(<= n 0) empty_seq r . return)^()
+  seq_enum (empty_seq r) seq ^(first . rest)
   r first ^(r)
   - n 1 ^(n)
   seq_finite rest n r . return )
@@ -193,7 +197,7 @@ $seqの先頭から条件$skip?を満たす要素を読み飛ばし、
 $skip?を満たさない要素を先頭とする列を返す。
 |#
 (defineCPS seq_skip ^($seq $skip? . $return)
-  when(seq_end? $seq)($return $seq)^()
+  when(seq_empty? $seq)($return $seq)^()
   seq_pop $seq ^($ch $rest)
   unless($skip? $ch)($return $seq)^()
   seq_skip $rest $skip? . $return)
@@ -204,14 +208,14 @@ $skip?を満たさない要素を先頭とする列を返す。
 条件を満たす要素が見つからなかったとき、列の終端を返す。
 |#
 (defineCPS seq_find ^($seq $match? . $return)
-  (when(seq_end? $seq) $return seq_end)^()
+  (when(seq_empty? $seq) $return empty_seq)^()
   seq_pop $seq ^($el $rest)
   (when($match? $el) $return $seq)^()
   seq_find $rest $match? . $return
   )
 
 (defineCPS seq_count ^($seq $no $up?)
-  (seq_end? $seq) seq_end
+  (seq_empty? $seq) empty_seq
   (^($out)
     seq_pop $seq ^($el $seq2)
     $no ^(no)
@@ -223,7 +227,7 @@ $skip?を満たさない要素を先頭とする列を返す。
   )
 
 #; (defineCPS seq_count_lines ^($in $no)
-  (seq_end? $in) seq_end
+  (seq_empty? $in) empty_seq
   (^($out)
     seq_pop $in ^($ch $in2)
     $no ^(no)
@@ -234,14 +238,14 @@ $skip?を満たさない要素を先頭とする列を返す。
     )
   )
 
-(defineCPS string_no_seq_stdin_line ^ $return
+(defineCPS string_no_seq_stdin_line ^ return
   port_stdin ^($port)
-  port_line_seq $port 1 ^($seq)
-  $return $seq ^()
+  port_line_seq $port 1 ^(seq)
+  return seq ^()
   print("close\n"))
 
 (defineCPS seq_tokenize_line ^($seq . $return)
-  (when(seq_end? $seq) $return seq_end)^()
+  (when(seq_empty? $seq) $return empty_seq)^()
   seq_pop $seq ^($line $seq2)
   list_pop $line ^($str $no)
   string_tokenize $str ^($list)
@@ -263,7 +267,7 @@ $seqの先頭から条件$end?を満たさない要素からなるリストと�
 $end?を満たす要素を先頭とする列を返す。
 |#
 (defineCPS seq_get_list ^($seq $end? . $return)
-  (when(seq_end? $seq) $return () $seq)^()
+  (when(seq_empty? $seq) $return () $seq)^()
   seq_pop $seq ^($first $rest)
   (when($end? $first) $return () $seq . $end)^()
   seq_get_list $rest $end? ^($list $rest)
@@ -272,7 +276,7 @@ $end?を満たす要素を先頭とする列を返す。
   )
 
 (defineCPS seq_list ^($seq . $return)
-  (when(seq_end? $seq) $return ())^()
+  (when(seq_empty? $seq) $return ())^()
   seq_pop $seq ^($first $seq2)
   seq_list $seq2 ^($list)
   list_cons $first $list ^($list2)
@@ -283,7 +287,7 @@ $end?を満たす要素を先頭とする列を返す。
   list_string $list)
 
 (defineCPS seq_append ^($seq1 $seq2 $out . $return)
-  (seq_end? $seq1)($seq2 $out)
+  (seq_empty? $seq1)($seq2 $out)
   (
     seq_pop $seq1 ^($first $rest1)
     $out $first ^($out2)
@@ -297,7 +301,7 @@ $end?を満たす要素を先頭とする列を返す。
 
 (defineCPS seq~ ^ cont
   cont_pop cont ^(seq return)
-  seq_join seq seq_end ^(seq)
+  seq_join seq empty_seq ^(seq)
   return seq)
 
 ;; 列の先頭の要素を関数，残りの要素を引数として関数適用を実行する
@@ -368,11 +372,11 @@ pop: 要素を削除する。
   return func cont)
 
 #; (defineCPS cont_end ^ return
-  return . seq_end)
+  return . empty_seq)
 
 #; (defineCPS cont_end? ^(cont . return)
   cont ^ seq
-  seq_end? seq . return)
+  seq_empty? seq . return)
 
 #; (defineCPS test ^ cont
   print("cont=" cont "\n")^()
@@ -402,8 +406,8 @@ pop: 要素を削除する。
   return ^(func1 func2)
   func2)
 
-(defineCPS cont_end? seq_end?)
-(defineCPS cont_end seq_end)
+(defineCPS cont_end? seq_empty?)
+(defineCPS cont_end empty_seq)
 |#
 
 ;; logic ----------------------------------
@@ -458,7 +462,7 @@ pop: 要素を削除する。
 (defineCPS if~ ^(test . cont)
 ;;;  (print~ "cont=" cont)^()
   cont_pop cont ^(seq return)
-  seq_join seq seq_end ^(seq)
+  seq_join seq empty_seq ^(seq)
 ;;;  (print~ "seq=" seq)^()
   seq_pop seq ^(then seq)
 ;;;  (print~ "test=" test)^()
@@ -466,7 +470,7 @@ pop: 要素を削除する。
 ;;;  (print~ "return=" return)^()
   when test (then . return)^()
 ;;;  (print~ "seq=" seq)^()
-  when(seq_end? seq) return ^()
+  when(seq_empty? seq) return ^()
   seq_pop seq ^(first rest)
 ;;;  (print~ "first=" first)^()
   unless(object_eq? first else)(first . return)^()
@@ -478,7 +482,7 @@ pop: 要素を削除する。
   action)
 
 (defineCPS fold_left ^(f z seq . return)
-  when(seq_end? seq)(return z)^()
+  when(seq_empty? seq)(return z)^()
   seq_pop seq ^(first rest)
   f z first ^(z2)
   fold_left f z2 rest)

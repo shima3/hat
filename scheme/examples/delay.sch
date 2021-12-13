@@ -6,14 +6,14 @@
   seq_repeat (port_read_line $port) object_eof? ^(seq)
   fix
   (^(loop seq . break)
-    when(seq_end? seq) break ^()
+    when(seq_empty? seq) break ^()
     seq_pop seq ^(first rest)
     (print~ first)^()
     loop rest . break
     ) seq ^()
   fix
   (^(loop2 seq . break)
-    when(seq_end? seq) break ^()
+    when(seq_empty? seq) break ^()
     seq_pop seq ^(first rest)
     (print~ first)^()
     loop2 rest . break
@@ -33,7 +33,7 @@
   print("v2=" v2 "\n")^()
   nop )
 
-#; (defineCPS seq_end? ^(aSeq . return)
+#; (defineCPS seq_empty? ^(aSeq . return)
   aSeq (return #f) . return)
 
 #; (defineCPS seq_get ^(aSeq . return)
@@ -47,7 +47,7 @@
   delay
   ( get ^(value)
     seq_repeat get end? ^(next)
-    (end? value) seq_end
+    (end? value) empty_seq
     (^(R) R value . next)
     )
   )

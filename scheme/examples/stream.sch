@@ -108,7 +108,7 @@
 
 (defineCPS main7 ^()
   list_seq(1 2 3) end ^($seq1)
-;;;  list_seq(1 2 3) seq_end ^($seq1)
+;;;  list_seq(1 2 3) empty_seq ^($seq1)
   print("seq1=" $seq1 "\n")^()
   seq_append $seq1 seq456 ^($seq2)
   print("seq2=" $seq2 "\n")^()
@@ -133,7 +133,7 @@
   print("End\n"))
 
 (defineCPS main73 ^()
-  seq_end? (^ R R 1 ^ R R 2 ^ R R 3 . end)^(flag)
+  seq_empty? (^ R R 1 ^ R R 2 ^ R R 3 . end)^(flag)
   (print~ flag)^()
   stop)
 
@@ -171,7 +171,7 @@
   )
 
 (defineCPS tokenizeCLNSeq ^(seq . return)
-  when(seq_end? in)(return seq_end)^()
+  when(seq_empty? in)(return empty_seq)^()
   seq_pop in ^(ch in2)
   when(char=? ch #\n)
   ( + line_no 1 ^(line_no2)
@@ -193,7 +193,7 @@ in2 は一致しない文字以降の文字列
   fix
   (^(loop idx in)
     when(>= idx len)(return #t in)^()
-    when(seq_end? in)(return #f in)^()
+    when(seq_empty? in)(return #f in)^()
     string-ref prefix idx ^(ch)
     seq_pop in ^(ch2 in2)
     unless(char=? ch ch2)(return #f in)^()
@@ -202,7 +202,7 @@ in2 は一致しない文字以降の文字列
     ) 0 in)
 
 (defineCPS seq456 ^($out)
-  $out 4 5 6 . seq_end)
+  $out 4 5 6 . empty_seq)
 
 ;; (defineCPS char2sexpSeq ^(char_seq))
 
@@ -212,7 +212,7 @@ in2 は一致しない文字以降の文字列
 ;; on_error 構文エラーのとき、呼び出す関数
 #; (defineCPS seq_read_sexp ^($in $on_empty on_fail on_error . return)
   seq_skip_spaces $in char_space? ^($in)
-  when(seq_end? $in)($on_empty . end)^()
+  when(seq_empty? $in)($on_empty . end)^()
   seq_pop $in ^($ch $in2)
   case $ch
   (() )

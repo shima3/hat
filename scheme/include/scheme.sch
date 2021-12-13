@@ -21,11 +21,11 @@ Scheme依存の関数群
 
 (defineCPS print~ ^ cont
   cont_pop cont ^(seq return)
-  seq_join seq seq_end ^(seq)
+  seq_join seq empty_seq ^(seq)
 ;;;  print("seq=" seq "\n")^()
   fix
   (^(loop seq . break)
-    when(seq_end? seq) break ^()
+    when(seq_empty? seq) break ^()
     seq_pop seq ^(first rest)
     print(first)^()
     loop rest . break) seq ^()
@@ -54,12 +54,12 @@ seq 列
 delimit 境界
 |#
 (defineCPS seq_print ^(seq delimit . return)
-  when(seq_end? seq) return ^()
+  when(seq_empty? seq) return ^()
   fix
   (^(loop seq)
     seq_pop seq ^(first rest)
     print(first)^()
-    when(seq_end? rest) return ^()
+    when(seq_empty? rest) return ^()
     print(delimit)^()
     loop rest
     ) seq)
@@ -309,7 +309,7 @@ char_seq_stdout ^(out . close)
   (
     port_read_char $port ^($ch)
     port_in $port ^($in)
-    (object_eof? $ch) seq_end
+    (object_eof? $ch) empty_seq
     (^($out) $out $ch . $in)
     )
   )
@@ -331,18 +331,35 @@ char_seq_stdout ^(out . close)
     (read-line port)
     ) $port)
 
-(defineCPS port_line_seq ^($port $start)
+(defineCPS port_line_seq ^($port)
   delay
-  (^ $return
+  (^ return
     port_read_line $port ^($line)
-    (object_eof? $line) seq_end
-    ( + $start 1 ^($next)
-      port_line_seq $port $next ^($seq)
-      (^($out) $out ($line . $start) . $seq)
-      )^($seq)
-    $return $seq
+    (object_eof? $line) empty_seq
+    ( port_line_seq $port $next ^(rest)
+      (^(out) out $line . rest)
+      )^(seq)
+    return seq
     )
   )
+
+(defineCPS open_input_file_port ^(file_name)
+  file_name ^($file_name)
+  (lambda(file_name)
+    (open-input-file file_name)
+    ) $file_name)
+
+(defineCPS open_output_file_port ^(file_name)
+  file_name ^($file_name)
+  (lambda(file_name)
+    (open-output-file file_name)
+    ) $file_name)
+
+(defineCPS port_close ^($port . return)
+  (lambda(port)
+    (close-port port)
+    ) $port ^(dummy)
+  return)
 
 ;; string ----------------------
 
