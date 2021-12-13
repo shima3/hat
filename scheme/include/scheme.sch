@@ -86,7 +86,7 @@ char_seq_stdin ^(in . close)
 |#
 (defineCPS char_seq_stdin ^ $return
   port_stdin ^($port)
-  port_seq $port ^($in)
+  port_char_seq $port ^($in)
   $return $in ^()
   print("close\n"))
 
@@ -304,11 +304,11 @@ char_seq_stdout ^(out . close)
     (standard-output-port)))
 ;;;    (current-output-port)))
 
-(defineCPS port_seq ^($port)
+(defineCPS port_char_seq ^($port)
   delay
   (
     port_read_char $port ^($ch)
-    port_seq $port ^($in)
+    port_char_seq $port ^($in)
     (object_eof? $ch) empty_seq
     (^($out) $out $ch . $in)
     )
