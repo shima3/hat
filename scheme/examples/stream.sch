@@ -189,12 +189,12 @@ matchPrefix prefix in ^(flag in2)
 in2 は一致しない文字以降の文字列
 |#
 (defineCPS matchPrefix ^(prefix in . return)
-  string-length prefix ^(len)
+  string_length prefix ^(len)
   fix
   (^(loop idx in)
     when(>= idx len)(return #t in)^()
     when(seq_empty? in)(return #f in)^()
-    string-ref prefix idx ^(ch)
+    string_ref prefix idx ^(ch)
     seq_pop in ^(ch2 in2)
     unless(char=? ch ch2)(return #f in)^()
     + idx 1 ^(idx2)

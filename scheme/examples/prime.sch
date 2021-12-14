@@ -14,7 +14,7 @@
 ( defineCPS test ^(args)
   list_car args ^(first)
 ;;;  print("first=" first "\n")^()
-  string->number first ^(n)
+  string_number first ^(n)
 ;;;  (print~ "n=" n)^()
   find_divisor n 2 ^(d)
 ;;;  (print~ "d=" d)^()
@@ -31,12 +31,12 @@
 
 (defineCPS main3 ^(args)
   get_first args ^(first)
-  string->number first ^(n)
+  string_number first ^(n)
   print(n "\n"))
 
 (defineCPS main4 ^(args)
   get_first args ^(first)
-  string->number first ^(n)
+  string_number first ^(n)
   n ^(n)
   print(n "\n"))
 
@@ -54,19 +54,12 @@
 
 (defineCPS main8 ^(args)
   car args ^(first)
-  string->number first ^(n)
+  string_number first ^(n)
   find_divisor n 2 ^(d)
   print(d "\n"))
 
 #; (defineCPS println ^(value)
   (lambda (value)(display value)(newline)) value ^(dummy)( ))
-
-#; ( defineCPS print ^(list . return)
-  ( lambda (list)
-    (display (string-concatenate (map x->string list)))
-    ;; (display (string-append (string-concatenate (map x->string list))))
-    ) list ^(dummy)
-  return )
 
 #; (defineCPS println ^(value)
   (lambda (value)
@@ -92,9 +85,6 @@
   when(< n (* d d))(return n)^()
   when(= (remainder n d) 0)(return d)^()
   find_divisor n (+ d 1). return)
-
-#; (defineCPS string_to_number ^(str)
-  (lambda (str)(string->number str)) str)
 
 #; (defineCPS car ^(list)
   (lambda (list)(car list)) list)

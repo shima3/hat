@@ -46,7 +46,7 @@ J 日本
 
 ( defineCPS print ^(list . return)
   ( lambda (list)
-    (display (string-concatenate (map x->string list)))
+    (display (string_concatenate (map x->string list)))
     ) list ^(dummy)
   return )
 

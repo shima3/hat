@@ -9,7 +9,7 @@ aとbの最大公約数を返す関数
 
 (defineCPS main ^(args . return)
   list_values args ^(a b)
-  gcd (string->number a)(string->number b)^(c)
+  gcd (string_number a)(string_number b)^(c)
   print(c "\n")^()
   return)
 
