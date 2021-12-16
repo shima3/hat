@@ -379,7 +379,7 @@ char_seq_stdout ^(out . close)
     ) $file_name)
 
 (defineCPS port_close ^($port . return)
-  (lambda(port)
+  (lambda(port) ; (display "port_close ")(write port)(newline)
     (close-port port)
     ) $port ^(dummy)
   return)
@@ -487,3 +487,32 @@ char_seq_stdout ^(out . close)
       (- (cadr (assq :total-heap-size stat))
 	(cadr (assq :free-bytes stat))
 	))))
+
+
+;; cont ----------------------------------
+
+(defineCPS cont_push ^(cont func)
+  (lambda(C F)
+    (func-with-cont F C)
+    ) cont func)
+
+(defineCPS cont_rest ^(cont . return)
+  (lambda(C)
+    (cddr C)
+    ) cont)
+
+(defineCPS cont_pop ^(cont . return)
+  (lambda(C)
+    (cadr C)
+    ) cont ^(first)
+  (lambda(C)
+    (cddr C)
+    ) cont ^(rest)
+  return first rest)
+
+(defineCPS cont_end ())
+
+(defineCPS cont_end? ^(cont)
+  (lambda(C)
+    (null? C)
+    ) cont)
