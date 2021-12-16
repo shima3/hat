@@ -118,6 +118,11 @@ char_seq_stdout ^(out . close)
 #; (defineCPS nil #f)
 #; (defineCPS isnil ^(s) s (^(x y d) #f) #t)
 
+(defineCPS list_empty? ^($list)
+  (lambda(list)
+    (null? list)
+    ) $list)
+
 (defineCPS list_pair? ^($list)
   (lambda(list)
     (pair? list)
@@ -150,15 +155,13 @@ char_seq_stdout ^(out . close)
     (cons obj1 obj2)
     ) $obj1 $obj2)
 
-(defineCPS list_pop ^(list . return)
-  (lambda(L)(car L)) list ^(first)
-  (lambda(L)(cdr L)) list ^(rest)
+(defineCPS list_pop ^($list . return)
+  (lambda(L)(car L)) $list ^(first)
+  (lambda(L)(cdr L)) $list ^(rest)
   return first rest)
 
-(defineCPS list_values ^(list . return)
-  (lambda(L R)
-    (cons R L)
-    ) list return ^(values)
+(defineCPS list_values ^($list . return)
+  list_cons return $list ^(values) ; print("values=" values "\n")^()
   values)
 
 ;; 文字のリスト ls を文字列に変換します。
@@ -294,6 +297,11 @@ char_seq_stdout ^(out . close)
     (read-char port)
     ) $port)
 
+(defineCPS port_write_char ^($ch $port)
+  (lambda(ch port)
+    (write-char ch port)
+    ) $ch $port)
+
 (defineCPS port_stdin ^()
   (lambda()
     (standard-input-port)))
@@ -335,11 +343,26 @@ char_seq_stdout ^(out . close)
   delay
   (^ return
     port_read_line $port ^($line)
-    (object_eof? $line) empty_seq
-    ( port_line_seq $port $next ^(rest)
-      (^(out) out $line . rest)
-      )^(seq)
-    return seq
+    when(object_eof? $line)
+    ( print("close 1\n")^()
+      port_close $port ^()
+      return empty_seq)^()
+    port_line_seq $port ^(rest)
+    return
+    (^(out . return2)
+      when(list_empty? out)
+      ( print("close 2\n")^()
+        port_close $port . return2 )^()
+      out $line ^(out2)
+      rest out2 . return2
+      )
+    )
+#;
+  (^ return
+    port_read_line $port ^($line)
+    when(object_eof? $line)(return empty_seq)^()
+    port_line_seq $port ^(rest)
+    return (^(out) out $line ^(out2) rest out2)
     )
   )
 
@@ -360,6 +383,15 @@ char_seq_stdout ^(out . close)
     (close-port port)
     ) $port ^(dummy)
   return)
+
+(defineCPS open_output_string_port ^()
+  (labmda()
+    (open-output-string)))
+
+(defineCPS port_get_output_string ^($port)
+  (lambda(port)
+    (get-output-string port)
+    ) $port)
 
 ;; string ----------------------
 
@@ -409,7 +441,37 @@ char_seq_stdout ^(out . close)
     (string->number S)
     ) $str)
 
-#; (defineCPS string_append ^(str1))
+#; (defineCPS string_concat ^(str_list)
+  (lambda(list)
+    ))
+
+(defineCPS string_start_cursor ^(str)
+  str ^($str)
+  (lambda(str)
+    (string-cursor-start str)
+    ) $str)
+
+(defineCPS string_end_cursor ^(str)
+  str ^($str)
+  (lambda(str)
+    (string-cursor-end str)
+    ) $str)
+
+(defineCPS string_next_cursor ^(str cur)
+  str ^($str) cur ^($cur)
+  (lambda(str cur)
+    (string-cursor-next str cur)
+    ) $str $cur)
+
+(defineCPS string_cursor<? ^($cur1 $cur2)
+  (lambda(cur1 cur2)
+    (string-cursor<? cur1 cur2)
+    ) $cur1 $cur2)
+
+(defineCPS string_cursor>=? ^($cur1 $cur2)
+  (lambda(cur1 cur2)
+    (string-cursor>=? cur1 cur2)
+    ) $cur1 $cur2)
 
 ;; memory ------------------------------
 
