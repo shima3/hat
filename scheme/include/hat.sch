@@ -26,7 +26,7 @@ seq_empty? seq ^(flag)
 数列seqが空ならばflagは真 #t、
 そうでなければflagは偽 #f
 |#
-(defineCPS seq_empty? ^(seq . return)
+(defineCPS seq_empty? ^(seq . return) ; print("seq=" seq "\n")^()
   seq (return false)^()
   return true)
 #; (defineCPS seq_empty? ^(seq . return)
@@ -214,17 +214,14 @@ $skip?を満たさない要素を先頭とする列を返す。
   seq_find $rest $match? . $return
   )
 
-(defineCPS seq_count ^($seq $no $up?)
-  (seq_empty? $seq) empty_seq
-  (^($out)
-    seq_pop $seq ^($el $seq2)
-    $no ^(no)
-    $out ($el . no)^($out2)
-    ($up? $el)(+ no 1) no ^($no2)
-    seq_count $seq2 $no2 $up? ^($seq)
-    $seq $out2
-    )
-  )
+(defineCPS seq_count ^(seq no)
+  (seq_empty? seq) empty_seq
+  (^(out)
+    seq_pop seq ^($el rest)
+    no ^($no)
+    out ($no . $el)^(out2)
+    seq_count rest (+ $no 1) out2
+    ))
 
 #; (defineCPS seq_count_lines ^($in $no)
   (seq_empty? $in) empty_seq
@@ -347,6 +344,11 @@ pop: 要素を削除する。
   (lambda(C F)
     (func-with-cont F C)
     ) cont func)
+
+(defineCPS cont_rest ^(cont . return)
+  (lambda(C)
+    (cddr C)
+    ) cont)
 
 (defineCPS cont_pop ^(cont . return)
   (lambda(C)
