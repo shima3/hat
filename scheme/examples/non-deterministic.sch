@@ -55,12 +55,6 @@
   condition return action ^(action)
   action)
 
-#; ( defineCPS print ^(list . return)
-  ( lambda (list)
-    (display (string-append (string-concatenate (map x->string list))))
-    ) list ^(dummy)
-  return )
-
 #; (defineCPS print ^(value)
   (lambda (value)(display value)) value ^(dummy)())
 

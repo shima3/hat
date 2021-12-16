@@ -277,14 +277,3 @@
   (print~ "main 7 flag=" flag) ;; ^()
   ;; nop
   )
-
-#; ( defineCPS println ^(list . return)
-  ( lambda (list)
-    ; (display (string-append (string-concatenate (map x->string list)) "\n"))
-    ; (map write list)(newline)
-    (print (string-concatenate (map x->string list)))
-    ) list ^(dummy)
-  return ;; バグ . end　混入日不明、2019/7/8発見
-  )
-
-#; (defineCPS nop ^ cont cont)

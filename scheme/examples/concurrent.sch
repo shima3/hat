@@ -46,16 +46,6 @@
       (print~ "e")^()
       (print~ "f") ) ) )
 
-#|
-( defineCPS print ^(list . return)
-  ( lambda (list)
-    (display (string-append (string-concatenate (map x->string list))))
-    ) list ^(dummy)
-  return )
-
-( defineCPS fix ^(x) x (fix x) )
-|#
-
 ( defineCPS repeatStep ^(command)
   stepCommand command ^(value)
   ;; isCommand value ^(flag)

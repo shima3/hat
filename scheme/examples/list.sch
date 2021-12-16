@@ -52,12 +52,6 @@
 (defineCPS add ^(list el)
   (^(a . c) list a ^(f) f el . c))
 
-( defineCPS print ^(list . return)
-  ( lambda (list)
-    (display (string-append (string-concatenate (map x->string list))))
-    ) list ^(dummy)
-  return )
-
 (defineCPS newline ^()
   (lambda ()(newline)) ^(dummy)())
 
