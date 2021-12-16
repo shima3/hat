@@ -349,7 +349,10 @@ built-in function: mailboxRemove ^(isEmpty)
 	  (if (not (null? app))
 	    (if (time<? (current-time) timeout)
 	      ;; (loop2 (step-app app '(F.C end)))
-	      (loop2 (step-app app default-continuation))
+              (begin
+;;                (display "app=")(write app)(newline)
+	        (loop2 (step-app app default-continuation))
+                )
 	      ;; (loop2 (step-app app 'end))
 	      ;; (loop2 (step-app app '(^($1) $1 . end)))
 	      ;; (loop2 (step-app app '( )))
@@ -566,13 +569,21 @@ built-in function: mailboxRemove ^(isEmpty)
   )
 
 (define (eval-promise P)
+  (define (f r)(set-car! (cdr P) r))
   (set-car! P 'quote)
   `(^ return
-      ,P ^ S
-      (lambda(r)
-	(set-car! (quote ,(cdr P)) r)
-	)(^ return2 S return2)^(D)
-      S return)
+     ,(car (cdr P))^ seq
+     ,f (^ c seq c)^(dummy) seq return)
+  #; (list '^ 'return (car (cdr P)) '^ 'seq
+    (lambda(r)
+      (set-car! (cdr P) r)
+      ) '(^ c seq c) '^ '(dummy) 'seq 'return)
+  #; `(^ return
+     ,(car (cdr P))^ seq
+     (lambda(r)
+       (set-car! (quote ,(cdr P)) r)
+       )(^ c seq c)^(dummy)
+     seq return)
   )
 
 (define (func-with-cont? func)
@@ -713,9 +724,9 @@ delay app ^(P)
 promiseを生成し、変数Pに渡す。
 |#
 (set-global-var 'delay
-  '(^(E)
-     (lambda(e)
-       (cons 'PROMISE (list e))) E))
+  '(^($e) ; print("e=" $e "\n")^()
+     (lambda(e) ; (newline)(display (ipair? (list e)))(newline)
+       (cons 'PROMISE (list e))) $e))
 
 #; (set-global-var 'cont_push
   '(^($cont $func)
