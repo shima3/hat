@@ -214,14 +214,18 @@ $skip?を満たさない要素を先頭とする列を返す。
   seq_find $rest $match? . $return
   )
 
-(defineCPS seq_count ^(seq no)
-  (seq_empty? seq) empty_seq
+#|
+chinの文字を読み、行番号と文字の組からなるseqを返す。
+行番号はstartから始まる。
+|#
+(defineCPS lineno_char_seq ^(chin start)
+  (seq_empty? chin) empty_seq
   (^(out)
-    seq_pop seq ^($el rest)
-    no ^($no)
-    out ($no . $el)^(out2)
-    seq_count rest (+ $no 1) out2
-    ))
+    seq_pop chin ^($ch rest)
+    start ^($no)
+    out ($no . $ch)^(out2)
+    (char=? $ch #\newline)(+ $no 1) $no ^($no)
+    lineno_char_seq rest $no out2))
 
 #; (defineCPS seq_count_lines ^($in $no)
   (seq_empty? $in) empty_seq
@@ -283,15 +287,11 @@ $end?を満たす要素を先頭とする列を返す。
   seq_list $seq ^($list)
   list_string $list)
 
-(defineCPS seq_append ^($seq1 $seq2 $out . $return)
-  (seq_empty? $seq1)($seq2 $out)
-  (
-    seq_pop $seq1 ^($first $rest1)
-    $out $first ^($out2)
-    seq_append $rest1 $seq2 ^($rest2)
-    $rest2 $out2
-    ) . $return
-  )
+(defineCPS seq_append ^(seq1 seq2 out . return)
+  when(seq_empty? seq1)(seq2 out . return)^()
+  seq_pop seq1 ^(first rest)
+  out first ^(out2)
+  seq_append rest seq2 out2 . return)
 
 (defineCPS seq_join ^(seq1 seq2 . return)
   return (^(handler) seq1 handler . seq2))
