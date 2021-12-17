@@ -109,7 +109,7 @@ char_seq_stdout ^(out . close)
   list_string $list ^($token)
   $return $token $in)
 
-(defineCPS char_seq_count_lines ^($in $no)
+#; (defineCPS char_seq_count_lines ^($in $no)
   seq_count $in $no (^($ch) char=? $ch #\newline)
   )
 
@@ -312,15 +312,17 @@ char_seq_stdout ^(out . close)
     (standard-output-port)))
 ;;;    (current-output-port)))
 
-(defineCPS port_char_seq ^($port)
+(defineCPS port_char_seq ^(port)
+  port ^($port)
   delay
-  (
-    port_read_char $port ^($ch)
-    port_char_seq $port ^($in)
-    (object_eof? $ch) empty_seq
-    (^($out) $out $ch . $in)
-    )
-  )
+  ( port_read_char $port ^($ch)
+    (object_eof? $ch)
+    ( port_close $port ^()
+      empty_seq)
+    (^(out)
+      port_char_seq $port ^(seq)
+      out $ch . seq)
+    ) )
 
 (defineCPS port_write ^($port $obj . $return)
   (lambda(obj port)
@@ -495,6 +497,11 @@ char_seq_stdout ^(out . close)
   (lambda(C F)
     (func-with-cont F C)
     ) cont func)
+
+(defineCPS cont_first ^(cont . return)
+  (lambda(C)
+    (cadr C)
+    ) cont)
 
 (defineCPS cont_rest ^(cont . return)
   (lambda(C)
