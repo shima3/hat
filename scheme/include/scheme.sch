@@ -475,6 +475,19 @@ char_seq_stdout ^(out . close)
     (string-cursor>=? cur1 cur2)
     ) $cur1 $cur2)
 
+(defineCPS string_seq ^(str)
+  str ^($str)
+  string_end_cursor $str ^($end)
+  fix
+  (^(loop cur out . break)
+    cur ^($cur)
+    when(string_cursor>=? $cur $end) break ^()
+    string_ref $str $cur ^($ch)
+    out $ch ^(out2)
+    loop (string_next_cursor $str $cur) out2 . break
+    )^(loop)
+  loop (string_start_cursor $str))
+
 ;; memory ------------------------------
 
 (defineCPS memory_gc ^ return
@@ -523,3 +536,30 @@ char_seq_stdout ^(out . close)
   (lambda(C)
     (null? C)
     ) cont)
+
+;; 正規表現 regexp -----------------------------
+
+(defineCPS string_regexp ^(str)
+  str ^($str)
+  (lambda(str)
+    (string->regexp str)
+    ) $str)
+
+(defineCPS regexp_match ^(regexp str onfail . return)
+  regexp ^($regexp) str ^($str) ; start ^($start) end ^($end)
+  (lambda(regexp str)
+    (rxmatch regexp str)
+    ) $regexp $str ^($result)
+  when(object_eq? $result #f) onfail ^()
+  return $result)
+
+(defineCPS regexp_start ^(match)
+  (lambda(match)
+    (rxmatch-start match)
+    ) match)
+
+(defineCPS regexp_end ^(match)
+  (lambda(match)
+    (rxmatch-end match)
+    ) match)
+
