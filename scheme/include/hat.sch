@@ -227,17 +227,18 @@ chinの文字を読み、行番号と文字の組からなるseqを返す。
     (char=? $ch #\newline)(+ $no 1) $no ^($no)
     lineno_char_seq rest $no out2))
 
-#; (defineCPS seq_count_lines ^($in $no)
-  (seq_empty? $in) empty_seq
-  (^($out)
-    seq_pop $in ^($ch $in2)
-    $no ^(no)
-    $out ($ch . no)^($out2)
-    (char=? $ch #\newline)(+ no 1) no ^($no2)
-    seq_count_lines $in2 $no2 ^($seq)
-    $seq $out2
-    )
-  )
+(defineCPS seq_count ^(in no $tail)
+  no ^($no)
+  fix
+  (^(loop in $no)
+    (seq_empty? in) empty_seq
+    (^(out)
+      seq_pop in ^($el in2)
+      out ($el $no . $tail)^(out2)
+      + $no 1 ^($no2)
+      loop in2 $no2 out2)
+    )^(loop)
+  loop in $no)
 
 (defineCPS string_no_seq_stdin_line ^ return
   port_stdin ^($port)
@@ -374,8 +375,11 @@ pop: 要素を削除する。
   action)
 
 (defineCPS unless ^(test body . return)
-  test return body ^(action)
-  action)
+  test return body ^(action . rest) action . rest)
+;;  test nop body ^(action) action)
+;;  test return body ^(action) action)
+;;  test return body ^(action . rest) rest action . end)
+;;  test (^ c return . c) body ^(action) action)
 
 (defineCPS when~ ^(test . cont)
   cont_pop cont ^(seq return)
