@@ -109,10 +109,6 @@ char_seq_stdout ^(out . close)
   list_string $list ^($token)
   $return $token $in)
 
-#; (defineCPS char_seq_count_lines ^($in $no)
-  seq_count $in $no (^($ch) char=? $ch #\newline)
-  )
-
 ;; list -----------------------------------
 
 #; (defineCPS nil #f)
@@ -198,6 +194,12 @@ char_seq_stdout ^(out . close)
   when(object_eq? $first $obj)($return #t)^()
   list_contains? $rest $obj . $return
   )
+
+(defineCPS list_reverse ^(list tail . return)
+  when(list_empty? list)(return tail)^()
+  list_pop list ^(el rest)
+  list_cons el tail ^(tail)
+  list_reverse rest tail . return)
 
 ;; number ------------------------------
 
@@ -346,14 +348,14 @@ char_seq_stdout ^(out . close)
   (^ return
     port_read_line $port ^($line)
     when(object_eof? $line)
-    ( print("close 1\n")^()
+    ( ; print("close 1\n")^()
       port_close $port ^()
       return empty_seq)^()
     port_line_seq $port ^(rest)
     return
     (^(out . return2)
       when(list_empty? out)
-      ( print("close 2\n")^()
+      ( ; print("close 2\n")^()
         port_close $port . return2 )^()
       out $line ^(out2)
       rest out2 . return2
@@ -403,7 +405,7 @@ char_seq_stdout ^(out . close)
     (string? S)
     ) $str)
 
-(defineCPS substring/shared ^(str start end)
+(defineCPS substring ^(str start end)
   str ^($str) start ^($start) end ^($end)
   (lambda(str start end)
     (substring/shared str start end)
@@ -488,6 +490,11 @@ char_seq_stdout ^(out . close)
     )^(loop)
   loop (string_start_cursor $str))
 
+(defineCPS string_concatenate ^($list)
+  (lambda(list)
+    (string-concatenate list)
+    ) $list)
+
 ;; memory ------------------------------
 
 (defineCPS memory_gc ^ return
@@ -545,13 +552,24 @@ char_seq_stdout ^(out . close)
     (string->regexp str)
     ) $str)
 
-(defineCPS regexp_match ^(regexp str onfail . return)
-  regexp ^($regexp) str ^($str) ; start ^($start) end ^($end)
-  (lambda(regexp str)
-    (rxmatch regexp str)
-    ) $regexp $str ^($result)
-  when(object_eq? $result #f) onfail ^()
-  return $result)
+#|
+正規表現regexpに一致する部分を文字列strのstart文字目から探す。
+start=0のとき、strの先頭から探す。
+一致する部分が見つかった場合、#tとregmatchオブジェクトを返す。
+見つからなかった場合、#fを返す。
+
+ifelse(regexp_match regexp str start)
+(^(regmatch) 見つかった場合の処理)
+(見つからなかった場合の処理)^()
+|#
+(defineCPS regexp_match ^(regexp str start . return)
+  regexp ^($regexp) str ^($str) start ^($start) ; end ^($end)
+  (lambda(regexp str start)
+;;    (rxmatch regexp str start)
+    (rxmatch regexp (substring str start (string-length str)))
+    ) $regexp $str $start ^($result)
+  when(object_eq? $result #f)(return #f)^()
+  return #t $result)
 
 (defineCPS regexp_start ^(match)
   (lambda(match)

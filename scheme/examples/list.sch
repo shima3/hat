@@ -26,13 +26,6 @@
 (defineCPS getRest ^(list)
   (lambda (list)(cdr list)) list)
 
-(defineCPS moveAll ^(back rest . return)
-  unless (pair? back) (return rest) ^()
-  getFirst back ^(el)
-  getRest back ^(back)
-  cons el rest ^(rest)
-  moveAll back rest . return)
-
 (defineCPS if ^(condition action) condition ^(condition)
   condition action ())
 
@@ -67,7 +60,7 @@
   list_cons 2 list ^(list)
   list_cons 3 list ^(list)
   print(list "\n") ^()
-  moveAll list () ^(list)
+  list_reverse list () ^(list)
   print(list "\n")^()
   exit 0)
 

@@ -66,24 +66,6 @@
 #; (defineCPS println ^(value)
   (lambda (value)(display value)(newline)) value ^(dummy) nop)
 
-#; (defineCPS moveAll ^(back rest . return)
-  unless(list_pair? back)(return rest) ^()
-  list_split back ^(el back)
-  list_cons el rest ^(rest)
-  moveAll back rest)
-
-;; list から要素を1つ選び、第1引数とし、残りを第2引数とし action を呼び出す。
-#; (defineCPS forEach ^(list action . return)
-  fix
-  (^(loop back rest)
-    unless(list_pair? rest) return ^()
-    list_split rest ^(el rest)
-    moveAll back rest ^(others)
-    action el others ^()
-    list_cons el back ^(back)
-    loop back rest)
-  () list . end)
-
 ( defineCPS main1 ^(args)
   print("begin\n") ^()
   forEach (1 2 3 4 5)
@@ -100,7 +82,7 @@
       ( ^(someone others)
 	list_cons someone selected ^(selected)
 	loop selected others ) )
-    ( moveAll selected () ^(selected)
+    ( list_reverse selected () ^(selected)
       action selected ) )
   () list )
 
@@ -255,11 +237,12 @@ listから１つ要素を選び、その要素と残りのリストを返す。
   nop )
 
 ( defineCPS amb3 ^(list . cont)
-  forEach list cont )
+  forEach list cont)
 
 ( defineCPS main ^(args)
   print("begin\n")^()
-  ( amb3 (1 2 3 4) ^(a r1)
+  (^ break
+    amb3 (1 2 3 4) ^(a r1)
     amb3 r1 ^(b r2)
     amb3 r2 ^(c r3)
     amb3 r3 ^(d r4 . back)
@@ -268,5 +251,5 @@ listから１つ要素を選び、その要素と残りのリストを返す。
     unless(not (= a 1)) back ^()
     unless(< b 3) back ^()
     unless(< c a) back ^()
-    print(a b c d "\n") ) ^()
+    print(a b c d "\n") . back) ^()
   print("end\n") )
