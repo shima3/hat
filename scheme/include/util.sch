@@ -102,33 +102,29 @@ cond
 #; ( defineCPS not ^(condition then else)
   condition else then )
 
-( defineCPS moveAll ^(back rest . return)
-  unless(list_pair? back)(return rest) ^()
-;;;  getFirst back ^(el)
-;;;  getRest back ^(back)
+#; ( defineCPS moveAll ^(back rest . return)
+  unless(list_pair? back)(return rest)^()
   list_pop back ^(el back)
-;;;  makePair el rest ^(rest)
   list_cons el rest ^(rest)
-  moveAll back rest )
+  moveAll back rest)
 
 #|
 list の各要素を一つずつ選び、その要素を第1引数、
 それ以外の要素からなるリストを第2引数とし、
 action を呼び出す。
 |#
-( defineCPS forEach ^(list action . return)
+( defineCPS forEach ^($list action . return)
   fix
-  (^(loop back rest)
-    unless(list_pair? rest) return ^()
-    list_pop rest ^(el rest)
-;;    getFirst rest ^(el)
-;;    getRest rest ^(rest)
-    moveAll back rest ^(others)
-    action el others ^()
-;;;    makePair el back ^(back)
-    list_cons el back ^(back)
-    loop back rest)
-  ( ) list )
+  (^(loop $head $tail . break)
+    when(list_empty? $tail) return ^()
+;;    unless(list_pair? rest) return ^()
+    list_pop $tail ^($el $tail)
+    ;;    moveAll back rest ^(others)
+    list_reverse $head $tail ^($others)
+    action $el $others ^()
+    list_cons $el $head ^($head)
+    loop $head $tail . break)^(loop)
+  loop () $list . return)
 ;;  ( ) list . end ) 2019/7/10 修正
 
 #|
