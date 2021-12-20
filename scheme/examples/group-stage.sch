@@ -6,6 +6,7 @@ S セネガル
 C コロンビア
 J 日本
 |#
+(include "util.sch")
 
 (defineCPS + ^(a b) a ^(a) b ^(b . c)
   (lambda (A B)(+ A B)) a b . c)
@@ -44,9 +45,9 @@ J 日本
 (defineCPS = ^(a b) a ^(a) b ^(b)
   (lambda (A B)(= A B)) a b)
 
-( defineCPS print ^(list . return)
+#; ( defineCPS print ^(list . return)
   ( lambda (list)
-    (display (string_concatenate (map x->string list)))
+    (display (string-concatenate (map x->string list)))
     ) list ^(dummy)
   return )
 
