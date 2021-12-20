@@ -117,9 +117,7 @@ action を呼び出す。
   fix
   (^(loop $head $tail . break)
     when(list_empty? $tail) return ^()
-;;    unless(list_pair? rest) return ^()
     list_pop $tail ^($el $tail)
-    ;;    moveAll back rest ^(others)
     list_reverse $head $tail ^($others)
     action $el $others ^()
     list_cons $el $head ^($head)

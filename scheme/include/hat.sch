@@ -371,11 +371,11 @@ pop: 要素を削除する。
   action)
 
 (defineCPS when ^(test body . return)
-  test body return ^(action)
-  action)
+  test (body) return ^(action . rest) action . rest)
+;;  test body return ^(action) action)
 
 (defineCPS unless ^(test body . return)
-  test return body ^(action . rest) action . rest)
+  test return (body) ^(action . rest) action . rest)
 ;;  test nop body ^(action) action)
 ;;  test return body ^(action) action)
 ;;  test return body ^(action . rest) rest action . end)

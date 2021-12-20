@@ -251,5 +251,7 @@ listから１つ要素を選び、その要素と残りのリストを返す。
     unless(not (= a 1)) back ^()
     unless(< b 3) back ^()
     unless(< c a) back ^()
-    print(a b c d "\n") . back) ^()
+    print(a b c d "\n") .
+    break ; １つの解だけで良い場合 break、すべての解を探す場合 back
+    )^()
   print("end\n") )
