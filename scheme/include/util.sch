@@ -293,3 +293,64 @@ seq_tokenize_line_comment $start_str in ^(in2)
         out $list ^(out2)
         loop in2 out2 . break )
       )))
+
+(defineCPS seq_skip_space ^($space)
+  string_regexp $space ^($regexp)
+  fix
+  (^(loop in)
+    (seq_empty? in) empty_seq
+    (^(out . break)
+      seq_pop in ^($list in2)
+      list_pop $list ^($type $tail)
+      list_pop $tail ^($line $tail)
+      ifelse(and(object_eq? $type RAW)(regexp_match $regexp $line))
+      (^($match) ; then
+        regexp_start $match ^($start)
+        regexp_end $match ^($end)
+        substring $line 0 $start ^($str)
+        out (RAW $str . $tail)^(out2)
+        substring $line $end -1 ^($str)
+        seq_push (RAW $str . $tail) in2 ^(in3)
+        loop in3 out2 . break)
+      ( ; else
+        out $list ^(out2)
+        loop in2 out2 . break)
+      )))
+
+(defineCPS seq_tokenize_delimit ^($delim)
+  string_regexp $delim ^($regexp)
+  fix
+  (^(loop in)
+    (seq_empty? in) empty_seq
+    (^(out . break)
+      seq_pop in ^($list in2)
+      list_pop $list ^($type $tail)
+      list_pop $tail ^($line $tail)
+      ifelse(and(object_eq? $type RAW)(regexp_match $regexp $line))
+      (^($match) ; then
+        regexp_start $match ^($start)
+        regexp_end $match ^($end)
+        substring $line 0 $start ^($str)
+        out (RAW $str . $tail)^(out2)
+        substring $line $start $end ^($str)
+        out2 (DELIMIT $str . $tail)^(out3)
+        substring $line $end -1 ^($str)
+        seq_push (RAW $str . $tail) in2 ^(in3)
+        loop in3 out3 . break)
+      ( ; else
+        out $list ^(out2)
+        loop in2 out2 . break)
+      )))
+
+(defineCPS seq_skip_empty_string ^()
+  fix
+  (^(loop in)
+    (seq_empty? in) empty_seq
+    (^(out . break)
+      seq_pop in ^($list in2)
+      list_pop $list ^($type $tail)
+      list_pop $tail ^($line $tail)
+      ifelse(or(not(object_eq? $type RAW))(> (string_length $line) 0))
+      (out $list)(I out)^(out2)
+      loop in2 out2 . break
+      )))
