@@ -40,29 +40,23 @@ Scheme依存の関数群
     (newline) ) tag value ^(dummy)
   return )
 
-#; (defineCPS seq_print ^($seq $sep . $return)
-  seq_enum $return $seq ^($first . $rest)
-  port_stdout ^($port)
-  port_write $port $first ^()
-  port_display $port $sep ^()
-;;  print($first $sep)^()
-  seq_print $rest $sep . $return)
-
 #|
 列の要素を出力する。
 seq 列
 delimit 境界
 |#
 (defineCPS seq_print ^(seq delimit . return)
-  when(seq_empty? seq) return ^()
+  when(seq_empty? seq) return ^() ; print("seq_print 1\n")^()
   fix
-  (^(loop seq)
-    seq_pop seq ^(first rest)
+  (^(loop seq . break) ; print("seq_print 5: ")^()
+    seq_pop seq ^(first rest) ; print("seq_print 3: ")^()
     print(first)^()
-    when(seq_empty? rest) return ^()
+    when(seq_empty? rest)
+    ( ; print("seq_print 2\n")^()
+      break )^() ; print("seq_print 4: ")^()
     print(delimit)^()
-    loop rest
-    ) seq)
+    loop rest . break
+    ) seq . return)
 
 ;; char --------------------------------
 
@@ -350,7 +344,7 @@ char_seq_stdout ^(out . close)
     when(object_eof? $line)
     ( ; print("close 1\n")^()
       port_close $port ^()
-      return empty_seq)^()
+      return empty_seq )^()
     port_line_seq $port ^(rest)
     return
     (^(out . return2)
@@ -358,7 +352,7 @@ char_seq_stdout ^(out . close)
       ( ; print("close 2\n")^()
         port_close $port . return2 )^()
       out $line ^(out2)
-      rest out2 . return2
+      rest out2 ; bug . return2
       )
     )
 #;
@@ -405,6 +399,10 @@ char_seq_stdout ^(out . close)
     (string? S)
     ) $str)
 
+#|
+strのstart番目の文字(これを含む)から、end番目の文字(これを含まない)までの部分文字列を返す。
+endが-1の場合、strの終端を意味する。
+|#
 (defineCPS substring ^(str start end)
   str ^($str) start ^($start) end ^($end)
   (lambda(str start end)
