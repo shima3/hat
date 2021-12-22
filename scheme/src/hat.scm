@@ -103,8 +103,7 @@
 
 ;; インタプリタを停止する．
 (define (interpreter-stop!)
-  (set! loop-flag #f)
-  )
+  (set! loop-flag #f))
 
 ;; 終了コード
 (define exit-code 0)
@@ -673,8 +672,7 @@ built-in function: mailboxRemove ^(isEmpty)
 
 ;; コマンド引数を与えてインタプリタを呼び出す。
 (define (main-proc cmd . args)
-  (interpret args)
-  )
+  (interpret args))
 
 (define (copy-cell dst src)
   ;; (display "copy-cell: ")(display dst)(newline)
