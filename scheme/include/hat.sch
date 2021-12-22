@@ -4,7 +4,7 @@ Hat言語のみで定義された関数群
 
 ;; combinator -----------------------------
 
-(defineCPS I ^(x . r) r x)
+(defineCPS I ^(x . return) return x)
 (defineCPS Y ^(f)
   (^(x) f (x x))
   (^(x) f (x x)))
@@ -372,8 +372,7 @@ pop: 要素を削除する。
 (defineCPS nop ^ return return)
 
 (defineCPS ifelse ^(test then else)
-  test then else ^(action)
-  action)
+  test (then)(else)^(action . rest) action . rest)
 
 (defineCPS when ^(test body . return)
   test (body) return ^(action . rest) action . rest)
