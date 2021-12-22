@@ -1,3 +1,3 @@
 #!/bin/bash
 dir=${0%/*}
-gosh $dir/aid-interpret.scm $*
+gosh $dir/aid-interpret.scm "$@"

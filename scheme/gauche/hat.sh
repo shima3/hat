@@ -5,4 +5,4 @@
 # Example: ./hat.sh sample/hello.sch
 dir=${0%/*}
 # $dir/gauche/interpret.sh $dir/src/hat.scm $*
-$dir/interpret.sh $dir/../src/hat.scm $*
+$dir/interpret.sh $dir/../src/hat.scm "$@"
