@@ -46,15 +46,16 @@ seq 列
 delimit 境界
 |#
 (defineCPS seq_print ^(seq delimit . return)
-  when(seq_empty? seq) return ^() ; print("seq_print 1\n")^()
+  ;; print("seq_print 1\n")^()
+  when(seq_empty? seq) return ^() ; print("seq_print 2\n")^()
   fix
-  (^(loop seq . break) ; print("seq_print 5: ")^()
-    seq_pop seq ^(first rest) ; print("seq_print 3: ")^()
+  (^(loop seq . break) ; print("seq_print 3: ")^()
+    seq_pop seq ^(first rest) ; print("seq_print 4: ")^()
     print(first)^()
     when(seq_empty? rest)
-    ( ; print("seq_print 2\n")^()
-      break )^() ; print("seq_print 4: ")^()
-    print(delimit)^()
+    ( ; print("seq_print 5\n")^()
+      break )^() ; print("seq_print 6: ")^()
+    print(delimit)^() ; print("seq_print 7: ")^()
     loop rest . break
     ) seq . return)
 
@@ -383,7 +384,7 @@ char_seq_stdout ^(out . close)
   return)
 
 (defineCPS open_output_string_port ^()
-  (labmda()
+  (lambda()
     (open-output-string)))
 
 (defineCPS port_get_output_string ^($port)
@@ -564,7 +565,8 @@ ifelse(regexp_match regexp str start)
   regexp ^($regexp) str ^($str) start ^($start) ; end ^($end)
   (lambda(regexp str start)
 ;;    (rxmatch regexp str start)
-    (rxmatch regexp (substring str start (string-length str)))
+;;    (rxmatch regexp (substring str start (string-length str)))
+    (rxmatch regexp (substring str start -1))
     ) $regexp $str $start ^($result)
   when(object_eq? $result #f)(return #f)^()
   return #t $result)
