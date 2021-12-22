@@ -158,3 +158,138 @@ list の要素を非決定的に一つ選び、その要素を第1戻り値、
   (print~ "if false")^()
   test1sub false ^()
   (print~ "End"))
+
+;; 字句解析 ------------------------------
+
+#|
+複数行コメントを字句解析する。
+$start_str コメントの開始記号
+$end_str コメントの終了記号
+in 入力 (各行の文字列 行番号 ファイル名) の列
+out 出力 (トークンの型 トークンの文字列 行番号 ファイル名) の列
+トークンの型は RAW または COMMENT
+|#
+(defineCPS seq_tokenize_block_comment ^($start_str $end_str in . return)
+  string_regexp $start_str ^($start_regexp)
+  string_regexp $end_str ^($end_regexp)
+  fix
+  (^(loop in out . break)
+    when(seq_empty? in) break ^()
+    seq_pop in ^($list in2)
+    list_pop $list ^($type $tail)
+    list_pop $tail ^($line $tail)
+    ifelse(and(object_eq? $type RAW)(regexp_match $start_regexp $line))
+    (^($start_match) ; then
+      regexp_start $start_match ^($start_start) ; 開始記号の開始位置
+      regexp_end $start_match ^($start_end) ; 開始記号の終了位置
+      ifelse(> $start_start 0)
+      ( ; then
+        substring $line 0 $start_start ^($str)
+        out (RAW $str . $tail)
+        )(I out)^(out2) ;else
+      substring $line $start_end -1 ^($str)
+      ifelse(regexp_match $end_regexp $str)
+      ;; ifelse(regexp_match $end_regexp $line $start_end)
+      (^($end_match) ; then 開始記号と同じ行に終了記号がある場合
+        regexp_end $end_match ^($end_end) ; 終了記号の終了位置
+        substring $line $start_start $end_end ^($str)
+        out2 (COMMENT $str . $tail)^(out3)
+        substring $line $end_end -1 ^($str)
+        string_length $str ^($len)
+        ;; ifelse(> $len 0)(seq_push ($str . $tail) in2)(I in2)^(in3)
+        seq_push (RAW $str . $tail) in2 ^(in3)
+        loop in3 out3 . break )
+      ( ; else 開始記号と異なる行に終了記号がある場合
+        open_output_string_port ^($buf)
+        substring $line $start_start -1 ^($str)
+        port_display $buf $str ^()
+        port_display $buf "\n" ^()
+        seq_read_string $end_regexp in2 $buf ^($comment in3)
+        out2 (COMMENT $comment . $tail)^(out3)
+        loop in3 out3 . break )
+      )
+    ( ; else
+      out (RAW $line . $tail)^(out2)
+      loop in2 out2 . break )
+    )^(loop)
+  loop in ^(loop_in)
+  return loop_in)
+
+(defineCPS seq_read_string ^($end_regexp in $buf . return)
+  seq_pop in ^($list in2)
+  list_pop $list ^($type $tail)
+  list_pop $tail ^($line $tail)
+  unless(and(object_eq? $type RAW)(regexp_match $end_regexp $line))
+  (
+    port_display $buf $line ^()
+    port_display $buf "\n" ^()
+    seq_read_string $end_regexp in2 $buf ^ result
+    result return )^($end_match)
+  regexp_end $end_match ^($end_end) ; 終了記号の終了位置
+  substring $line 0 $end_end ^($str)
+  port_display $buf $str ^()
+  port_get_output_string $buf ^($comment)
+  substring $line $end_end -1 ^($str)
+  seq_push (RAW $str . $tail) in2 ^(in3)
+  return $comment in3)
+
+#|
+seq_tokenize_line_comment $start_str in ^(in2)
+開始記号$start_strで始まる一行コメントを字句解析する。
+|#
+(defineCPS seq_tokenize_line_comment ^($start_str)
+  string_regexp $start_str ^($start_regexp)
+  fix
+  (^(loop in)
+    (seq_empty? in) empty_seq
+    (^(out . break)
+      seq_pop in ^($list in2)
+      list_pop $list ^($type $tail)
+      list_pop $tail ^($line $tail)
+      ifelse(object_eq? $type RAW)
+      ( ; then
+        ifelse(regexp_match $start_regexp $line)
+        (^($match) ; then
+          regexp_start $match ^($start)
+          substring $line 0 $start ^($str)
+          out (RAW $str . $tail)^(out2)
+          substring $line $start -1 ^($str)
+          out2 (COMMENT $str . $tail)^(out3)
+          loop in2 out3 . break)
+        ( ; else
+          out $list ^(out2)
+          loop in2 out2 . break) )
+      ( ; else
+        out $list ^(out2)
+        loop in2 out2 . break) )
+    ))
+
+(defineCPS seq_tokenize_quote ^($delim)
+  string_regexp $delim ^($start_regexp)
+  string_concatenate ("(?!\\\\)" $delim)^($end_delim)
+  string_regexp $end_delim ^($end_regexp)
+  fix
+  (^(loop in)
+    (seq_empty? in) empty_seq
+    (^(out . break)
+      seq_pop in ^($list in2)
+      list_pop $list ^($type $tail)
+      list_pop $tail ^($line $tail)
+      ifelse(and(object_eq? $type RAW)(regexp_match $start_regexp $line))
+      (^($match) ; then
+        regexp_start $match ^($start)
+        regexp_end $match ^($end)
+        substring $line 0 $start ^($str)
+        out (RAW $str . $tail)^(out2)
+        open_output_string_port ^($buf)
+        substring $line $start $end ^($str)
+        port_display $buf $str ^()
+        substring $line $end -1 ^($str)
+        seq_push (RAW $str . $tail) in2 ^(in3)
+        seq_read_string $end_regexp in3 $buf ^($str in4)
+        out2 (QUOTE $str . $tail)^(out3)
+        loop in4 out3 . break)
+      ( ; else
+        out $list ^(out2)
+        loop in2 out2 . break )
+      )))
