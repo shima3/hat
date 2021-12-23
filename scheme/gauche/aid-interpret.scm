@@ -9,7 +9,7 @@
 ;; not implemented (use srfi-115)
 (use srfi-117)
 
-(define-macro (define-type Name . Fields)
+(define-macro (define-record Name . Fields)
   (cons 'define-record-type
     (cons Name
       (cons

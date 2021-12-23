@@ -25,13 +25,14 @@
 ;; (cons key value) ; key-value pair
 ;; (list kv1 kv2 ...) ; list of key-value pairs
 
-(define-record-type vtb #t #t ; 変数表 variable table
+;;; (define-record-type vtb #t #t ; 変数表 variable table
+(define-record vtb ; 変数表 variable table
   kvld ; キーと値の対の降順リスト list of key-value pairs in descending order
   kvla ; キーと値の対の昇順リスト list of key-value pairs in ascending order
-  )
+)
 
 ;; 空の変数表を作って返す
-(define (new-vtb)(make-vtb ()()))
+(define (new-vtb)(make-vtb '() '()))
 
 (define (print-vtb t)
   (println (vtb-kvld t))
@@ -71,13 +72,15 @@
   (let ([t (remove-vtb t key)])
     (make-vtb (cons (cons key value)(vtb-kvld t))(vtb-kvla t))))
 
-(define-record-type fap #t #t ; 関数適用 function application
+;;; (define-record-type fap #t #t ; 関数適用 function application
+(define-record fap ; 関数適用 function application
   func ; 関数
   args ; 通常の実引数のリスト
   cont ; 継続の実引数
   )
 
-(define-record-type fab #t #t ; 関数抽象 function abstraction
+;;; (define-record-type fab #t #t ; 関数抽象 function abstraction
+(define-record fab ; 関数抽象 function abstraction
   pars ; 仮引数のリスト 
   fap  ; 関数適用
   vars ; 変数表
@@ -192,7 +195,8 @@ built-in function: mailboxRemove ^(isEmpty)
 
 ;; アクターは振舞とメールボックスからなる
 ;; メールボックスはキューである
-(define-type actor behavior mailbox dictionary properties)
+(define-record actor behavior mailbox dictionary properties)
+;; (define-type actor behavior mailbox dictionary properties)
 #; (define-record-type actor ; srfi-9
   (make-actor behavior mailbox dictionary)
   actor?
@@ -392,7 +396,7 @@ built-in function: mailboxRemove ^(isEmpty)
   (step-loop)
   (exit exit-code))
 
-(define sch-load-path ())
+(define sch-load-path '())
 
 (define(get-path filename)
   (let([index (string-index-right filename #\/)])
@@ -413,7 +417,7 @@ built-in function: mailboxRemove ^(isEmpty)
 		  [next (get-path filepath)] )
 	      (if (string? next)
 		(set! sch-load-path (cons next sch-load-path)))
-	      (while(interpret-sexp (read port))())
+	      (while(interpret-sexp (read port)) '())
 	      #; (let loop ( )
 	      (if (interpret-sexp (read port))
 	      (loop)))
