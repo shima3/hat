@@ -66,11 +66,6 @@ delimit 境界
     (char-whitespace? ch)
     ) $ch)
 
-#; (defineCPS isSpace ^(ch)
-  (lambda(ch)
-    (char=? ch #\Space)
-    ) ch)
-
 (defineCPS char=? ^($c1 $c2)
   (lambda(c1 c2)
     (char=? c1 c2)
@@ -106,8 +101,10 @@ char_seq_stdout ^(out . close)
 
 ;; list -----------------------------------
 
-#; (defineCPS nil #f)
-#; (defineCPS isnil ^(s) s (^(x y d) #f) #t)
+#|
+(defineCPS nil #f)
+(defineCPS isnil ^(s) s (^(x y d) #f) #t)
+|#
 
 (defineCPS list_empty? ^($list)
   (lambda(list)
@@ -280,6 +277,11 @@ char_seq_stdout ^(out . close)
     (eq? a b)
     ) $a $b)
 
+(defineCPS object_equal? ^($a $b)
+  (lambda(a b)
+    (equal? a b)
+    ) $a $b)
+
 (defineCPS object_print ^(obj . return)
   (lambda(Obj)
     (ifelse(string? Obj)
@@ -335,35 +337,27 @@ char_seq_stdout ^(out . close)
 
 (defineCPS port_read_line ^($port)
   (lambda(port)
-    (read-line port)
+    (port-read-line port)
     ) $port)
 
 (defineCPS port_line_seq ^($port)
   delay
   (^ return
-    port_read_line $port ^($line)
+    port_read_line $port ^($line) ; print("port_line_seq 2\n")^()
     when(object_eof? $line)
     ( ; print("close 1\n")^()
       port_close $port ^()
       return empty_seq )^()
-    port_line_seq $port ^(rest)
+    port_line_seq $port ^(rest) ; print("port_line_seq 1\n")^()
     return
-    (^(out . return2)
+    (^(out . return2) ; print("port_line_seq 3\n")^()
       when(list_empty? out)
       ( ; print("close 2\n")^()
         port_close $port . return2 )^()
-      out $line ^(out2)
+      out $line ^(out2) ; print("port_line_seq 4\n")^()
       rest out2 ; bug . return2
       )
-    )
-#;
-  (^ return
-    port_read_line $port ^($line)
-    when(object_eof? $line)(return empty_seq)^()
-    port_line_seq $port ^(rest)
-    return (^(out) out $line ^(out2) rest out2)
-    )
-  )
+    ))
 
 (defineCPS open_input_file_port ^(file_name)
   file_name ^($file_name)
@@ -379,7 +373,8 @@ char_seq_stdout ^(out . close)
 
 (defineCPS port_close ^($port . return)
   (lambda(port) ; (display "port_close ")(write port)(newline)
-    (close-port port)
+    (port-close port)
+;;    (close-port port)
     ) $port ^(dummy)
   return)
 
@@ -407,7 +402,9 @@ endが-1の場合、strの終端を意味する。
 (defineCPS substring ^(str start end)
   str ^($str) start ^($start) end ^($end)
   (lambda(str start end)
-    (substring/shared str start end)
+;;    (if(< end 0)(set! end (string-length str)))
+    (substring str start end)
+;;    (substring/shared str start end)
     ) $str $start $end)
 
 (defineCPS string_tokenize ^(str)
@@ -434,19 +431,23 @@ endが-1の場合、strの終端を意味する。
     (make-string L)
     ) $len)
 
-#; (defineCPS string-set! ^(str index char . return) index ^(index)
+#|
+ (defineCPS string-set! ^(str index char . return) index ^(index)
   (lambda(S I C)(string-set! S I C)) str index char ^(dummy)
   return)
-
+  |#
+  
 (defineCPS string_number ^(str)
   str ^($str)
   (lambda(S)
     (string->number S)
     ) $str)
 
-#; (defineCPS string_concat ^(str_list)
+#|
+(defineCPS string_concat ^(str_list)
   (lambda(list)
     ))
+|#
 
 (defineCPS string_start_cursor ^(str)
   str ^($str)
@@ -491,7 +492,8 @@ endが-1の場合、strの終端を意味する。
 
 (defineCPS string_concatenate ^($list)
   (lambda(list)
-    (string-concatenate list)
+    (string-cat list)
+;;    (string-concatenate list)
     ) $list)
 
 ;; memory ------------------------------
@@ -548,6 +550,7 @@ endが-1の場合、strの終端を意味する。
 (defineCPS string_regexp ^(str)
   str ^($str)
   (lambda(str)
+;;    (regexp str)
     (string->regexp str)
     ) $str)
 
@@ -567,18 +570,28 @@ ifelse(regexp_match regexp str start)
 ;;    (rxmatch regexp str start)
 ;;    (rxmatch regexp (substring str start (string-length str)))
 ;;    (rxmatch regexp (substring str start -1))
-    (rxmatch regexp str)
+;;    (define pos (regexp-search regexp str))
+;;    (define pos (string-search-positions regexp str))
+;;    (define pos (string-match-positions regexp str))
+    ;; (display "pos=")(write pos)(newline)
+    ;;    (if pos (cons #t (car pos))(cons #f '()))
+    (regexp-search regexp str)
+    ;;    (rxmatch regexp str)
     ) $regexp $str ^($result)
-  when(object_eq? $result #f)(return #f)^()
-  return #t $result)
+  ;; when(object_eq? $result #f)(return #f)^()
+  ;; print("match result=" $result "\n")^()
+  list_values $result . return)
+  ;; return #t $result)
 
 (defineCPS regexp_start ^(match)
   (lambda(match)
-    (rxmatch-start match)
+    (car match)
+;;    (rxmatch-start match)
     ) match)
 
 (defineCPS regexp_end ^(match)
   (lambda(match)
-    (rxmatch-end match)
+    (cdr match)
+;;    (rxmatch-end match)
     ) match)
 
