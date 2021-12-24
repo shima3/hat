@@ -7,7 +7,7 @@
 ;; Scheme処理系依存を吸収するためのユーティリティ関数
 
 (define (cons-alist key datum alist)(cons (cons key datum) alist))
-(define (eval1 expr)(eval expr (interaction-environment)))
+;; (define (eval1 expr)(eval expr (interaction-environment)))
 (define (print . list)
   (if(pair? list)
     (let ([first (car list)][rest (cdr list)])
@@ -98,7 +98,7 @@
 
 ;; 項 term を値とする変数 var を定義する．
 (define (set-global-var var term)
-;;; (println "set-global-var " var "=" term)
+  ;; (println "set-global-var " var "=" term)
   (hash-table-set! cps-env var term))
 
 ;; インタプリタによる式の評価を繰り返すかどうかを示すフラグ
@@ -408,24 +408,26 @@ built-in function: mailboxRemove ^(isEmpty)
 ;; sch-script 言語のファイル filename を読み込む
 (define(load-sch-script filename path)
   (if(pair? path)
-    (let([filepath (string-append (car path) filename)])
-;;;      (println "filepath=" filepath)
-      (call-with-input-file filepath
+    (let([filepath (string-append (car path) filename)]) ; then
+      ;; (println "filepath=" filepath)
+      (with-input-file-exception-handler filepath
 	(lambda(port)
-	  (if port
-	    (let( [previous sch-load-path]
-		  [next (get-path filepath)] )
-	      (if (string? next)
-		(set! sch-load-path (cons next sch-load-path)))
-	      (while(interpret-sexp (read port)) '())
-	      #; (let loop ( )
-	      (if (interpret-sexp (read port))
-	      (loop)))
-	      (set! sch-load-path previous)
-	      )
-	    (load-sch-script filename (cdr path))))
-	:if-does-not-exist #f))
-    (begin
+          ;; (println "port=" port)
+          (let( [previous sch-load-path]
+                [next (get-path filepath)] )
+            (if (string? next)
+              (set! sch-load-path (cons next sch-load-path)))
+            ;;(while(interpret-sexp (read port)) '())
+            (let loop ( )
+              (if (interpret-sexp (read port))
+                (loop)))
+            (set! sch-load-path previous)
+            ))
+        (lambda(ex)
+          ;; (println ex ": filepath=" filepath)
+          (load-sch-script filename (cdr path)))
+      ))
+    (begin ; else
       (println "*** ERROR: cannot find \"" filename "\" in " sch-load-path)
       (exit 1))
     ))

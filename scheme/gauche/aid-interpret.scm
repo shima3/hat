@@ -67,6 +67,28 @@
       (let ( [handler (hash-table-ref/default selector-input-table fd #f)] )
 	(if handler (start-command handler))))))
 
+(define (with-input-file-exception-handler
+          file-name input-file exception-handler)
+  (call-with-current-continuation
+    (lambda(k)
+      (with-exception-handler
+        (lambda(ex)
+          (k (exception-handler ex)))
+        (lambda()
+          (call-with-input-file file-name input-file))))))
+
+(define (eval1 expr)
+  (if(procedure? expr) expr
+    (eval expr (interaction-environment))))
+
+(define port-read-line read-line)
+(define string-cat string-concatenate)
+(define port-close close-port)
+
+(define (regexp-search regexp str)
+  (define match (rxmatch regexp str))
+  (if match (list #t (rxmatch-start match)(rxmatch-end match)) '(#f)))
+
 (add-load-path ".")
 (load (car (cdr (command-line))))
 (apply main-proc (cdr (command-line)))
