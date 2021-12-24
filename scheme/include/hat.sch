@@ -24,8 +24,7 @@ Hat言語のみで定義された関数群
 |#
 (defineCPS empty_seq ^(handler . return)
   return)
-#; (defineCPS seq_empty ^(R . return)
-  return true)
+;; (defineCPS seq_empty ^(R . return) return true)
 
 #|
 seq_empty? seq ^(flag)
@@ -35,8 +34,7 @@ seq_empty? seq ^(flag)
 (defineCPS seq_empty? ^(seq . return) ; print("seq=" seq "\n")^()
   seq (return false)^()
   return true)
-#; (defineCPS seq_empty? ^(seq . return)
-  seq (return false). return)
+;; (defineCPS seq_empty? ^(seq . return) seq (return false). return)
 
 #| empty_seqとseq_empty?のその他の定義
 
@@ -117,9 +115,10 @@ a: 取り出した項
 rest: 残りの項からなる数列
 省略時の継続は元のままなので、通常の関数と同様に使える。
 |#
-#; (defineCPS seqGet ^(seq . return)
+#| (defineCPS seqGet ^(seq . return)
   seq (^(V . S) return V S)^()
   return seqEnd seqEnd)
+|#
 
 #|
 seq_enum ex seq ^(a1 a2 ・・・ an . rest)
@@ -144,8 +143,7 @@ seqGetCont ifend seq ^(a1 a2 ・・・ an . rest)
 ただし、継続がrestになるので元の継続に戻れなくなる。
 よって、元の継続を事前に確保しておき、呼び出す必要がある。
 |#
-#; (defineCPS seqGetCont ^(ifend seq . return)
-  seq return . ifend)
+;; (defineCPS seqGetCont ^(ifend seq . return) seq return . ifend)
 
 #|
 ( defineCPS seqList ^(list . return)
@@ -234,16 +232,16 @@ chinの文字を読み、行番号と文字の組からなるseqを返す。
     lineno_char_seq rest $no out2))
 
 (defineCPS seq_count ^($head in no $tail)
-  no ^($no)
+  no ^($no) ; print("seq_count 1\n")^()
   fix
-  (^(loop in $no)
+  (^(loop in $no) ; print("seq_count 2\n")^()
     (seq_empty? in) empty_seq
-    (^(out)
-      seq_pop in ^($el in2)
+    (^(out) ; print("seq_count 3\n")^()
+      seq_pop in ^($el in2) ; print("seq_count 6\n")^()
       out ($head $el $no . $tail)^(out2)
-      + $no 1 ^($no2)
+      + $no 1 ^($no2) ; print("seq_count 4\n")^()
       loop in2 $no2 out2)
-    )^(loop)
+    )^(loop) ; print("seq_count 5\n")^()
   loop in $no)
 
 (defineCPS string_no_seq_stdin_line ^ return
@@ -325,7 +323,9 @@ pop: 要素を削除する。
   R ^(F . C)
   C)
 
-#; (defineCPS stack_end ^(F . C) C)
+#|
+ (defineCPS stack_end ^(F . C) C)
+|#
 
 (defineCPS stack_empty ^(S . R)
   S ^ C
@@ -417,9 +417,11 @@ pop: 要素を削除する。
 ;;;  (print~ "rest=" rest)^()
   seq_app rest . return)
 
-#; (defineCPS if ^(test body . return)
+#|
+ (defineCPS if ^(test body . return)
   test body return ^(action)
   action)
+|#
 
 (defineCPS fold_left ^(f z seq . return)
   when(seq_empty? seq)(return z)^()
@@ -446,7 +448,7 @@ pop: 要素を削除する。
 
 (defineCPS hat_test3 ^(args)
   (print~ "Begin")^()
-  if true (print~ "then")#;else(print~ "else")^()
+  if true (print~ "then")(print~ "else")^()
 ;;;  if false (print~ "then")(print~ "else")^()
   (print~ "End"))
 
