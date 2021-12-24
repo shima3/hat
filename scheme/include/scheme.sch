@@ -555,16 +555,15 @@ endが-1の場合、strの終端を意味する。
     ) $str)
 
 #|
-正規表現regexpに一致する部分を文字列strのstart文字目から探す。
-start=0のとき、strの先頭から探す。
-一致する部分が見つかった場合、#tとregmatchオブジェクトを返す。
+正規表現regexpに一致する部分を文字列strから探す。
+一致する部分が見つかった場合、#tと開始位置と終了位置を返す。
 見つからなかった場合、#fを返す。
-
-ifelse(regexp_match regexp str start)
-(^(regmatch) 見つかった場合の処理)
+使用例：
+ifelse(regexp_search regexp str start)
+(^(start end) 見つかった場合の処理)
 (見つからなかった場合の処理)^()
 |#
-(defineCPS regexp_match ^(regexp str . return)
+(defineCPS regexp_search ^(regexp str . return)
   regexp ^($regexp) str ^($str) ; start ^($start) end ^($end)
   (lambda(regexp str)
 ;;    (rxmatch regexp str start)
@@ -582,16 +581,3 @@ ifelse(regexp_match regexp str start)
   ;; print("match result=" $result "\n")^()
   list_values $result . return)
   ;; return #t $result)
-
-(defineCPS regexp_start ^(match)
-  (lambda(match)
-    (car match)
-;;    (rxmatch-start match)
-    ) match)
-
-(defineCPS regexp_end ^(match)
-  (lambda(match)
-    (cdr match)
-;;    (rxmatch-end match)
-    ) match)
-
