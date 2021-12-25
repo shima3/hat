@@ -244,9 +244,9 @@ chinの文字を読み、行番号と文字の組からなるseqを返す。
     )^(loop) ; print("seq_count 5\n")^()
   loop in $no)
 
-(defineCPS string_no_seq_stdin_line ^ return
-  port_stdin ^($port)
-  port_line_seq $port 1 ^(seq)
+(defineCPS stdin_line_seq ^ return
+  stdin_port ^($port)
+  port_line_seq $port ^(seq)
   return seq ^()
   print("close\n"))
 

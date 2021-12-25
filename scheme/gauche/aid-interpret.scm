@@ -46,7 +46,7 @@
   (make-list-queue '()))
 (define (queue-empty? queue)
   (list-queue-empty? queue))
-(define (queue-first queue)
+(define (queue-front queue)
   (list-queue-front queue))
 (define (queue-add! queue el)
   (list-queue-add-back! queue el))

@@ -76,7 +76,7 @@
   exit 0)
 
 (defineCPS main3 ^()
-  char_seq_stdout ^($out . $close)
+  stdout_char_seq ^($out . $close)
   $out "hello world\n" ^($out)
   $out "hello " ^($out)
   $out "world\n" ^($out)
@@ -85,7 +85,7 @@
   print("bye\n"))
 
 (defineCPS main4 ^()
-  char_seq_stdin ^($in . $close)
+  stdin_char_seq ^($in . $close)
   char_seq_tokenize $in char_whitespace? ^($token $in)
   print("token=" $token "\n")^()
   char_seq_tokenize $in char_whitespace? ^($token $in)
@@ -94,13 +94,13 @@
   exit 0)
 
 (defineCPS main5 ^()
-  char_seq_stdin ^($in . $close)
+  stdin_char_seq ^($in . $close)
   char_seq_count_lines $in 1 ^($seq)
   seq_print $seq "\n" ^()
   exit 0)
 
 (defineCPS main6 ^()
-  seq_stdin_line ^($seq . $close)
+  stdin_line_seq ^($seq . $close)
 ;;  seq_tokenize_line $seq ^($seq)
   seq_print $seq "\n" ^()
   $close ^()
@@ -144,12 +144,6 @@
   exit 0)
 
 (defineCPS main9 ^()
-  #|
-  seq_stdin_line ^($seq . $close)
-  seq_tokenize_line $seq ^($seq)
-  seq_pop $seq ^($first $rest)
-  print("first=" $first "\n")^()
-  |#
   case (object_eq? 2 2)
   (then
     print("true\n"))
@@ -170,6 +164,7 @@
   fibonacci $b $c $out2
   )
 
+#|
 (defineCPS tokenizeCLNSeq ^(seq . return)
   when(seq_empty? in)(return empty_seq)^()
   seq_pop in ^(ch in2)
@@ -181,6 +176,7 @@
   (tokenizeIn in2 line_no . return)^()
   
   )
+|#
 
 #|
 matchPrefix prefix in ^(flag in2)

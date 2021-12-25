@@ -71,11 +71,10 @@ delimit 境界
     (char=? c1 c2)
     ) $c1 $c2)
 
-#|
-char_seq_stdin ^(in . close)
-|#
-(defineCPS char_seq_stdin ^ $return
-  port_stdin ^($port)
+;; (defineCPS char_seq_stdin ^ $return
+(defineCPS stdin_char_seq ^ $return
+  stdin_port ^($port)
+;;;  port_stdin ^($port)
   port_char_seq $port ^($in)
   $return $in ^()
   print("close\n"))
@@ -83,8 +82,8 @@ char_seq_stdin ^(in . close)
 #|
 char_seq_stdout ^(out . close)
 |#
-(defineCPS char_seq_stdout ^ $return
-  port_stdout ^($port)
+(defineCPS stdout_char_seq ^ $return
+  stdout_port ^($port) ; port_stdout ^($port)
   fix
   (^($out $obj . $ret)
     port_display $port $obj ^()
@@ -301,15 +300,17 @@ char_seq_stdout ^(out . close)
     (write-char ch port)
     ) $ch $port)
 
-(defineCPS port_stdin ^()
+;;; (defineCPS port_stdin ^()
+(defineCPS stdin_port ^()
   (lambda()
-    (standard-input-port)))
-;;;    (current-input-port)))
+;;;    (standard-input-port)))
+    (current-input-port)))
 
-(defineCPS port_stdout ^()
+;;; (defineCPS port_stdout ^()
+(defineCPS stdout_port ^()
   (lambda()
-    (standard-output-port)))
-;;;    (current-output-port)))
+;;;    (standard-output-port)))
+    (current-output-port)))
 
 (defineCPS port_char_seq ^(port)
   port ^($port)

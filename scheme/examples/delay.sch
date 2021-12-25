@@ -2,7 +2,7 @@
 
 (defineCPS main ^()
   (print~ "Start")^()
-  port_stdin ^($port)
+  stdin_port ^($port)
   seq_repeat (port_read_line $port) object_eof? ^(seq)
   fix
   (^(loop seq . break)
