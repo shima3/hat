@@ -287,7 +287,7 @@ built-in function: mailboxRemove ^(isEmpty)
   ;; (display "actor-respond 1 ")(display actor)(newline)
   (let ( (behavior (actor-behavior actor))
 	 (mailbox (actor-mailbox actor)) )
-    (let ( (message (queue-first mailbox)) )
+    (let ( (message (queue-front mailbox)) )
     ;; (let ([message (mt-queue-peek mailbox)])
       ;; (display "actor-respond 2 ")(display message)(newline)
       (if (not (null? message))
@@ -405,8 +405,30 @@ built-in function: mailboxRemove ^(isEmpty)
       #f
       )))
 
+;; (define exn-of-i/o? (exn-of? 'i/o))
+
 ;; sch-script 言語のファイル filename を読み込む
-(define(load-sch-script filename path)
+(define(load-sch-script filename pathlist)
+  (define port-filepath (open-input-file-in-pathlist filename pathlist))
+  (when(null? port-filepath)
+    (println "*** ERROR: cannot find \"" filename "\" in " sch-load-path)
+    (exit 1)
+    )
+  (let( [port (car port-filepath)]
+        [previous sch-load-path]
+        [next (get-path (car (cdr port-filepath)))]
+        )
+    (if(string? next)
+      (set! sch-load-path (cons next sch-load-path))
+      )
+    (let loop ( )
+      (if(interpret-sexp (read port))
+        (loop)
+        ))
+    (set! sch-load-path previous)
+    ))
+
+#|
   (if(pair? path)
     (let([filepath (string-append (car path) filename)]) ; then
       ;; (println "filepath=" filepath)
@@ -425,12 +447,51 @@ built-in function: mailboxRemove ^(isEmpty)
             ))
         (lambda(ex)
           ;; (println ex ": filepath=" filepath)
-          (load-sch-script filename (cdr path)))
+          (if(exn-of-i/o? ex)
+            (load-sch-script filename (cdr path))
+            (begin
+              (println filepath (message ex) "(" (location ex) ")")
+              (exit 1)
+            )))
       ))
     (begin ; else
       (println "*** ERROR: cannot find \"" filename "\" in " sch-load-path)
       (exit 1))
     ))
+|#
+
+#|
+ディレクトリ名のリストpathlistの各ディレクトリでファイ名filenameのファイルを探す。
+見つかった場合、そのファイルをオープンし、そのポートとフルパスのリストを返す。
+見つからなかった場合、空リストを返す。
+|#
+(define (open-input-file-in-pathlist filename pathlist)
+  (if(null? pathlist) '()
+    (let( [filepath (string-append (car pathlist) filename)] )
+      (let( [port (open-input-file-or-exception filepath)] )
+        (if(port? port)(list port filepath)
+          (open-input-file-in-pathlist filename (cdr pathlist))
+          )))))
+
+(define (open-input-file-or-exception filename)
+  (call-with-current-continuation
+    (lambda(k)
+      (with-exception-handler
+        (lambda(ex)(k #f))
+        (lambda()(open-input-file filename))))))
+
+#; (define (with-input-file-exception-handler
+          file-name input-file exception-handler)
+  (call-with-current-continuation
+    (lambda(return)
+      (exception-handler
+        (call-with-current-continuation
+          (lambda(k)
+            (with-exception-handler
+              (lambda(ex)(k ex))
+              (lambda()
+                (return (call-with-input-file file-name input-file))
+                ))))))))
 
 ;; S式 sexp を解釈し，実行する．
 (define (interpret-sexp sexp)
