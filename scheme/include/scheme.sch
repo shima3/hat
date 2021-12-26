@@ -9,9 +9,11 @@ Scheme依存の関数群
 
 ;; debug ----------------------------------
 
-(defineCPS print ^(list . return)
-  (lambda(L)
-    (apply print L)) list ^(dummy)
+(defineCPS print ^($list . return)
+  (lambda(list)
+    (apply println list)
+    ;; (for-each write list)
+    ) $list ^($dummy)
   return)
 
 (defineCPS newline ^ return
@@ -45,19 +47,23 @@ Scheme依存の関数群
 seq 列
 delimit 境界
 |#
+(defineCPS seq_print ^(seq . return)
+  when(seq_empty? seq) return ^()
+  seq_pop seq ^(first rest)
+  print(first)^()
+  seq_print rest . return
+  )
+#|
 (defineCPS seq_print ^(seq delimit . return)
   ;; print("seq_print 1\n")^()
   when(seq_empty? seq) return ^() ; print("seq_print 2\n")^()
   fix
-  (^(loop seq . break) ; print("seq_print 3: ")^()
+  (^(loop seq . break)
     seq_pop seq ^(first rest) ; print("seq_print 4: ")^()
     print(first)^()
-    when(seq_empty? rest)
-    ( ; print("seq_print 5\n")^()
-      break )^() ; print("seq_print 6: ")^()
-    print(delimit)^() ; print("seq_print 7: ")^()
     loop rest . break
     ) seq . return)
+|#
 
 ;; char --------------------------------
 
@@ -404,7 +410,7 @@ endが-1の場合、strの終端を意味する。
   str ^($str) start ^($start) end ^($end)
   (lambda(str start end)
 ;;    (if(< end 0)(set! end (string-length str)))
-    (substring str start end)
+    (string_substring str start end)
 ;;    (substring/shared str start end)
     ) $str $start $end)
 
