@@ -11,7 +11,7 @@
 (define (seconds->duration sec) sec)
 (define (fork-thread thunk)
   (thread-start! (make-thread thunk)))
-(define (sleep duration)
+#; (define (sleep duration)
   (thread-sleep! (add-duration (current-time) duration))
   duration)
 (define (add-duration time duration)
@@ -89,6 +89,7 @@ evalで呼び出すため、別名で再定義する。
 |#
 (define (queue_front queue)
   (queue-first queue))
+(define make_queue make-queue)
 (define queue_empty? queue-empty?)
 (define queue_add! queue-add!)
 (define queue_remove! queue-remove!)
@@ -169,6 +170,7 @@ evalで呼び出すため、別名で再定義する。
   (define match (string-search-positions regexp str))
   (if match (cons #t (car match)) '(#f)))
 
-(define (substring str start end)
-  (if(< end 0)(set! end (string-length str)))
+(define (string_substring str start end)
+  (if(< end 0)
+    (set! end (string-length str)))
   (substring/shared str start end))
