@@ -22,7 +22,10 @@ OUT="$2"
 SCHEME="$3"
 FILE="${SRC##*/}"
 EXE="${SCHEME}/${FILE%.*}"
-"${SCHEME}/compile.sh" "$SRC"
+if [ ! "$EXE" -nt "$SRC" ]
+then
+    "${SCHEME}/compile.sh" "$SRC"
+fi
 STATUS="$?"
 if [ ! "$STATUS" -eq 0 ]
 then
@@ -32,7 +35,7 @@ fi
 for TEST in $TESTS
 do
     BASE="${TEST%.*}"
-    test/${OUT}.sh "$BASE" "$TEST" "$EXE"
+    test/${OUT}.sh "$BASE" "$TEST" "$EXE" -I include
     echo "Exit code = $?"
 done
 exit 0
@@ -40,7 +43,7 @@ exit 0
 if [ $# == 0 ]
 then
     echo Usage: "$0" 処理系 SRC テストケース
-    echo Example: "$0" chicken schsi.scm test/2.sh
+    echo Example: "$0" chicken src/hat.scm test/2.sh
     echo Internal Usage: "$0" 処理系 - スクリプト 引数・・・
     exit 0
 fi
@@ -56,9 +59,9 @@ echo "$ $TEST $EXE"
 exit 0
 
 if [ "$test" == "-" ]
- then
+then
     source="${3##*/}"
-     executable="$scheme/${source%.*}"
+    executable="$scheme/${source%.*}"
     if [ ! "$executable" -nt "$3" ]
     then
 	"$scheme/compile.sh" "$3"
