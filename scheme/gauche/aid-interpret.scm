@@ -53,6 +53,7 @@
 (define (queue_remove! queue)
   (list-queue-remove-front! queue))
 (define current_time current-time)
+(define string_substring substring)
 
 (define selector-input-table (make-eqv-hashtable))
 (define (port->fd port)(car (sys-fdset->list (sys-fdset port))))
