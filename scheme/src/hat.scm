@@ -8,16 +8,28 @@
 
 (define (cons-alist key datum alist)(cons (cons key datum) alist))
 ;; (define (eval1 expr)(eval expr (interaction-environment)))
-(define (print . list)
+
+#; (define (print . list)
   (if(pair? list)
     (let ([first (car list)][rest (cdr list)])
       (if(string? first)
 	(display first)
 	(write first))
       (apply print rest))))
+
 (define (println . list)
-  (apply print list)
-  (newline))
+  (if(pair? list)
+    (let( [first (car list)]
+          [rest (cdr list)]
+          )
+      (if(string? first)
+	(display first)
+	(write first)
+        )
+      (apply println rest)
+      )
+    (newline)
+    ))
 
 ;; -------------------------------------
 ;; データ構造
@@ -374,7 +386,7 @@ built-in function: mailboxRemove ^(isEmpty)
 	  (let ((opt (string-ref arg 1)))
 	    (case opt
 	      ([#\e]
-		(set! entry-point (substring arg 2 (string-length arg)))
+		(set! entry-point (string_substring arg 2 (string-length arg)))
 		(if (equal? entry-point "")
 		  (begin
 		    (set! args (cdr args))
@@ -401,7 +413,7 @@ built-in function: mailboxRemove ^(isEmpty)
 (define(get-path filename)
   (let([index (string-index-right filename #\/)])
     (if(number? index)
-      (substring filename 0 (+ index 1))
+      (string_substring filename 0 (+ index 1))
       #f
       )))
 
