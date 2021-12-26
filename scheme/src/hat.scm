@@ -115,7 +115,7 @@
 ;; 空のキューを新たに作り，変数 queue に渡す
 (set-global-var 'make.queue
   `(lambda args
-     (cons 'quote (make-queue))))
+     (cons 'quote (make_queue))))
 
 #|
 built-in function: mailboxAdd message ^(isFirst)
@@ -126,8 +126,8 @@ built-in function: mailboxAdd message ^(isFirst)
 (set-global-var 'mailboxAdd
   `(lambda (message)
      (let ( (mailbox (actor-mailbox (current-actor))) )
-       (let ( (flag (queue-empty? mailbox)) )
-	 (queue-add! mailbox message)
+       (let ( (flag (queue_empty? mailbox)) )
+	 (queue_add! mailbox message)
 	 flag)))
   )
 
@@ -140,7 +140,7 @@ built-in function: mailboxRemove ^(isEmpty)
 (set-global-var 'mailboxRemove
   `(lambda ()
      (let ((mailbox (actor-mailbox (current-actor))))
-       (queue-remove! mailbox)
+       (queue_remove! mailbox)
        )))
 
 ;; 現在のアクターを返す
@@ -163,13 +163,13 @@ built-in function: mailboxRemove ^(isEmpty)
 
 ;; 計算過程のキュー
 ;; 計算過程は関数適用とアクターの組で表現される
-(define app-queue (make-queue))
+(define app-queue (make_queue))
 ;;; (define app-queue (make-mt-queue))
 
 ;; 関数適用 app とアクター actor の組を計算過程のキューに追加する
 (define (app-enqueue! app actor)
 ;;; (println "app-enqueue! 1 app=" app)
-  (queue-add! app-queue (cons app actor))
+  (queue_add! app-queue (cons app actor))
 ;;; (mt-enqueue! app-queue (cons app actor))
 ;;; (println "app-enqueue! 2 " app)
   )
@@ -189,8 +189,8 @@ built-in function: mailboxRemove ^(isEmpty)
 
 ;; 計算過程のキューから関数適用とアクターの組を取り出す
 (define (app-dequeue!)
-  (if (queue-empty? app-queue) '()
-    (queue-remove! app-queue)))
+  (if (queue_empty? app-queue) '()
+    (queue_remove! app-queue)))
   ;; (mt-dequeue! app-queue))
 
 ;; アクターは振舞とメールボックスからなる
@@ -214,7 +214,7 @@ built-in function: mailboxRemove ^(isEmpty)
 
 ;; 振舞 behavior を持つアクターを作る
 (define (new-actor behavior)
-  (make-actor behavior (make-queue)(make-eqv-hashtable)(make-eqv-hashtable))
+  (make-actor behavior (make_queue)(make-eqv-hashtable)(make-eqv-hashtable))
   )
 ;;  (cons behavior (make-mt-queue)))
 
@@ -287,7 +287,7 @@ built-in function: mailboxRemove ^(isEmpty)
   ;; (display "actor-respond 1 ")(display actor)(newline)
   (let ( (behavior (actor-behavior actor))
 	 (mailbox (actor-mailbox actor)) )
-    (let ( (message (queue-front mailbox)) )
+    (let ( (message (queue_front mailbox)) )
     ;; (let ([message (mt-queue-peek mailbox)])
       ;; (display "actor-respond 2 ")(display message)(newline)
       (if (not (null? message))
@@ -308,9 +308,9 @@ built-in function: mailboxRemove ^(isEmpty)
 	 ;; (display "actorNext 2")(newline)
 	 (let ( (mailbox (actor-mailbox actor)) )
 	   ;; (display "actorNext 3")(newline)
-	   (queue-remove! mailbox)
+	   (queue_remove! mailbox)
 	   ;; (mt-dequeue! mailbox)
-	   (if (not (queue-empty? mailbox))
+	   (if (not (queue_empty? mailbox))
 	   ;; (if (not (mt-queue-empty? mailbox))
 	     (actor-respond actor)
 	     )

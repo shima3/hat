@@ -81,7 +81,7 @@
 
 (defineCPS beforeTime ^(time)
   (lambda(time)
-    (time<? (current-time) time)) time)
+    (time<? (current_time) time)) time)
 
 ;;  (lambda (condition then else)(if condition then else)) condition then else
 ;;  ^(thenorelse) thenorelse)
@@ -90,6 +90,6 @@
   when(beforeTime timeout)(sleepUntil timeout))
 
 (defineCPS sleepSec ^(sec) sec ^(sec)
-  (lambda (sec)(add-duration (current-time)(seconds->duration sec)))
+  (lambda (sec)(add-duration (current_time)(seconds->duration sec)))
   sec ^(timeout)
   sleepUntil timeout)

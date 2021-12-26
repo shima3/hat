@@ -6,6 +6,7 @@
 (import (chicken io))
 ;; (import simple-exceptions)
 (require-extension queues)
+;; (import queues)
 
 (define (seconds->duration sec) sec)
 (define (fork-thread thunk)
@@ -22,6 +23,7 @@
   (display args)
   (newline)
   )
+(define current_time current-time)
 
 (define (current-thread-specific)
   (thread-specific (current-thread))
@@ -81,9 +83,15 @@
 		       (symbol->string field) "-set!")))) Fields)))))
   )
 
-;;; queue -----
-(define (queue-front queue)
+#| queue -----
+外部ライブラリの関数はevalで呼び出せない。
+evalで呼び出すため、別名で再定義する。
+|#
+(define (queue_front queue)
   (queue-first queue))
+(define queue_empty? queue-empty?)
+(define queue_add! queue-add!)
+(define queue_remove! queue-remove!)
 #|
 (define (make-queue)(cons '( ) '( )))
 (define (queue-empty? queue)(null? (car queue)))
@@ -147,8 +155,8 @@
 
 (define (eval1 expr)
   (if(procedure? expr) expr
-    (eval expr)))
-;;    (eval expr (interaction-environment))))
+    (eval expr (interaction-environment))))
+;;    (eval expr)))
 ;;    (eval expr (null-environment 5))))
 ;;    (eval expr (scheme-report-environment 5))))
 

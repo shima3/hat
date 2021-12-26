@@ -60,6 +60,7 @@
   dequeue queue ^(command)
   repeatConcurrentStep queue command )
 
+#|
 ( defineCPS makeQueue lambda()
   (cons 'quote (make-queue)) )
 
@@ -75,10 +76,11 @@
   return )
 
 ( defineCPS isEmptyQueue lambda(queue)
-  (queue-empty? (cdr queue)) )
+  (queue_empty? (cdr queue)) )
 
 ( defineCPS dequeue lambda(queue)
   (dequeue! (cdr queue)) )
+|#
 
 ;; for multi-thread
 #; ( defineCPS start ^(command . return)
@@ -111,7 +113,7 @@
   (print~ count)^( )
   when(= count 0) stop ^( )
   (lambda (d)
-    (add-duration (current-time) d)
+    (add-duration (current_time) d)
     ) duration ^(timeout)
   exp ^( )
   sleep_until timeout ^( )
@@ -140,7 +142,7 @@
   ^(thenorelse) thenorelse)
 
 ( defineCPS before_time ^(time)
-  (lambda (time)(time<? (current-time) time)) time)
+  (lambda (time)(time<? (current_time) time)) time)
 
 ( defineCPS sleep_until ^(timeout)
   before_time timeout ^(flag)
@@ -148,6 +150,6 @@
   )
 
 (defineCPS sleep_sec ^(sec) sec ^(sec)
-  (lambda (sec)(add-duration (current-time)(seconds->duration sec)))
+  (lambda (sec)(add-duration (current_time)(seconds->duration sec)))
   sec ^(timeout)
   sleep_until timeout)
