@@ -9,10 +9,21 @@ Scheme依存の関数群
 
 ;; debug ----------------------------------
 
-(defineCPS print ^($list . return)
+#; (defineCPS print ^($list . return)
   (lambda(list)
-    (apply println list)
-    ;; (for-each write list)
+    (let( [list2 (tail-first list)] )
+      (let( [tail (car list2)]
+            [list3 (cdr list2)] )
+        (apply print list3)
+        (if(null? tail)
+          (newline)
+          (display tail))))
+) $list ^($dummy)
+return)
+
+#; (defineCPS print ^($list . return)
+  (lambda(list)
+    (apply print list)
     ) $list ^($dummy)
   return)
 
@@ -21,17 +32,55 @@ Scheme依存の関数群
   (lambda()(newline))^(dummy)
   return)
 
-(defineCPS print~ ^ cont
+#|
+引数を出力した後、改行を出力する。
+改行を出力したくない場合、displayを用いる。
+(print "Hello," " World")^()
+|#
+;;; (defineCPS print~ ^ cont
+(defineCPS print ^ cont
   cont_pop cont ^(seq return)
   seq_join seq empty_seq ^(seq)
+  seq_list seq ^($list)
+  display $list ^()
+  newline . return)
+#|
+  cont_pop cont ^(seq return)
+  seq display ^()
+  newline . return)
+|#
+#|
+  (lambda(list)
+    (print list)
+    ) $list . return)
+|#
+
+#|
+引数を出力するが、自動的には改行を出力しない。
+改行を出力したい場合はprintを用いるか、引数に"\n"を追加する。
+display("Hello," " World\n")^()
+|#
+(defineCPS display ^()
+  stdout_port ^($port)
+  port_display $port)
+
+#|  
+(defineCPS display ^($list)
+  stdout_port ^($port)
+  port_display $port $list)
+|#
+
 ;;;  print("seq=" seq "\n")^()
+  #|
   fix
   (^(loop seq . break)
     when(seq_empty? seq) break ^()
     seq_pop seq ^(first rest)
     print(first)^()
     loop rest . break) seq ^()
+  
   newline . return)
+|#
 ;;;  seq_list seq ^(list)
 ;;;  print list ^()
 
@@ -113,6 +162,7 @@ char_seq_stdout ^(out . close)
 
 (defineCPS list_empty? ^($list)
   (lambda(list)
+    ;; (print "list_empty? " (null? list))
     (null? list)
     ) $list)
 
@@ -336,11 +386,33 @@ char_seq_stdout ^(out . close)
     ) $obj $port ^($dummy)
   $return)
 
-(defineCPS port_display ^($port $obj . $return)
-  (lambda(obj port)
-    (display obj port)
-    ) $obj $port ^($dummy)
-  $return)
+#|
+(defineCPS port_display ^($port . cont)
+  cont_pop cont ^(seq return)
+  seq_join seq empty_seq ^(args)
+  fix
+  (^(loop seq . break)
+    when(seq_empty? seq) break ^()
+    seq_pop seq ^($obj rest)
+    (lambda(obj port)
+      (if(string? obj)
+        (display obj port)
+        (write obj port))
+      ) $obj $port ^($dummy)
+    loop rest . break)^(loop)
+  loop args . return)
+|#
+
+(defineCPS port_display ^($port $list . return)
+  (lambda(port list)
+    (map
+      (lambda(obj)
+        (if(string? obj)
+          (display obj port)
+          (write obj port)))
+      list)
+    ) $port $list ^($dummy)
+  return)
 
 (defineCPS port_read_line ^($port)
   (lambda(port)
@@ -551,6 +623,16 @@ endが-1の場合、strの終端を意味する。
   (lambda(C)
     (null? C)
     ) cont)
+
+(defineCPS cont? ^(cont)
+  (lambda(C)
+    (and(pair? C)(eq? (car C) 'F.C))
+    ) cont)
+
+(defineCPS cont_print ^(msg cont . return)
+  ifelse(cont? cont)
+  (cont_first cont)(I cont)^(cont)
+  print(msg cont) . return)
 
 ;; 正規表現 regexp -----------------------------
 

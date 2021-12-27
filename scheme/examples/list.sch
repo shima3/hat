@@ -54,17 +54,17 @@
 (defineCPS I ^(x . return) return x)
 |#
 
-( defineCPS main ^(args)
+(defineCPS main ^(args)
   I () ^(list)
   list_cons 1 list ^(list)
   list_cons 2 list ^(list)
   list_cons 3 list ^(list)
-  print(list "\n") ^()
-  list_reverse list () ^(list)
-  print(list "\n")^()
+  (print list)^()
+  list_reverse list ()^(list)
+  (print list)^()
   exit 0)
 
 ( defineCPS main1 ^(args)
   I (1) ^(list)
-  print(list "\n")
+  print(list)
   )

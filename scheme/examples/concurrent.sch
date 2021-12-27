@@ -1,31 +1,31 @@
 (include "util.sch")
 
-( defineCPS main ^(args)
-  start ( repeat_at_interval ( print~ "a" ) 1 ) ^()
-  start ( repeat_at_interval ( print~ "b" ) 2 ) ^()
+(defineCPS main ^(args)
+  start ( repeat_at_interval ( print "a" ) 1 ) ^()
+  start ( repeat_at_interval ( print "b" ) 2 ) ^()
   wait)
 
 (defineCPS main1 ^(args)
-  repeat_at_interval (print~ "a") 1)
+  repeat_at_interval (print "a") 1)
 
 (defineCPS main2 ^(args)
-  print~ "a" ^( )
-  print~ "b")
+  print "a" ^( )
+  print "b")
 
 ( defineCPS main3 ^(args)
-  start ( print~ "a" ) ^()
+  start ( print "a" ) ^()
   wait )
 
 ( defineCPS main4 ^(args)
   makeQueue ^(queue)
-  repeatConcurrentStep queue ( print~ "a" ) )
+  repeatConcurrentStep queue ( print "a" ) )
 
 ( defineCPS main5 ^(args)
-  stepCommand ( print~ "a" ) ^(value)
+  stepCommand ( print "a" ) ^(value)
   print("main5 value=" value "\n") )
 
 ( defineCPS main6 ^(args)
-  stepCommand ( print~ "a" ) ^(value)
+  stepCommand ( print "a" ) ^(value)
   isCommand value ^(flag)
   print("main6 flag=" flag "\n") )
 
@@ -38,13 +38,13 @@
   makeQueue ^(queue)
   repeatConcurrentStep queue
   ( enqueue queue
-    ( (print~ "a")^()
-      (print~ "b")^()
-      (print~ "c") ) ^()
+    ( (print "a")^()
+      (print "b")^()
+      (print "c") ) ^()
     enqueue queue
-    ( (print~ "d")^()
-      (print~ "e")^()
-      (print~ "f") ) ) )
+    ( (print "d")^()
+      (print "e")^()
+      (print "f") ) ) )
 
 ( defineCPS repeatStep ^(command)
   stepCommand command ^(value)
@@ -110,7 +110,7 @@
   (lambda (a b)(- a b)) a b)
 
 (defineCPS repeat_at_interval_duration ^(exp duration count) count ^(count)
-  (print~ count)^( )
+  (print count)^( )
   when(= count 0) stop ^( )
   (lambda (d)
     (add-duration (current_time) d)

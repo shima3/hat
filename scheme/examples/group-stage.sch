@@ -74,7 +74,7 @@ J 日本
 (defineCPS I ^(f) f)
 
 (defineCPS main ^(args)
-  print("start\n")^()
+  (print "start")^()
   (
     lose-win 0 0 ^(C J)
     lose-win 0 0 ^(P S)
@@ -84,9 +84,9 @@ J 日本
     match J P ^(J P)
     match S C ^(S C)
     rank (S C P) J ^(ranking)
-    print("R" ranking " J" J " S" S " C" C " P" P "\n")
+    (print "R" ranking " J" J " S" S " C" C " P" P)
     )^()
-  print("end\n"))
+  (print "end"))
 
 ( defineCPS I2 ^(x y . c)
   print("I2 c=" c "\n")^()

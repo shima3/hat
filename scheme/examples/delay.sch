@@ -1,24 +1,24 @@
 (include "util.sch")
 
 (defineCPS main ^()
-  (print~ "Start")^()
+  (print "Start")^()
   stdin_port ^($port)
   seq_repeat (port_read_line $port) object_eof? ^(seq)
   fix
   (^(loop seq . break)
     when(seq_empty? seq) break ^()
     seq_pop seq ^(first rest)
-    (print~ first)^()
+    (print first)^()
     loop rest . break
     ) seq ^()
   fix
   (^(loop2 seq . break)
     when(seq_empty? seq) break ^()
     seq_pop seq ^(first rest)
-    (print~ first)^()
+    (print first)^()
     loop2 rest . break
     ) seq ^()
-  (print~ "End")^()
+  (print "End")^()
   exit 0)
 
 (defineCPS main1 ^(args)

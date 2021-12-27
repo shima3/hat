@@ -240,18 +240,19 @@ listから１つ要素を選び、その要素と残りのリストを返す。
   forEach list cont)
 
 ( defineCPS main ^(args)
-  print("begin\n")^()
+  (print "begin")^()
   (^ break
     amb3 (1 2 3 4) ^(a r1)
     amb3 r1 ^(b r2)
     amb3 r2 ^(c r3)
-    amb3 r3 ^(d r4 . back)
+    amb3 r3 ^(d r4 . back) ; print("main 2")^()
     unless(= d 4) back ^()
     unless(> c b) back ^()
-    unless(not (= a 1)) back ^()
+    unless(not(= a 1)) back ^() ; print("main 3")^()
     unless(< b 3) back ^()
     unless(< c a) back ^()
-    print(a b c d "\n") .
+    (print a b c d) .
     break ; １つの解だけで良い場合 break、すべての解を探す場合 back
     )^()
-  print("end\n") )
+  (print "end")^()
+  exit 0)

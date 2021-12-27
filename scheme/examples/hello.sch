@@ -1,5 +1,5 @@
 (include "util.sch")
 
 (defineCPS main ^()
-  print("Hello World!!\n")^()
+  (print "Hello World!!")^()
   exit 0)
