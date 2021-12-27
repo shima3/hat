@@ -273,20 +273,20 @@ $seqの先頭から条件$end?を満たさない要素からなるリストと�
 $end?を満たす要素を先頭とする列を返す。
 |#
 (defineCPS seq_get_list ^($seq $end? . $return)
-  (when(seq_empty? $seq) $return () $seq)^()
+  when(seq_empty? $seq)($return () $seq)^()
   seq_pop $seq ^($first $rest)
-  (when($end? $first) $return () $seq . $end)^()
+  when($end? $first)($return () $seq . $end)^()
   seq_get_list $rest $end? ^($list $rest)
   list_cons $first $list ^($list)
   $return $list $rest
   )
 
-(defineCPS seq_list ^($seq . $return)
-  (when(seq_empty? $seq) $return ())^()
-  seq_pop $seq ^($first $seq2)
-  seq_list $seq2 ^($list)
-  list_cons $first $list ^($list2)
-  $return $list2)
+(defineCPS seq_list ^(seq . return) ; display("seq_list 5\n")^()
+  when(seq_empty? seq)(return ())^() ; display("seq_list 1\n")^()
+  seq_pop seq ^($first seq2) ; display("seq_list 2\n")^()
+  seq_list seq2 ^($list) ; display("seq_list 3\n")^()
+  list_cons $first $list ^($list2) ; display("seq_list 4\n")^()
+  return $list2)
 
 (defineCPS seq_string ^($seq)
   seq_list $seq ^($list)
@@ -377,13 +377,15 @@ pop: 要素を削除する。
 ;;  test then else ^(action . rest) action . rest)
 
 (defineCPS when ^(test body . return)
-  test body (return)^(action . cont)
+  test(body)(return)^(action . cont)
   action . cont)
 ;;  test body return ^(action . rest)(action). rest)
 ;;  test body return ^(action) action)
 
 (defineCPS unless ^(test body . return)
-  test return body ^(action . cont) action . cont)
+  test return body ^(action . cont) ; print("unless 1")^()
+  ;; cont_print "\naction=" action ^() print("unless 2")^()
+  action . cont)
 ;;  test return body ^(action . rest)(action). rest)
 ;;  test nop body ^(action) action)
 ;;  test return body ^(action) action)
