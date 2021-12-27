@@ -99,7 +99,8 @@ delimit 境界
 (defineCPS seq_print ^(seq . return)
   when(seq_empty? seq) return ^()
   seq_pop seq ^(first rest)
-  print(first)^()
+  (print first)^()
+  ;; display(first "\n")^()
   seq_print rest . return
   )
 #|
@@ -403,16 +404,30 @@ char_seq_stdout ^(out . close)
   loop args . return)
 |#
 
-(defineCPS port_display ^($port $list . return)
-  (lambda(port list)
-    (map
-      (lambda(obj)
-        (if(string? obj)
-          (display obj port)
-          (write obj port)))
-      list)
-    ) $port $list ^($dummy)
+(defineCPS port_display ^($port $obj . return)
+  (lambda(port obj)
+    (if(list? obj)
+      (map ; then
+        (lambda(el)
+          (if(string? el)
+            (display el port)
+            (write el port)))
+        ;; (write-simple obj port)))
+        obj)
+      (display obj port) ; else
+    )) $port $obj ^($dummy)
   return)
+
+#|
+(defineCPS port_display2 ^($port $obj . return)
+  (lambda(port obj)
+    (if(string? obj)
+      (display obj port)
+      (write obj port))
+      ;; (write-simple obj port))
+    ) $port $obj ^($dummy)
+  return)
+|#
 
 (defineCPS port_read_line ^($port)
   (lambda(port)
