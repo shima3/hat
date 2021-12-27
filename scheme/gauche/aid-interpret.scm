@@ -91,6 +91,43 @@
   (define match (rxmatch regexp str))
   (if match (list #t (rxmatch-start match)(rxmatch-end match)) '(#f)))
 
+
+(define (write-list list)
+  (display "(")
+  (when(pair? list)
+    (write-object (car list))
+    (let loop
+      ( [list3 (cdr list)] )
+      (cond
+        [(pair? list3)
+          (display " ")
+          (write-object (car list3))
+          (loop (cdr list3))]
+        [(not (null? list3))
+          (display " . ")
+          (write-object list3)])))
+  (display ")"))
+
+(define (write-object obj)
+  (cond
+    [(list? obj)
+      (write-list obj)]
+    #; [(keyword? obj)
+      (display obj)]
+    [else
+      (write obj)]))
+
+(define (print . list)
+  (if(pair? list)
+    (let( [first (car list)]
+          [rest (cdr list)] )
+      (if(string? first)
+	(display first)
+	(write-object first))
+      (apply print rest))
+;;    (newline)
+    ))
+
 (add-load-path ".")
 (load (car (cdr (command-line))))
 (apply main-proc (cdr (command-line)))
