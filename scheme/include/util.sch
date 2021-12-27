@@ -84,12 +84,12 @@ action を呼び出す。
 |#
 ( defineCPS forEach ^($list action . return)
   fix
-  (^(loop $head $tail . break)
-    when(list_empty? $tail) return ^()
-    list_pop $tail ^($el $tail)
-    list_reverse $head $tail ^($others)
-    action $el $others ^()
-    list_cons $el $head ^($head)
+  (^(loop $head $tail . break) ; print("forEach 1")^()
+    when(list_empty? $tail) return ^() ; print("forEach 2 " $tail)^()
+    list_pop $tail ^($el $tail) ; print("forEach 3")^()
+    list_reverse $head $tail ^($others) ; print("forEach 4")^()
+    action $el $others ^() ; print("forEach 5")^()
+    list_cons $el $head ^($head) ; print("forEach 6")^()
     loop $head $tail . break)^(loop)
   loop () $list . return)
 ;;  ( ) list . end ) 2019/7/10 修正
@@ -109,6 +109,7 @@ list の要素を非決定的に一つ選び、その要素を第1戻り値、
 
 ;; test ---------------------------------
 
+#|
 (defineCPS hoge ^(a . c)
   (print~ "a=" a)^()
   (print~ "c=" c))
@@ -127,6 +128,7 @@ list の要素を非決定的に一つ選び、その要素を第1戻り値、
   (print~ "if false")^()
   test1sub false ^()
   (print~ "End"))
+|#
 
 ;; 字句解析 ------------------------------
 
@@ -136,7 +138,7 @@ $start_str コメントの開始記号
 $end_str コメントの終了記号
 in 入力 (各行の文字列 行番号 ファイル名) の列
 out 出力 (トークンの型 トークンの文字列 行番号 ファイル名) の列
-トークンの型は .raw または .comment
+トークンの型は raw: または comment:
 |#
 (defineCPS seq_tokenize_block_comment ^($start_str $end_str in . return)
   string_regexp $start_str ^($start_regexp)
@@ -147,7 +149,7 @@ out 出力 (トークンの型 トークンの文字列 行番号 ファイル�
     seq_pop in ^($list in2)
     list_pop $list ^($type $tail)
     list_pop $tail ^($line $tail)
-    ifelse(and(object_equal? $type .raw)(regexp_search $start_regexp $line))
+    ifelse(and(object_equal? $type raw:)(regexp_search $start_regexp $line))
     (^($start_start $start_end) ; then
     ;; (^($start_match) ; then
       ;; regexp_start $start_match ^($start_start) ; 開始記号の開始位置
@@ -156,7 +158,7 @@ out 出力 (トークンの型 トークンの文字列 行番号 ファイル�
       ifelse(> $start_start 0)
       ( ; then
         substring $line 0 $start_start ^($str)
-        out (.raw $str . $tail)
+        out (raw: $str . $tail)
         )(I out)^(out2) ;else
       substring $line $start_end -1 ^($str)
       ifelse(regexp_search $end_regexp $str)
@@ -165,11 +167,11 @@ out 出力 (トークンの型 トークンの文字列 行番号 ファイル�
 ;;      (^($end_match) ; then 開始記号と同じ行に終了記号がある場合
 ;;        regexp_end $end_match ^($end_end) ; 終了記号の終了位置
         substring $line $start_start $end_end ^($str)
-        out2 (.comment $str . $tail)^(out3)
+        out2 (comment: $str . $tail)^(out3)
         substring $line $end_end -1 ^($str)
         string_length $str ^($len)
         ;; ifelse(> $len 0)(seq_push ($str . $tail) in2)(I in2)^(in3)
-        seq_push (.raw $str . $tail) in2 ^(in3)
+        seq_push (raw: $str . $tail) in2 ^(in3)
         loop in3 out3 . break )
       ( ; else 開始記号と異なる行に終了記号がある場合
         open_output_string_port ^($buf)
@@ -177,11 +179,11 @@ out 出力 (トークンの型 トークンの文字列 行番号 ファイル�
         port_display $buf $str ^()
         port_display $buf "\n" ^()
         seq_read_string $end_regexp in2 $buf ^($comment in3)
-        out2 (.comment $comment . $tail)^(out3)
+        out2 (comment: $comment . $tail)^(out3)
         loop in3 out3 . break )
       )
     ( ; else
-      out (.raw $line . $tail)^(out2)
+      out (raw: $line . $tail)^(out2)
       loop in2 out2 . break )
     )^(loop)
   loop in ^(loop_in)
@@ -191,7 +193,7 @@ out 出力 (トークンの型 トークンの文字列 行番号 ファイル�
   seq_pop in ^($list in2)
   list_pop $list ^($type $tail)
   list_pop $tail ^($line $tail)
-  unless(and(object_equal? $type .raw)(regexp_search $end_regexp $line))
+  unless(and(object_equal? $type raw:)(regexp_search $end_regexp $line))
   (
     port_display $buf $line ^()
     port_display $buf "\n" ^()
@@ -203,7 +205,7 @@ out 出力 (トークンの型 トークンの文字列 行番号 ファイル�
   port_display $buf $str ^()
   port_get_output_string $buf ^($comment)
   substring $line $end_end -1 ^($str)
-  seq_push (.raw $str . $tail) in2 ^(in3)
+  seq_push (raw: $str . $tail) in2 ^(in3)
   return $comment in3)
 
 #|
@@ -219,23 +221,23 @@ seq_tokenize_line_comment $start_str in ^(in2)
       seq_pop in ^($list in2)
       list_pop $list ^($type $tail)
       list_pop $tail ^($line $tail)
-      ifelse(object_equal? $type .raw)
+      ifelse(object_equal? $type raw:)
       ( ; print("seq_tokenize_line_comment 1\n")^() ; then
         ifelse(regexp_search $start_regexp $line)
         (^($start $end) ; then
 ;;        (^($match) ; then
 ;;          regexp_start $match ^($start)
           substring $line 0 $start ^($str)
-          out (.raw $str . $tail)^(out2)
+          out (raw: $str . $tail)^(out2)
           substring $line $start -1 ^($str)
-          out2 (.comment $str . $tail)^(out3)
+          out2 (comment: $str . $tail)^(out3)
           loop in2 out3 . break)
         ( ; else
           out $list ^(out2)
-          loop in2 out2 . break) )
+          loop in2 out2 . break ))
       ( ; else
         out $list ^(out2)
-        loop in2 out2 . break) )
+        loop in2 out2 . break ))
     ))
 
 (defineCPS seq_tokenize_quote ^($delim)
@@ -250,20 +252,20 @@ seq_tokenize_line_comment $start_str in ^(in2)
       seq_pop in ^($list in2)
       list_pop $list ^($type $tail)
       list_pop $tail ^($line $tail)
-      ifelse(and(object_equal? $type .raw)(regexp_search $start_regexp $line))
+      ifelse(and(object_equal? $type raw:)(regexp_search $start_regexp $line))
       (^($start $end) ; then
 ;;      (^($match) ; then
 ;;        regexp_start $match ^($start)
 ;;        regexp_end $match ^($end)
         substring $line 0 $start ^($str)
-        out (.raw $str . $tail)^(out2)
+        out (raw: $str . $tail)^(out2)
         open_output_string_port ^($buf)
         substring $line $start $end ^($str)
         port_display $buf $str ^()
         substring $line $end -1 ^($str)
-        seq_push (.raw $str . $tail) in2 ^(in3)
+        seq_push (raw: $str . $tail) in2 ^(in3)
         seq_read_string $end_regexp in3 $buf ^($str in4)
-        out2 (.quote $str . $tail)^(out3)
+        out2 (quote: $str . $tail)^(out3)
         loop in4 out3 . break)
       ( ; else
         out $list ^(out2)
@@ -279,15 +281,15 @@ seq_tokenize_line_comment $start_str in ^(in2)
       seq_pop in ^($list in2)
       list_pop $list ^($type $tail)
       list_pop $tail ^($line $tail)
-      ifelse(and(object_equal? $type .raw)(regexp_search $regexp $line))
+      ifelse(and(object_equal? $type raw:)(regexp_search $regexp $line))
       (^($start $end) ; then
 ;;      (^($match) ; then
 ;;        regexp_start $match ^($start)
 ;;        regexp_end $match ^($end)
         substring $line 0 $start ^($str)
-        out (.raw $str . $tail)^(out2)
+        out (raw: $str . $tail)^(out2)
         substring $line $end -1 ^($str)
-        seq_push (.raw $str . $tail) in2 ^(in3)
+        seq_push (raw: $str . $tail) in2 ^(in3)
         loop in3 out2 . break)
       ( ; else
         out $list ^(out2)
@@ -303,17 +305,17 @@ seq_tokenize_line_comment $start_str in ^(in2)
       seq_pop in ^($list in2)
       list_pop $list ^($type $tail)
       list_pop $tail ^($line $tail)
-      ifelse(and(object_equal? $type .raw)(regexp_search $regexp $line))
+      ifelse(and(object_equal? $type raw:)(regexp_search $regexp $line))
       (^($start $end) ; then
 ;;      (^($match) ; then
 ;;        regexp_start $match ^($start)
 ;;        regexp_end $match ^($end)
         substring $line 0 $start ^($str)
-        out (.raw $str . $tail)^(out2)
+        out (raw: $str . $tail)^(out2)
         substring $line $start $end ^($str)
-        out2 (.delimit $str . $tail)^(out3)
+        out2 (delimit: $str . $tail)^(out3)
         substring $line $end -1 ^($str)
-        seq_push (.raw $str . $tail) in2 ^(in3)
+        seq_push (raw: $str . $tail) in2 ^(in3)
         loop in3 out3 . break)
       ( ; else
         out $list ^(out2)
@@ -328,7 +330,7 @@ seq_tokenize_line_comment $start_str in ^(in2)
       seq_pop in ^($list in2)
       list_pop $list ^($type $tail)
       list_pop $tail ^($line $tail)
-      ifelse(and(object_equal? $type .raw)(object_equal? $line ""))(I out)(out $list)^(out2)
-;;      ifelse(or(not(object_eq? $type .raw))(> (string_length $line) 0))(out $list)(I out)^(out2)
+      ifelse(and(object_equal? $type raw:)(object_equal? $line ""))(I out)(out $list)^(out2)
+;;      ifelse(or(not(object_eq? $type raw:))(> (string_length $line) 0))(out $list)(I out)^(out2)
       loop in2 out2 . break
       )))
