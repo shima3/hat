@@ -1,0 +1,15 @@
+(include "util.sch")
+
+(defineCPS main ^()
+  true ^(p)
+  if p (print("pは真\n"))(print("pは偽\n"))^()
+  false ^(q)
+  if q "真" "偽" ^(s)
+  print("qは" s "\n")^()
+
+  and p q ^(r)
+  if r (print "pかつqは真\n") nop ^()
+  if(or p q) nop (print "pまたはqは偽\n")^()
+  if(not p) "真ではない" "偽ではない" ^(s)
+  print("pは" s "\n")^()
+  exit 0)
