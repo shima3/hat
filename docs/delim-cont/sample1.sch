@@ -1,0 +1,28 @@
+(include "util.sch")
+
+(defineCPS main ^()
+  same_fringe
+  (1 (2 3) 4 (5 6) 7)
+  ((1 2) 3 (4 5) 6 7)
+  ^(flag)
+  if flag (print("同じ\n"))
+  (print("違う\n"))^()
+  exit 0)
+
+(defineCPS same_fringe ^(list1 list2)
+  list_flat list1 ^(list1)
+  print("list1=" list1 "\n")^()
+  list_flat list2 ^(list2)
+  print("list2=" list2 "\n")^()
+  equal? list1 list2)
+
+(defineCPS list_flat ^(list . return)
+  when(list_empty? list)(return list)^()
+  list_get_first list ^(first)
+  list_get_rest list ^(rest)
+  list_flat rest ^(rest)
+  if(list? first)
+  ( list_flat first ^(first)
+    list_append first rest . return )
+  ( list_push rest first . return )
+  )

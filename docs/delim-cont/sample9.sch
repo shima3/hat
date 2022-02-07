@@ -1,0 +1,15 @@
+(include "util.sch")
+
+(defineCPS main ^()
+  set meta_continuation (^(v) print("error\n"))^()
+  + 1 (reset(+ (+ 3 (shift(^(k)(* 3 (k 2))))) 1))^(result)
+  print("result=" result "\n")^()
+  printev(+ 1 (reset 3))^()
+  printev(+ 1 (reset(* 2 (shift(^(k) 4)))))^()
+  printev(+ 1 (reset(* 2 (shift(^(k)(k 4))))))^()
+  printev(+ 1 (reset(* 2 (shift(^(k)(k (k 4)))))))^()
+  exit 0)
+
+(defineCPS printev ^(exp)
+  exp ^(v)
+  print(exp " -> " v "\n"))
