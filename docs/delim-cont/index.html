@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<!-- !DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <title>A Tutorial on Delimited Continuations</title>
+    <link rel="shortcut icon" href="/hat/assets/images/favicon.ico">
+    <link rel="stylesheet" href="/hat/assets/css/github-markdown.css">
+    <!-- ソースコードのフォントは ../jquery-linedtextarea.css で設定 -->
+    <link rel="stylesheet" href="/hat/assets/css/jquery-linedtextarea.css">
+    <link ref="icon" href="/hat/assets/images/favicon.ico">
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+	  TeX: { equationNumbers: { autoNumber: "AMS" }},
+	  tex2jax: {
+	      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+	      skipTags: ["script","noscript","style","textarea","kbd"],
+	      processEscapes: true
+	  },
+	  "HTML-CSS": { matchFontHeight: false },
+	  displayAlign: "left",
+	  displayIndent: "2em"
+      });
+    </script>
+    <style type="text/css">
+      @font-face {
+	  font-family: ipag;
+	  src: url('/hat/assets/fonts/ipag.ttf') format("truetype");
+      }
+      /*
+      @font-face {
+	  font-family: hackgen;
+	  src: url('../../HackGen-Regular.ttf') format("truetype");
+      }
+      */
+      html, body, input, .code{
+	  font-style: normal;
+	  font-weight: normal;
+	  font-family: hackgen, Osaka-Mono, "Courier New", monospace;
+	  font-size: 100%;
+	  line-height: 1.2;
+	  box-sizing: border-box;
+	  height: 100%;
+	  padding: 0px;
+	  margin: 0 0 4px 4px;
+      }
+      div{
+	  box-sizing: border-box;
+	  padding: 0px;
+	  margin: 0 0 0px 0px;
+      }
+      .full {
+	  width: 100%;
+	  height: 100%;
+      }
+      .border {
+	  border: solid 1px black;
+	  // background-color: black;
+      }
+      .stripe {
+	  background: repeating-linear-gradient(
+	      45deg,     /* 角度の指定 */
+	      #fff,      /* 色A ... 開始 */
+	      #fff 3px,  /* 色A ... 終了 */
+	      #000 3px,      /* 色B ... 開始 */
+	      #000 6px   /* 色B ... 終了 */
+	  );
+      }
+      @keyframes move{
+	  from{
+	      background-position: 0px 0px, 5px 5px;
+	  }
+	  to{
+	      background-position: 30px 30px, 35px 35px;
+	  }
+      }
+      .checker {
+	  background-color: #fff;
+	  background-image:
+	      linear-gradient(45deg, #ccc 25%, transparent 25%,
+			      transparent 75%, #ccc 75%, #ccc),
+	      linear-gradient(45deg, #ccc 25%, transparent 25%,
+			      transparent 75%, #ccc 75%, #ccc);
+	  background-size: 10px 10px;
+	  animation-name: move;
+	  animation-duration: 1s;
+	  animation-iteration-count: infinite;
+	  animation-timing-function: linear;
+      }
+      .right-float {
+	  float: right;
+      }
+      .clear-both {
+	  clear: both;
+      }
+      .hang {
+	  margin-left: 1em;
+	  text-indent: -1em;
+      }
+      .indent {
+	  text-indent: 1em;
+      }
+      hr {
+	  clear: both;
+      }
+    </style>
+    <script src="/hat/assets/js/sexpr-plus.js"></script>
+    <script src="/hat/assets/js/taterm.js"></script>
+    <script src="hat.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <script type="text/javascript" src="/hat/assets/js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="/hat/assets/js/jquery-linedtextarea.js"></script>
+  </head>
+  <body id="body">
+    <div style="width:70%;height:100%; float:left; overflow:scroll;">
+      <h1><img src="/hat/assets/images/favicon.ico" height="30" />限定継続のチュートリアル</h1>
+      継続とは「その後の計算」であり、限定継続とは範囲が限定されている継続です<a href="#Asai2011">[1]</a>。このページでは限定継続の利点や継続との違いなどについてHat言語のサンプルコードを用いて説明します。また、限定継続を応用して練習問題のプログラムを作成することによって理解を確認できます。Hat言語については、<a href="../tutorial/">こちら</a>のページを参照してください。
+      <h2>使用上の注意</h2>
+      <ul>
+	<li>このページはGoogle Chromeにしか対応していません。
+	<li>文字の見間違いを減らすため、以下の文字の区別が比較的容易なHackGenフォントを用いています。
+	  <ul>
+	    <li>"「ダブルクォート」''「シングルクォート２つ」``「バッククォート２つ」
+	    <li>,「カンマ」.「ピリオド」
+	    <li>-「マイナス」^「ハット」~「チルダ」
+	    <li>0「数字のゼロ」O「大文字のオー」
+	    <li>1「数字のイチ」I「大文字のアイ」l「小文字のエル」|「縦線」
+	    <li>9「数字のキュー」g「小文字のジー」
+	    <li>:「コロン」;「セミコロン」
+	  </ul>
+	<li>ソースコードの枠の上のRunボタンを押すと実行できます。
+	<li>ソースコードを変更して実行できます。リロードすると元に戻ります。
+	<li>ソースコードの保存機能はないので，別のテキストエディタなどにコピペして保存してください。
+	<li>標準入出力は右のTerminal:に表示されます。
+      </ul>
+      <hr>
+      <div class="sourcefile right-float">
+	<input type="text" value="sample1.sch" disabled />
+	<input type="button" value="Run"
+	       onclick="runCode(this);"/><br>
+	<textarea id="text" class="lined" cols="50" rows="14"
+		  spellcheck="false"></textarea>
+      </div>
+      <div class="sourcefile right-float clear-both">
+	<input type="text" value="sample2.sch" disabled />
+	<input type="button" value="Run"
+	       onclick="runCode(this);"/><br>
+	<textarea id="text" class="lined" cols="50" rows="14"
+		  spellcheck="false"></textarea>
+      </div>
+      <h2>限定継続の利点</h2>
+      限定継続の利点の１つとして、処理の中断と再開に応用できることが挙げられます。この利点について説明するため、次の例題について限定継続を使った場合と使わなかった場合について示します。
+      <div class="hang"><b>例題：</b>二つのリストに含まれる数字の並びが同じかどうかを判定する関数same_fringeを作れ。リストにはリストが含まれる場合があるが、数字だけ抜き出した並びが同じかどうかを判定せよ。例えば、(1 (2 3) 4)と((1 2)(3 4))は同じと判定する。</div>
+      <h3>限定継続（処理の中断と再開）を使わない場合</h3>
+      sample1.schでは、限定継続は使わず、関数list_flatを用いてリストを含まない（数字だけからなる）リストを作ってから、それらのリストを比較します。例えば、(1 (2 3) 4)をlist_flatに与えると(1 2 3 4)を返します。
+      <div class="indent">sample1.schを実行（Runをクリック）してみてください。ソースコードの5行目と6行目のリストを比較し、数字の並びが同じかどうか出力します。リストに含まれる数字やカッコを変更して実行してみてください。ただし、カッコを変更するときは、開くカッコと閉じカッコが対応するようにしてください。</div>
+      <h3>限定継続（処理の中断と再開）を使った場合</h3>
+      sample2.schでは、リストの先頭から順に数字を取り出す処理の途中で限定継続を用いて中断と再開を行うことで、二つのリストから交互に数字を取り出して比較します。リストを関数startに与えると、そのリストに含まれる数字を探し、最初の数字とその後の処理を示す限定継続を返します。その限定継続を呼び出すと、次の数字と限定継続を返します。これを繰り返すことで、すべての要素を比較します。
+      <div class="indent">sample2.schを実行してみてください。ソースコードの5行目と6行目のリストを比較し、数字の並びが同じかどうか出力します。5行目の先頭の数字1を0に変更して実行してみてください。先頭の数字だけ比較し、「違う」と出力されます。</div>
+      <h3>比較</h3>
+      ここでは、ソースコードを厳密に理解する必要はなく、限定継続の利点について理解できれば良いです。処理の中断と再開を使った場合、数字だけからなるリストを作成する必要がないのでメモリ消費量を少なくできます。また、２つのリストの前の方に含まれる数字が異なっていたとき、結果を早く出力できます。ここでは説明のため、データ数が少ないので、メモリ消費量や実行時間の差はほとんどありません。しかし、実践的なプログラムの場合、データ数が多いので、それらの差が大きくなります。
+      <hr>
+      <div class="sourcefile right-float">
+	<input type="text" value="sample4.sch" disabled />
+	<input type="button" value="Run"
+	       onclick="runCode(this);"/><br>
+	<textarea id="text" class="lined" cols="40" rows="18"
+		  spellcheck="false"></textarea>
+      </div>
+      <div class="sourcefile right-float">
+	<input type="text" value="sample3.sch" disabled />
+	<input type="button" value="Run"
+	       onclick="runCode(this);"/><br>
+	<textarea id="text" class="lined" cols="40" rows="18"
+		  spellcheck="false"></textarea>
+      </div>
+      <h2>継続との違い</h2>
+      継続と限定継続との違いを説明するため、sample3.schとsample4.schを示します。どちらのコードも関数mainから関数fを呼び出し、fから関数gを呼び出します。ただし、sample3.schではgから継続を、sample4.schでは限定継続を呼び出します。sample3.schとsample4.schを実行してみてください。関数printに指定された文字列がTerminalに出力されます。ソースコードのどの部分がどの順序で実行されているか確認してください。
+      <h3>継続の場合</h3>
+      sample3.schの11行目のcall/ccがgを呼び出し、継続を渡します。gから継続を呼び出したとき、fに戻り、fからmainに戻って終了しています。g2を出力する部分は実行されていません。このように継続を呼び出すと、呼び出し元に戻る方向への一方通行となります。このため、継続は例外処理など大域脱出を実装するために用いることができます。
+      <h3>限定継続の場合</h3>
+      sample4.schの5行目のresetが限定継続の範囲を限定し、11行目のshiftがgを呼び出し、限定継続を渡します。gから限定継続を呼び出したとき、fに戻りますが、fから再びgに戻り、gからmainに戻って終了しています。このように限定継続を呼び出すと、shiftの外側からresetの内側までの限定された範囲を実行しますが、resetの外側までは戻りません。このため、処理を中断したところで限定継続を取り出し、それを後で呼び出すと処理を再開できます。
+      <hr>
+      <div class="sourcefile right-float">
+	<input type="text" value="sample5.sch" disabled />
+	<input type="button" value="Run"
+	       onclick="runCode(this);"/><br>
+	<textarea id="text" class="lined" cols="50" rows="30"
+		  spellcheck="false"></textarea>
+      </div>
+      <div class="sourcefile right-float clear-both">
+	<input type="text" value="sample2.sch" disabled />
+	<input type="button" value="Run"
+	       onclick="runCode(this);"/><br>
+	<textarea id="text" class="lined" cols="50" rows="30"
+		  spellcheck="false"></textarea>
+      </div>
+      <h2>処理の中断と再開</h2>
+      限定継続を応用した処理の中断と再開の動作について説明するため、sample5.schとsample2.schを示します。sample5.schを実行すると、5行目のリストに含まれる数字を順に出力します。この場合、処理の中断と再開を用いる利点はありませんが、理解しやすくするために単純な処理にしています。sample2.schは上述の「限定継続の利点」で示したコードと同じです。sample5.schの動作を理解できれば、sample2.schの動作も理解しやすくなります。
+      <h3>リストの要素の出力</h3>
+      sample5.schを実行したとき、3行目から定義されている関数mainを呼び出します。次に、4行目でmainからstartを呼び出し、5行目のリストを引数として渡します。その戻り値を6行目の変数nkで受け取り、7行目でloopを呼び出し、nkを引数として渡します。
+      <div class="indent">10行目から定義されている関数startは、渡されたリストを仮引数listで受け取り、その要素の取り出しを開始する関数です。11行目のresetで継続を限定した上で、walkを呼び出し、listを引数として渡します。</div>
+      <div class="indent">13行目から定義されている関数walkは、渡されたリストを仮引数listで受け取り、それに含まれるリスト以外の全ての要素を取り出す関数です。14行目でlistが空ならばreturnを呼び出し、呼び出し元に戻ります。そうでなければ15行目に進み、listの先頭の要素を変数nで受け取ります。16行目でnがリストならばwalkを呼び出し、nを引数として渡します。nがリストでなければ、17行目でyieldを呼び出し、nを引数として渡します。18行目でlistの先頭を除く残りのリストを変数restで受け取ります。19行目でwalkを呼び出し、restを引数として渡します。</div>
+      <div class="indent">21行目から定義されている関数yieldは、渡された値を仮引数nで受け取り、その値と限定継続からなるリストをresetの外側に返す関数です。22行目のshiftで限定継続を取り出し、変数kで受け取ります。Iは恒等関数であり、渡されたリスト(n k)を、そのまま返します。</div>
+      <div class="indent">25行目から定義されている関数loopは、渡されたリストを仮引数nkで受け取り、要素を出力する関数です。26行目でnkが空ならば、呼び出し元に戻ります。そうでなければ27行目に進み、nkの先頭の要素を変数nで受け取り、28行目で出力します。29行目でnkの2つ目の要素を変数kで受け取り、30行目で呼び出します。ここで引数として渡した空リストは22行目のshiftの戻り値となり、変数dで受け取りますが、ここでは必要ないので使っていません。22行目の(n k)が30行目のkの戻り値となり、変数nextで受け取ります。31行目でloopを呼び出し、nextを引数として渡します。これによって、要素の出力を繰り返します。walkが全ての要素を取り出したとき、11行目のIを呼び出し、空リストを返します。その空リストを30行目のnextで受け取り、31行目でloopに渡されると、25行目のnkで受け取るので、26行目で繰り返しを終了し、呼び出し元に戻ります。</div>
+      <h3>リストの要素の比較</h3>
+      sample2.schを実行したとき、3行目から定義されている関数mainを呼び出します。次に、4行目でmainからsame_fringeを呼び出し、5行目と6行目のリストを引数として渡します。その戻り値を7行目のflagで受け取り、8行目でflagがtrueならば文字列"同じ"、falseならば文字列"違う"を出力します。
+      <div class="indent">
+	12行目から定義されているsame_fringeは２つのリストを仮引数list1, list2で受け取ります。13行目と14行目でstartを呼び出し、list1の先頭の数字と限定継続を要素とするリストを変数nk1、list2の先頭の数字と限定継続を要素とするリストを変数nk2で受け取ります。15行目でloopを呼び出し、nk1とnk2を引数として渡します。
+      </div>
+      <div class="indent">
+	17行目から定義されているloopは、18行目でnk1が空ならばtrue、空でなければfalseをflag1で受け取ります。同様に19行目ではnk2が空かどうかをflag2で受け取ります。20行目でflag1とflag2の両方がtrueならば呼び出し元の7行目へ戻り、戻り値trueを変数flagで受け取ります。そうでなければ21行目に進みます。21行目でflag1がtrueならば文字列"無"を、そうでなければ22行目でnk1の先頭の要素を変数n1で受け取ります。同様に23行目でflag2がtrueならば"無"を、そうでなければnk2の先頭の要素を変数n2で受け取ります。nk1, nk2が空でないとき、それらの先頭の要素は元のリストに含まれていた数字です。25行目でn1、文字"="、n2を出力します。26行目でn1とn2が等しくなければ呼び出し元の7行目へ戻り、戻り値falseを変数flagで受け取ります。そうでなければ27行目でnk1の2つ目の要素を変数k1で受け取ります。同様に28行目でnk2の2つ目の要素を変数k2で受け取ります。nk1, nk2の2つ目の要素は継続です。29行目と30行目でそれらの継続を呼び出し、処理を再開し、次に見つかった数字と継続を要素とするリストを変数next1, next2で受け取ります。31行目でloopを呼び出し、next1とnext2を渡します。これによって全ての数字を比較するまで繰り返します。
+      </div>
+      <hr>
+      <div class="sourcefile right-float">
+	<input type="text" value="sample6.sch" disabled />
+	<input type="button" value="Run"
+	       onclick="runCode(this);"/><br>
+	<textarea id="text" class="lined" cols="50" rows="14"
+		  spellcheck="false"></textarea>
+      </div>
+      <h2>練習問題</h2>
+      sample6.schを実行すると5行目で与えられた木を深さ優先で探索し、ノードに指定された数字を出力します。木の節はリスト(左の枝 数字 右の枝)または空リストで表現しています。例えば、５行目のリストは下の木を表しています。
+      <table>
+	<tr><td></td><td></td><td>２</td><td></td><td></td></tr>
+	<tr><td></td><td>／</td><td></td><td>＼</td><td></td></tr>
+	<tr><td>１</td><td></td><td></td><td></td><td>４</td></tr>
+	<tr><td></td><td></td><td></td><td>／</td><td></td></tr>
+	<tr><td></td><td></td><td>３</td><td></td><td></td></tr>
+      </table>
+      <div class="indent">このサンプルコードを変更し、与えられた2つの木を深さ優先で探索し、ノードに指定された数字の並びが同じかどうかを出力するプログラムを作成してください。ただし、木の全ての数字をリストなどに展開するのではなく、限定継続を用いた処理の中断と再開によって、2つの木から1つずつ数字を取り出して比較するようにしてください。</div>
+      <hr>
+      <h2>参考文献</h2>
+      <a name="Asai2011">[1]</a> 浅井健一：shift/reset プログラミング入門，ACM SIGPLAN Continuation Workshop 2011，2011年9月．
+    </div>
+    <div id="wrapper" style="width:30%; float:right;">
+      <div id="upper">
+	Terminal:
+	<input type="button" name="clear" value="Clear"
+	       onclick="terminal.value=''"/>
+	<textarea class="code full" id="terminal" cols="40"
+		  style="height:30em; box-sizing:border-box;">
+	</textarea>
+	<!--  style="height:30em; box-sizeing:border-box;" -->
+	Canvas:
+	<input type="button" id="stop" value="Stop"
+	       onclick="HatInterpreter.stop()"/>
+	<input type="button" id="restart" value="Restart"
+	       onclick="HatInterpreter.restart()"/>
+	<input type="button" name="clear" value="Clear"
+	       onclick="resetCanvas()"/>
+      </div>
+      <div id="wrapper2">
+	<canvas id="canvas" class="checker"></canvas>
+	<canvas id="canvas2" class="checker" style="display:none;"></canvas>
+      </div>
+    </div>
+  </body>
+</html>
+<script type="text/javascript">
+/*
+  function step(timestamp){
+      console.log("step "+timestamp);
+  }
+  window.requestAnimationFrame(step);
+*/
+  $(function(){
+      $(".lined").linedtextarea(
+	  //	      {selectedLine: 1}
+      );
+  });
+  var term=TATerm("terminal");
+  function printPrompt( ){
+      term.print("OK> ");
+  }
+  term.onInput=function(str){
+      this.print(str);
+      this.print("\n");
+      printPrompt( )
+  };
+  function hatPrint(arg){
+      if(arg==null) return;
+      var first=arg.getFirst( );
+      term.print(HatInterpreter.valueString(first));
+      /*
+      if(first){
+	  if(first.string) term.print(first.string);
+	  else if(first.type=="HatVar"){
+	      console.log("hatPrint first="+first);
+	      term.print(first.getValue(currentTask));
+	  }else term.print(first.toString( ));
+      }else term.print("()");
+      */
+      hatPrint(arg.getRest( ));
+  }
+  var splitted_command_line;
+  function hat_get_command_line_args(){
+      return HatInterpreter.makeSequence(splitted_command_line.slice(1), 0);
+  }
+  var exit_status=0;
+  function hatExit(status){
+      // exit_status=parseInt(status.toString());
+      exit_status=status;
+      HatInterpreter.stop();
+      copyCanvas();
+  }
+  function runProgram(){
+      var path=document.getElementById("path");
+      var command=document.getElementById("command");
+      var program=document.getElementById("program");
+      /*
+       console.log("path: "+path.value);
+       console.log("command: "+command.value);
+       console.log("program: "+program.value);
+      */
+      // HatInterpreter.startCode(path.value, program.value, command.value);
+      splitted_command_line=command.value.split(/\s/);
+      HatInterpreter.startCode(path.value, program.value,
+			       command.value);
+      //				  splitted_command_line[0]);
+  }
+  function getTextInput(node){
+      for(let child of node.getElementsByTagName("input")){
+	  if(child.type=="text") return child;
+      }
+      return null;
+  }
+  function getTextArea(node){
+      let list=node.getElementsByTagName("textarea");
+      return list[0];
+  }
+  function runCode(button){
+      let input=getTextInput(button.parentNode);
+      let text=getTextArea(button.parentNode);
+      // console.log("text="+text.value);
+      resetCanvas();
+      HatInterpreter.startCode(input.value, text.value, "main");
+  }
+  function snap(){
+      var image=document.getElementById("image");
+      image.src=canvas.toDataURL("image/png");
+  }
+  var terminal=document.getElementById("terminal");
+  var upper=document.getElementById("upper");
+  var wrapper=document.getElementById("wrapper");
+  var body=document.getElementById("body");
+  let canvas=document.getElementById("canvas");
+  //  var backCanvas=document.createElement('canvas');
+  var backCanvas=document.getElementById("canvas2");
+  var canvases=[ canvas, backCanvas ];
+  let canvas_flip=1;
+  // console.log(canvas.width+", "+canvas.height);
+  // let context2d=canvas.getContext('2d');
+  let context2d=canvases[1-canvas_flip].getContext('2d'); // backCanvas.getContext('2d');
+//  context2d.save();
+//  console.log("save lineWidth="+context2d.lineWidth);
+  let stroke_flag=true, fill_flag=false;
+  let initialStrokeStyle=context2d.strokeStyle;
+  let initialFillStyle=context2d.fillStyle;
+
+  fitCanvas();
+  // setTimeout(fitCanvas, 3000)
+  window.onresize=fitCanvas;
+  
+  function fitCanvas(){
+      // console.log("fitCanvas");
+      canvas.width=upper.clientWidth;
+      canvas.height=body.clientHeight-upper.clientHeight;
+      backCanvas.width=canvas.width;
+      backCanvas.height=canvas.height;
+      /*
+       canvas.width=wrapper.clientWidth;
+       canvas.height=wrapper.clientHeight-upper.clientHeight;
+      */
+  };
+  function resetCanvas(){
+      /*
+      console.log("resetCanvas "+canvas.width+", "+canvas.height);
+       context2d.strokeStyle=initialStrokeStyle;
+       context2d.fillStyle=initialFillStyle;
+      */
+      context2d.clearRect(0, 0, canvas.width, canvas.height);
+      // console.log("reset 1 lineWidth="+context2d.lineWidth);
+      context2d.restore();
+      context2d.save();
+      //  console.log("reset 2 lineWidth="+context2d.lineWidth);
+      stroke_flag=true;
+      fill_flag=false;
+  }
+  function copyCanvas(){
+      /*
+       let c2d=canvas.getContext('2d');
+       let img=context2d.getImageData(0, 0, canvas.width, canvas.height);
+       c2d.putImageData(img, 0, 0);
+       canvases[canvas_flip].style.visibility='hidden';
+       canvases[1-canvas_flip].style.visibility='visible';
+       let d=canvases[canvas_flip].style.display;
+      */
+      /*
+       canvases[canvas_flip].style.display='none';
+       canvases[1-canvas_flip].style.display='';
+       context2d=canvases[canvas_flip].getContext('2d');
+       canvas_flip=1-canvas_flip;
+      */
+  }
+  function hatBeginPath(){
+      context2d.beginPath();
+  }
+  function hatMoveTo(x, y){
+      context2d.moveTo(x, y);
+  }
+  function hatLineTo(x, y){
+      context2d.lineTo(x, y);
+  }
+  function hatClosePath(){
+      context2d.closePath();
+      hatEndPath();
+  }
+  function hatStroke(){
+      context2d.stroke();
+  }
+  function hatFill(){
+      context2d.fill();
+  }
+  function hatEndPath(){
+      //      console.log("fill_stroke stroke="+stroke_flag);
+      if(fill_flag) context2d.fill();
+      if(stroke_flag) context2d.stroke();
+  }
+  function hatRotate(x, y, angle){
+      context2d.translate(x, y);
+      context2d.rotate(angle*Math.PI/180);
+      context2d.translate(-x, -y);
+  }
+  function hatStrokeRGB(red, green, blue){
+      context2d.strokeStyle='rgb('+red+','+green+','+blue+')';
+      stroke_flag=true;
+  }
+  function hatNoStroke(){
+      //      console.log("hatNoStroke");
+      stroke_flag=false;
+  }
+  function hatFillRGB(red, green, blue){
+      context2d.fillStyle='rgb('+red+','+green+','+blue+')';
+      // context2d.globalAlpha=0.4;
+      fill_flag=true;
+  }
+  function hatNoFill(){
+      fill_flag=false;
+  }
+  function fillRect(x, y, w, h){
+      context2d.fillRect(x, y, w, h);
+  }
+  function strokeRect(x, y, w, h){
+      context2d.strokeRect(x, y, w, h);
+  }
+  function hatLine(x1, y1, x2, y2){
+      context2d.beginPath();
+      context2d.moveTo(x1, y1);
+      context2d.lineTo(x2, y2);
+      context2d.stroke();
+  }
+  function hatTriangle(x1, y1, x2, y2, x3, y3){
+      context2d.beginPath();
+      context2d.moveTo(x1, y1);
+      context2d.lineTo(x2, y2);
+      context2d.lineTo(x3, y3);
+      hatClosePath();
+  }
+  function hatRect(x, y, w, h){
+      context2d.beginPath();
+      context2d.rect(x, y, w, h);
+      hatClosePath();
+  }
+  function degree2radian(degree){
+      return degree*Math.PI/180;
+  }
+  function hatEllipse(x, y, w, h, s, e){
+      s=degree2radian(s);
+      e=degree2radian(e);
+      context2d.beginPath();
+      context2d.translate(x, y);
+      if(w<h){
+	  context2d.scale(1, h/w);
+	  context2d.arc(0, 0, w/2, s, e);
+      }else{
+	  context2d.scale(w/h, 1);
+	  context2d.arc(0, 0, h/2, s, e);
+      }
+      hatEndPath();
+      context2d.setTransform(1, 0, 0, 1, 0, 0);
+  }
+  function hatCircle(x, y, r){
+      context2d.beginPath();
+      context2d.arc(x, y, r, 0, 2*Math.PI);
+      hatEndPath();
+  }
+  function hatArc(x, y, r, s, e){
+      let anti=r<0;
+      if(anti) r=-r;
+      context2d.arc(x, y, r, s*Math.PI/180, e*Math.PI/180, anti);
+  }
+  function hatLineWidth(width){
+      if(width>0){
+	  context2d.lineWidth=width;
+	  stroke_flag=true;
+      }else stroke_flag=false;
+  }
+  function hatText(text, x, y){
+      // console.log("hatText "+text+" "+fill_flag+" "+stroke_flag);
+      if(fill_flag) context2d.fillText(text, x, y);
+      if(stroke_flag) context2d.strokeText(text, x, y);
+  }
+  function hatMeasureText(text){
+      console.log(context2d.font);
+      context2d.font=fontStyle+" "+fontSize+"px "+fontFamily;
+      let metrics=context2d.measureText(text);
+      /*
+       console.log("w="+metrics.width);
+       console.log("h="+metrics.actualBoundingBoxAscent);
+      */
+      return [metrics.width, metrics.actualBoundingBoxAscent];
+  }
+  // let fontStyle="normal", fontSize=10, fontFamily="Osaka-Mono";
+  // let fontStyle="normal", fontSize=16, fontFamily="ipag";
+  let fontStyle="normal", fontSize=16, fontFamily="hackgen";
+  function setFont(){
+      context2d.font=fontStyle+" "+fontSize+"px "+fontFamily;
+  }
+  function hatTextSize(size){
+      fontSize=size;
+      setFont();
+  }
+  function hatTextAlign(align){
+      context2d.textAlign=align;
+  }
+  function hatFillCanvas(){
+      context2d.fillRect(0, 0, canvas.width, canvas.height);
+  }
+  function hatGetCanvasSize(){
+      return [canvas.width, canvas.height];
+  }
+  
+  for(let node of document.getElementsByClassName("sourcefile")){
+      let input;
+      for(input of node.getElementsByTagName("input"))
+	  if(input.type=="text") break;
+      if(!input) break;
+      let path=input.value;
+      let list=node.getElementsByTagName("textarea");
+      let text=list[0];
+      let xmlHttp=new XMLHttpRequest();
+      xmlHttp.onreadystatechange=function(){
+	  if(xmlHttp.readyState == 4 && xmlHttp.status == 200){
+	      text.innerHTML = xmlHttp.responseText;
+	  }
+      };
+      xmlHttp.open("GET", path+"?", true);
+      xmlHttp.send(null);
+  }
+</script>
+ 
