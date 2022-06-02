@@ -9,6 +9,16 @@
 (define (cons-alist key datum alist)(cons (cons key datum) alist))
 ;; (define (eval1 expr)(eval expr (interaction-environment)))
 
+#|
+リスト ls の末尾の cdr を先頭に移動したリストを返す。
+例：(a b . c) -> (c a b)
+|#
+(define (tail-first $list)
+  (if(pair? $list)
+    (let( [$rest (tail-first (cdr $list))] )
+      (cons (car $rest)(cons (car $list)(cdr $rest))))
+    (list $list)))
+
 #; (define (print . list)
   (if(pair? list)
     (let ([first (car list)][rest (cdr list)])
@@ -575,7 +585,7 @@ built-in function: mailboxRemove ^(isEmpty)
 	  (cons args (cons func defcont))))
 	;; (list args func))
       ((func-with-cont? app) ; app が継続付き関数ならば
-	(println "func-with-cont")
+	;; (println "func-with-cont")
 	'( )) ; なにもしない
       ((procedure? func)
 	(apply-func func (pickup-cont-arg args) defcont))

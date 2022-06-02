@@ -133,7 +133,7 @@ var HatInterpreter=(function( ){
         HatExp.call(this, source);
         this.pars=pars; // 通常の仮引数の配列
         this.contpar=contpar; // 継続の仮引数
-        this.funcall=funcall; // 関数適用
+        this.funcall=funcall; // 関数適用 List
     }
     
     /* JavaScript関数 */

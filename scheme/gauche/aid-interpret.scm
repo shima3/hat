@@ -1,7 +1,7 @@
 (use gauche.threads)
 ;; (use util.queue)
 (use gauche.net)
-(use srfi-9)
+(use srfi-9) ; record
 (use srfi-13)
 (use srfi-19)
 (use srfi-69)
@@ -41,6 +41,7 @@
   #; (guard (e (else key))
   (hash-table-ref/default table key key))
   )
+;;; (hash-table-set! table key value)
 
 (define (make_queue)
   (make-list-queue '()))
@@ -87,10 +88,16 @@
 (define string-cat string-concatenate)
 (define port-close close-port)
 
-(define (regexp-search regexp str)
+#; (define (regexp-search regexp str)
   (define match (rxmatch regexp str))
   (if match (list #t (rxmatch-start match)(rxmatch-end match)) '(#f)))
 
+(define (regexp-search regexp str)
+  (let ( [match (rxmatch regexp str)] )
+    (if match
+      (list #t (rxmatch-start match)(rxmatch-end match))
+      '(#f)
+      )))
 
 (define (write-list list)
   (display "(")
@@ -125,7 +132,7 @@
 	(display first)
 	(write-object first))
       (apply print rest))
-;;    (newline)
+    (newline)
     ))
 
 (add-load-path ".")

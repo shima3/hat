@@ -82,6 +82,36 @@
   ;; print(exp "\n")^()
   exp)
 
+#|
+$listがリストならばtrue、リストでなければfalseを返す。
+|#
+(defineCPS list? ^($list)
+  JavaScript "HatInterpreter.isList" $list)
+
+#|
+$listが空ならばtrue、空でなければfalseを返す。
+|#
+(defineCPS list_empty? ^($list)
+  JavaScript "HatInterpreter.listIsEmpty" $list)
+
+#|
+$listの先頭の要素を返す。
+|#
+(defineCPS list_get_first ^($list)
+  JavaScript "HatInterpreter.listGetFirst" $list)
+
+#|
+$listの2番目以降の要素からなるリストを返す。
+|#
+(defineCPS list_get_rest ^($list)
+  JavaScript "HatInterpreter.listGetRest" $list)
+
+#|
+$listの先頭に$elを追加したリストを返す。
+|#
+(defineCPS list_push ^($list $el)
+  JavaScript "HatInterpreter.listPush" $list ($el))
+
 ;; キャラクタユーザインタフェース用関数群
 
 (defineCPS print ^(list . return)
@@ -244,3 +274,24 @@
 (defineCPS canvas_size ^ return
   JavaScript "hatGetCanvasSize" ^(size)
   size return . end)
+
+;;; 配列関連
+
+(defineCPS new_array ^($size)
+  JavaScript "(function(size){ var array=Array(); array.length=size; return { array: array }; })" $size)
+
+(defineCPS array_get ^($array $index)
+  JavaScript "(function(array, index){ return array.array[index]; })" $array $index)
+
+(defineCPS array_set ^($array $index $value . return)
+  JavaScript "(function(array, index, value){ console.log(array.array); array.array[index]=value; })" $array $index $value ^($dummy)
+  return)
+
+#| 使用例
+(defineCPS main ^()
+  new_array 10 ^(array)
+  array_set array 3 "hoge" ^()
+  array_get array 3 ^(value)
+  print("value=" value "\n")^()
+  exit 0)
+|#

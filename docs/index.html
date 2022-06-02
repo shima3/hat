@@ -9,10 +9,8 @@ layout: default
 <body class="markdown-body">
   <h1><img src="/hat/assets/images/favicon.ico" height="30" />Hatプログラミング言語</h1>
   <h1>The Hat Programming Language</h1>
-  Hatは関数型プログラミング、ラムダ計算、継続渡しスタイル、アクターモデルをサポートするプログラミング言語です。
-  (Hat is a programming language that supports functional programming, lambda calculus, continuation passing style, and the actor model.)
-  Hatを試す手っ取り早い方法は<a href="tutorial">チュートリアル</a>を使うことです。
-  The quickest way to try Hat is to use a <a href="tutorial">tutorial</a>.
+  Hatは関数型プログラミング、ラムダ計算、継続渡しスタイル、アクターモデルをサポートするプログラミング言語です。Hat is a programming language that supports functional programming, lambda calculus, continuation passing style, and the actor model.
+  Hatを試す手っ取り早い方法は<a href="tutorial">チュートリアル</a>を使うことです。The quickest way to try Hat is to use a <a href="tutorial">tutorial</a>.
 
   <h2>用語 (Terms)</h2>
   <dl>
@@ -37,21 +35,20 @@ layout: default
     -->
 	<h2>非形式的説明 (Informal Description)</h2>
 	この言語では次の形式で関数を定義します。
-  <p><pre>(defineCPS FunctionName AnonymousFunction)</pre></p>
-	ここで、FunctionNameは関数名、AnonymousFunctionは関数の処理を示す無名関数です。
+  <p><pre>(defineCPS 関数名 無名関数)</pre></p>
   <dl>
     <div><dt>関数 (Function)</dt>
-    <dd>この言語では、0個以上の通常の引数と一つの継続の引数を与えて呼び出します。
-      ほとんどの関数は何らかの処理を行い、与えられた継続に戻り値を渡します。
-      戻り値を渡さない関数や継続に呼ばない場合もあります。</dd></div>
+    <dd>Hat言語では、0個以上の通常の引数と一つの継続の引数を与えて呼び出します。
+      通常の関数は何らかの処理を行い、与えられた継続に戻り値を渡します。
+      ただし、継続に戻り値を渡さない場合や継続を呼ばない場合もあります。</dd></div>
     <div><dt>関数名 (Function name)</dt>
     <dd>一つ以上の英数字（大文字、小文字、数字）からなる文字列です。</dd></div>
     <div><dt><a name="anonymous function">無名関数 (Anonymous Function)</a></dt>
     <dd>名前をつけずに定義された関数です。
       この言語では次の形式で無名関数を定義します。
-      <p><pre>^ Header Body</pre></p>
+      <p><pre>^ ヘッダ ボディ</pre></p>
       <dl>
-        <div><dt>Header</dt>
+        <div><dt>ヘッダ（Header）</dt>
         <dd>無名関数の仮引数を示す一つのリスト、または変数名です。
           <ul>
             <li>リストの場合、0個以上の変数名が空白で区切られ、丸括弧で囲まれています。<br/>
@@ -64,7 +61,7 @@ layout: default
             <li>変数名の場合、継続の仮引数を示します。</li>
           </ul>
         </dd></div>
-        <div><dt>Body</dt>
+        <div><dt>ボディ（Body）</dt>
         <dd>無名関数が呼び出されたときに実行する処理を示す一つの関数呼び出しです。</dd></div>
       </dl>
     </dd></div>
@@ -115,9 +112,9 @@ layout: default
     <ul>
     <li><a href="https://www.kanzaki.com/docs/html/htminfo13.html">リスト：簡潔な情報表現</a> The Web KANZAKI</li>
     <li><a href="https://developer.mozilla.org/ja/docs/Web/HTML/Element/Script">スクリプト要素</a> MDN web docs</li>
-    <li><a href="https://github.com/sindresorhus/github-markdown-css"></a>github-markdown-css</li>
     <!--
     <li><a href=""></a></li>
+    <li><a href="https://github.com/sindresorhus/github-markdown-css"></a>github-markdown-css</li>
     -->
     </ul>
     <h2>History</h2>
