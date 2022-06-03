@@ -9,5 +9,7 @@
 - A **variable name** is a string which must starts with a letter or the dollar sign ($), and can contain letters and digits.
 - (M N) is a **function application** if M and N are hat terms.
 - (M . N) is a **continuation application** if M and N are hat terms.
+- (^(x) M) is a **function abstraction** if x is a variable name and M is a hat term.
+- (^ x M) is a **continuation abstraction** if x is a variable name and M is a hat term.
 
 
