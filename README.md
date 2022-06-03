@@ -23,6 +23,9 @@ This is defined so that:
 - FV(M N) and FV(M . N) are a union of FV(M) and FV(N) if M and N are hat terms.
 - FV(^(x) M) and FV(^ x M) are a set removed x from FV(M) if x is a variable and M is a hat term.
 
+Variables except free variable of M are said to be **fresh** for M if M is a hat term.
+That is, bound variables of M and variables not contained in M are fresh for M.
+
 ## Substitution
 
 The notation M[x:=N] indicates substitution of N for x in M if M and N are hat terms and x is a variable.
@@ -33,10 +36,21 @@ This is defined so that:
 - (M1 . M2)[x:=N] = (M1[x:=N] . M2[x:=N])
 - (^(x) M)[x:=N] = (^(x) M)
 - (^ x M)[x:=N] = (^ x M)
-- (^(y) M)[x:=N] = (^(y) M[x:=N]) if y is a variable different from x and is not a free variable of N.
-- (^ y M)[x:=N] = (^ y M[x:=N]) if y is a variable different from x and is not a free variable of N.
+- (^(y) M)[x:=N] = (^(y) M[x:=N]) if the variable y is different from x and fresh for N.
+- (^ y M)[x:=N] = (^ y M[x:=N]) if the variable y is different from x and fresh for N.
 
 ## Reduction
 
+The reduction rules are as follow:
 
+- A function application ((^(x) M) N) is reduced to M[x:=N] if the variable x is fresh for N.
+((^(x) M) N) is reduced to M[x:=y][y:=N] if x is a free variable of N. Here, a variable y is fresh for M and N.
+
+- A continuation application ((^ x M) . N) is reduced to (M[x:=N] . N) if the variable x is fresh for N.
+((^ x M) . N) is reduced to (M[x:=y][y:=N] . N) if x is a free variable of N. Here, a variable y is fresh for M and N
+
+- A function application ((^ x M) N) is reduced to (M . x)[x:=(^(z) z N)] if the variable x is fresh for N. Here, a variable z is different from x and is fresh for N.
+((^ x M) N) is reduced to (M[x:=y] . y)[y:=(^(z) z N)] if x is a free variable of N. Here, a variable y is fresh for M and N, and a variable z is different from y and is fresh for N.
+
+- A continuation application ((^(x) M) . N) is reduced to (N (^(x) M)).
 
