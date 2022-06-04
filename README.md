@@ -76,3 +76,7 @@ Hat expressions are hat terms applied the following conventions to keep the nota
 - (^ c M N1 N2 ... Nm) means (^ c (M N1 N2 ... Nm)).
 - (^(x1 x2 ... xn) M N1 N2 ... Nm) means (^(x1 x2 ... xn)(M N1 N2 ... Nm)).
 - (^(x1 x2 ... xn . c) M N1 N2 ... Nm) means (^(x1 x2 ... xn . c)(M N1 N2 ... Nm)).
+
+## Functions
+
+(defineCPS *FN* *HEXP*)
