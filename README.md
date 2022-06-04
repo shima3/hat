@@ -92,4 +92,6 @@ We can define logic operators:
 (defineCPS Not ^(p) p False True)
 ```
 
+->
+
 $\leftarrow$
