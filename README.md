@@ -38,10 +38,10 @@ This is defined so that:
 - (^ x M)[x:=N] = (^ x M)
 - (^(y) M)[x:=N] = (^(y) M[x:=N]) if the variable y is different from x and fresh for N.
 - (^ y M)[x:=N] = (^ y M[x:=N]) if the variable y is different from x and fresh for N.
-- (^(y) M)[x:=N] = (^(z) M[y:=z][x:=N]) if the variable y is different from x and a free variable of N.
-Here, the variable z must be fresh for M and N.
-- (^ y M)[x:=N] = (^ z M[y:=z][x:=N]) if the variable y is different from x and a free variable of N.
-Here, the variable z must be fresh for M and N.
+- (^(y) M)[x:=N] = (^(y2) M[y:=y2][x:=N]) if the variable y is different from x and a free variable of N.
+Here, the variable y2 must be fresh for M and N.
+- (^ y M)[x:=N] = (^ y2 M[y:=y2][x:=N]) if the variable y is different from x and a free variable of N.
+Here, the variable y2 must be fresh for M and N.
 
 ## Reduction
 
@@ -49,30 +49,30 @@ Suppose x, y and z are variables, and M and N are hat terms.
 The reduction rules are as follow:
 
 - ((^(x) M) N) is reduced to M[x:=N] if x is fresh for N.
-((^(x) M) N) is reduced to M[x:=y][y:=N] if x is a free variable of N.
-Here, y must be fresh for M and N.
+((^(x) M) N) is reduced to M[x:=x2][x2:=N] if x is a free variable of N.
+Here, x2 must be fresh for M and N.
 
 - ((^ x M) . N) is reduced to (M[x:=N] . N) if x is fresh for N.
-((^ x M) . N) is reduced to (M[x:=y][y:=N] . N) if x is a free variable of N.
-Here, y must be fresh for M and N.
+((^ x M) . N) is reduced to (M[x:=x2][x2:=N] . N) if x is a free variable of N.
+Here, x2 must be fresh for M and N.
 
 - ((^(x) M) . N) is reduced to (N (^(x) M)).
 
 - ((^ x M) N) is reduced to (M . x)[x:=(^(y) y N)] if x is fresh for N.
-((^ x M) N) is reduced to (M[x:=z] . z)[z:=(^(y) y N)] if x is a free variable of N.
-Here, y must be different from x and be fresh for N, and z must be fresh for M and N.
+((^ x M) N) is reduced to (M[x:=x2] . x2)[x2:=(^(y) y N)] if x is a free variable of N.
+Here, y must be different from x and be fresh for N, and x2 must be fresh for M and N.
 
 ## Hat expressions
 
 Hat expressions are hat terms applied the following conventions to keep the notation uncluttered.
-- (F A1 A2) means ((F A1) A2).
-(F A1 A2 ... An) means ((...((F A1) A2) ...) An).
-- (F A . C) means ((F A) . C).
-(F A1 A2 ... An . C) means (((...((F A1) A2) ...) An) . C).
-- (^(p1 p2) F) means (^(p1)(^(p2) F)).
-(^(p1 p2 ... pm) F) means (^(p1)(^(p2)(...(^(pm) F)...))).
-- (^(p . c) F) means (^(p)(^ c F)).
-(^(p1 p2 ... pm . c) F) means (^(p1)(^(p2)(...(^(pm)(^ c F))...))).
-- (^ c F A1 A2 ... An) means (^ c (F A1 A2 ... An)).
-- (^(p1 p2 ... pm) F A1 A2 ... An) means (^(p1 p2 ... pm)(F A1 A2 ... An)).
-- (^(p1 p2 ... pm . c) F A1 A2 ... An) means (^(p1 p2 ... pm . c)(F A1 A2 ... An)).
+- (M N1 N2) means ((M N1) N2).
+(M N1 N2 ... Nm) means ((...((M N1) N2) ...) Nm).
+- (M N . C) means ((M N) . C).
+(M N1 N2 ... Nm . C) means (((...((M N1) N2) ...) Nm) . C).
+- (^(x y) M) means (^(x)(^(y) M)).
+(^(x1 x2 ... xn) M) means (^(x1)(^(x2)(...(^(xn) M)...))).
+- (^(x . c) M) means (^(x)(^ c M)).
+(^(x1 x2 ... xn . c) M) means (^(x1)(^(x2)(...(^(xn)(^ c M))...))).
+- (^ c M N1 N2 ... Nm) means (^ c (M N1 N2 ... Nm)).
+- (^(x1 x2 ... xn) M N1 N2 ... Nm) means (^(x1 x2 ... xn)(M N1 N2 ... Nm)).
+- (^(x1 x2 ... xn . c) M N1 N2 ... Nm) means (^(x1 x2 ... xn . c)(M N1 N2 ... Nm)).
