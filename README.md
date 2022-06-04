@@ -38,21 +38,25 @@ This is defined so that:
 - (^ x M)[x:=N] = (^ x M)
 - (^(y) M)[x:=N] = (^(y) M[x:=N]) if the variable y is different from x and fresh for N.
 - (^ y M)[x:=N] = (^ y M[x:=N]) if the variable y is different from x and fresh for N.
+- (^(y) M)[x:=N] = (^(z) M[y:=z][x:=N]) if the variable y is different from x and a free variable of N.
+- (^ y M)[x:=N] = (^ z M[y:=z][x:=N]) if the variable y is different from x and a free variable of N.
+Here, the variable z must be fresh for M and N.
 
 ## Reduction
 
 The reduction rules are as follow:
 
 - A function application ((^(x) M) N) is reduced to M[x:=N] if the variable x is fresh for N.
-((^(x) M) N) is reduced to M[x:=y][y:=N] if x is a free variable of N. Here, a variable y is fresh for M and N.
+((^(x) M) N) is reduced to M[x:=y][y:=N] if x is a free variable of N.
+Here, the variable y must be fresh for M and N.
 
 - A function application ((^ x M) N) is reduced to (M . x)[x:=(^(y) y N)] if the variable x is fresh for N.
-Here, a variable y is different from x and is fresh for N.
 ((^ x M) N) is reduced to (M[x:=z] . z)[z:=(^(y) y N)] if x is a free variable of N.
-Here, a variable y is fresh for N, and a variable z is fresh for M and N.
+Here, the variable y must be different from x and fresh for N, and the variable z is fresh for M and N.
 
 - A continuation application ((^ x M) . N) is reduced to (M[x:=N] . N) if the variable x is fresh for N.
-((^ x M) . N) is reduced to (M[x:=y][y:=N] . N) if x is a free variable of N. Here, a variable y is fresh for M and N
+((^ x M) . N) is reduced to (M[x:=y][y:=N] . N) if x is a free variable of N.
+Here, the variable y must be fresh for M and N
 
 - A continuation application ((^(x) M) . N) is reduced to (N (^(x) M)).
 
