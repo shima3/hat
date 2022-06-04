@@ -80,11 +80,8 @@ Hat expressions are hat terms applied the following conventions to keep the nota
 ## Functions
 
 (defineCPS *f* *M*) defines a function named *f* as *M* where *f* is a sequence of characters and *M* is a hat expression.
-For example, the following two definitions are used for the boolean values.
+For example, the following two definitions are used for the boolean values **true** and **false**:
 ```
-(defineCPS true ^(x y . return)
-  return x)
-
-(defineCPS false ^(x y . return)
-  return y)
+(defineCPS true ^(x y . return) return x)
+(defineCPS false ^(x y . return) return y)
 ```
