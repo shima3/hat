@@ -39,32 +39,25 @@ This is defined so that:
 - (^(y) M)[x:=N] = (^(y) M[x:=N]) if the variable y is different from x and fresh for N.
 - (^ y M)[x:=N] = (^ y M[x:=N]) if the variable y is different from x and fresh for N.
 - (^(y) M)[x:=N] = (^(z) M[y:=z][x:=N]) if the variable y is different from x and a free variable of N.
+Here, the variable z must be fresh for M and N.
 - (^ y M)[x:=N] = (^ z M[y:=z][x:=N]) if the variable y is different from x and a free variable of N.
 Here, the variable z must be fresh for M and N.
 
 ## Reduction
 
+Suppose x, y and z are variables, and M and N are hat terms.
 The reduction rules are as follow:
 
-- A function application ((^(x) M) N) is reduced to M[x:=N] if the variable x is fresh for N.
+- ((^(x) M) N) is reduced to M[x:=N] if x is fresh for N.
 ((^(x) M) N) is reduced to M[x:=y][y:=N] if x is a free variable of N.
-Here, the variable y must be fresh for M and N.
+Here, y must be fresh for M and N.
 
-- A function application ((^ x M) N) is reduced to (M . x)[x:=(^(y) y N)] if the variable x is fresh for N.
-((^ x M) N) is reduced to (M[x:=z] . z)[z:=(^(y) y N)] if x is a free variable of N.
-Here, the variable y must be different from x and fresh for N, and the variable z is fresh for M and N.
-
-- A continuation application ((^ x M) . N) is reduced to (M[x:=N] . N) if the variable x is fresh for N.
+- ((^ x M) . N) is reduced to (M[x:=N] . N) if x is fresh for N.
 ((^ x M) . N) is reduced to (M[x:=y][y:=N] . N) if x is a free variable of N.
-Here, the variable y must be fresh for M and N
+Here, y must be fresh for M and N.
 
-- A continuation application ((^(x) M) . N) is reduced to (N (^(x) M)).
+- ((^(x) M) . N) is reduced to (N (^(x) M)).
 
-((^ x M) N) -> ((^ x M) . (^(z) z N))
-
-(^ x (M N))
-(^ x (M . N))
-
-((M . N) . N2) -> (M . (^ c (c N) . N2))
-
-(M . (N1 . N2)) -> ((M N1) N2)
+- ((^ x M) N) is reduced to (M . x)[x:=(^(y) y N)] if x is fresh for N.
+((^ x M) N) is reduced to (M[x:=z] . z)[z:=(^(y) y N)] if x is a free variable of N.
+Here, y must be different from x and be fresh for N, and z must be fresh for M and N.
