@@ -97,22 +97,14 @@ We can define a control statement IfThenElse:
 ```
 `(IfThenElse True T E)` is reduced to T as follows:  
 `(IfThenElse True T E)`  
-&darr;
-`((^(p t e) p t e ^(f) f) True T E)`  
-&darr;
-`((^(t e) True t e ^(f) f) T E)`  
-&darr;
-`((^(t e) True t e ^(f) f) T E)`  
-&darr;
-`(True T E ^(f) f)`  
-&darr;
-`((^(x y . return) return x) T E . (^(f) f))`  
-&darr;
-`((^ return return T) . (^(f) f))`  
-&darr;
-`((^(f) f) T)`  
-&darr;
-`T`  
+&rarr;`((^(p t e) p t e ^(f) f) True T E)`  
+&rarr;`((^(t e) True t e ^(f) f) T E)`  
+&rarr;`((^(t e) True t e ^(f) f) T E)`  
+&rarr;`(True T E ^(f) f)`  
+&rarr;`((^(x y . return) return x) T E . (^(f) f))`  
+&rarr;`((^ return return T) . (^(f) f))`  
+&rarr;`((^(f) f) T)`  
+&rarr;`T`  
 
 We can define logic operators:
 ```
