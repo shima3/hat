@@ -79,6 +79,8 @@ Hat expressions are hat terms applied the following conventions to keep the nota
 
 ## Functions
 
+`(defineCPS *FN* *HEXP*)` defines a function.
+
 ```
 (defineCPS *FN* *HEXP*)
 ```
