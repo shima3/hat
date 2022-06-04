@@ -46,11 +46,21 @@ The reduction rules are as follow:
 - A function application ((^(x) M) N) is reduced to M[x:=N] if the variable x is fresh for N.
 ((^(x) M) N) is reduced to M[x:=y][y:=N] if x is a free variable of N. Here, a variable y is fresh for M and N.
 
+- A function application ((^ x M) N) is reduced to (M . x)[x:=(^(y) y N)] if the variable x is fresh for N.
+Here, a variable y is different from x and is fresh for N.
+((^ x M) N) is reduced to (M[x:=z] . z)[z:=(^(y) y N)] if x is a free variable of N.
+Here, a variable y is fresh for N, and a variable z is fresh for M and N.
+
 - A continuation application ((^ x M) . N) is reduced to (M[x:=N] . N) if the variable x is fresh for N.
 ((^ x M) . N) is reduced to (M[x:=y][y:=N] . N) if x is a free variable of N. Here, a variable y is fresh for M and N
 
-- A function application ((^ x M) N) is reduced to (M . x)[x:=(^(z) z N)] if the variable x is fresh for N. Here, a variable z is different from x and is fresh for N.
-((^ x M) N) is reduced to (M[x:=y] . y)[y:=(^(z) z N)] if x is a free variable of N. Here, a variable y is fresh for M and N, and a variable z is different from y and is fresh for N.
-
 - A continuation application ((^(x) M) . N) is reduced to (N (^(x) M)).
 
+((^ x M) N) -> ((^ x M) . (^(z) z N))
+
+(^ x (M N))
+(^ x (M . N))
+
+((M . N) . N2) -> (M . (^ c (c N) . N2))
+
+(M . (N1 . N2)) -> ((M N1) N2)
