@@ -92,11 +92,13 @@ We can define logic operators:
 (defineCPS Not ^(p) p False True)
 ```
 
-&larr;
-&rarr;
+`(And True False)`
 &darr;
 
-
+<!--
+&larr;
+&rarr;
 $\downarrow$
-
 $\leftarrow$
+-->
+        
