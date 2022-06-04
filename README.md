@@ -61,3 +61,18 @@ Here, y must be fresh for M and N.
 - ((^ x M) N) is reduced to (M . x)[x:=(^(y) y N)] if x is fresh for N.
 ((^ x M) N) is reduced to (M[x:=z] . z)[z:=(^(y) y N)] if x is a free variable of N.
 Here, y must be different from x and be fresh for N, and z must be fresh for M and N.
+
+## Hat expressions
+
+Hat expressions are hat terms applied the following conventions to keep the notation uncluttered.
+- (F A1 A2) means ((F A1) A2).
+(F A1 A2 ... An) means ((...((F A1) A2) ...) An).
+- (F A . C) means ((F A) . C).
+(F A1 A2 ... An . C) means (((...((F A1) A2) ...) An) . C).
+- (^(p1 p2) F) means (^(p1)(^(p2) F)).
+(^(p1 p2 ... pm) F) means (^(p1)(^(p2)(...(^(pm) F)...))).
+- (^(p . c) F) means (^(p)(^ c F)).
+(^(p1 p2 ... pm . c) F) means (^(p1)(^(p2)(...(^(pm)(^ c F))...))).
+- (^ c F A1 A2 ... An) means (^ c (F A1 A2 ... An)).
+- (^(p1 p2 ... pm) F A1 A2 ... An) means (^(p1 p2 ... pm)(F A1 A2 ... An)).
+- (^(p1 p2 ... pm . c) F A1 A2 ... An) means (^(p1 p2 ... pm . c)(F A1 A2 ... An)).
