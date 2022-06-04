@@ -67,24 +67,53 @@ Here, y must be different from x and be fresh for N, and x2 must be fresh for M 
 Hat expressions are hat terms applied the following conventions to keep the notation uncluttered.
 - (M N1 N2) means ((M N1) N2).
 (M N1 N2 ... Nm) means ((...((M N1) N2) ...) Nm).
-- (M N . C) means ((M N) . C).
-(M N1 N2 ... Nm . C) means (((...((M N1) N2) ...) Nm) . C).
+- (M N . K) means ((M N) . K).
+(M N1 N2 ... Nm . K) means (((...((M N1) N2) ...) Nm) . K).
 - (^(x y) M) means (^(x)(^(y) M)).
 (^(x1 x2 ... xn) M) means (^(x1)(^(x2)(...(^(xn) M)...))).
-- (^(x . c) M) means (^(x)(^ c M)).
-(^(x1 x2 ... xn . c) M) means (^(x1)(^(x2)(...(^(xn)(^ c M))...))).
-- (^ c M N1 N2 ... Nm) means (^ c (M N1 N2 ... Nm)).
+- (^(x . k) M) means (^(x)(^ k M)).
+(^(x1 x2 ... xn . k) M) means (^(x1)(^(x2)(...(^(xn)(^ k M))...))).
+- (^ k M N1 N2 ... Nm) means (^ k (M N1 N2 ... Nm)).
 - (^(x1 x2 ... xn) M N1 N2 ... Nm) means (^(x1 x2 ... xn)(M N1 N2 ... Nm)).
-- (^(x1 x2 ... xn . c) M N1 N2 ... Nm) means (^(x1 x2 ... xn . c)(M N1 N2 ... Nm)).
+- (^(x1 x2 ... xn . k) M N1 N2 ... Nm) means (^(x1 x2 ... xn . k)(M N1 N2 ... Nm)).
+- (^ k M N1 N2 ... Nm . K) means (^ k (M N1 N2 ... Nm . K)).
+- (^(x1 x2 ... xn) M N1 N2 ... Nm . K) means (^(x1 x2 ... xn)(M N1 N2 ... Nm . K)).
+- (^(x1 x2 ... xn . k) M N1 N2 ... Nm . K) means (^(x1 x2 ... xn . k)(M N1 N2 ... Nm . K)).
+- (M ^ k N) means (M . (^ k N)).
+- (M ^(x1 x2 ... xn) N) means (M . (^(x1 x2 ... xn) N)).
+- (M ^(x1 x2 ... xn . k) N) means (M . (^(x1 x2 ... xn . k) N)).
 
 ## Functions
 
 (defineCPS *f* *M*) defines a function named *f* as *M* where *f* is a sequence of characters and *M* is a hat expression.
-For example, the following two definitions are used for the boolean values:
+For example, the following two definitions are used for the boolean values True and False:
 ```
 (defineCPS True ^(x y . return) return x)
 (defineCPS False ^(x y . return) return y)
 ```
+We can define a control statement IfThenElse:
+```
+(defineCPS IfThenElse ^(p t e) p t e ^(f) f)
+```
+`(IfThenElse True T E)` is reduced to T as follows:  
+`(IfThenElse True T E)`  
+&darr;
+`((^(p t e) p t e ^(f) f) True T E)`  
+&darr;
+`((^(t e) True t e ^(f) f) T E)`  
+&darr;
+`((^(t e) True t e ^(f) f) T E)`  
+&darr;
+`(True T E ^(f) f)`  
+&darr;
+`((^(x y . return) return x) T E . (^(f) f))`  
+&darr;
+`((^ return return T) . (^(f) f))`  
+&darr;
+`((^(f) f) T)`  
+&darr;
+`T`  
+
 We can define logic operators:
 ```
 (defineCPS And ^(p q) p q p)
@@ -92,8 +121,19 @@ We can define logic operators:
 (defineCPS Not ^(p) p False True)
 ```
 
-`(And True False)`
+`(And True False)`  
 &darr;
+`((^(p q) p q p) True False)`  
+&darr;
+`((^(q) True q True) False)`  
+&darr;
+`(True False True)`  
+&darr;
+`((^(x y . return) return x) False True)`  
+&darr;
+`((^(y . return) return False) True)`  
+&darr;
+`(^ return return False)`  
 
 <!--
 &larr;
