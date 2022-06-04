@@ -94,7 +94,9 @@ We can define logic operators:
 
 &larr;
 &rarr;
+&darr;
 
-->
+
+$\downarrow$
 
 $\leftarrow$
