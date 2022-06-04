@@ -7,7 +7,7 @@
 
 **Hat terms** are variable names, function applications, continuation applications, function abstraction, or continuation abstractions.
 They are defined so that:
-- A **variable name** is a string that must starts with a letter (A-Z, a-z) or the dollar sign ($), and can contain letters and digits (0-9), e.g. x, M, xy, N2, $sum, or $12.
+- A **variable name** is a sequence of characters which must starts with a letter (a, b, ..., z) or the dollar sign ($), and can contain letters and digits (0, 1, ..., 9), e.g. x, xy, x2, $sum, $12.
 - (M N) is a **function application** if M and N are hat terms.
 - (M . N) is a **continuation application** if M and N are hat terms.
 - (^(x) M) is a **function abstraction** if x is a variable name and M is a hat term.
@@ -79,7 +79,7 @@ Hat expressions are hat terms applied the following conventions to keep the nota
 
 ## Functions
 
-(defineCPS *f* *M*) defines a function named *f* as *M*.
+(defineCPS *f* *M*) defines a function named *f* as *M* where *f* is a string .
 
 ```
 (defineCPS *FN* *HEXP*)
