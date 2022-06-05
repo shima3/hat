@@ -66,8 +66,8 @@ $(M N_1 N_2\cdots N_m)$ means $((\cdots((M N_1) N_2)\cdots) N_m)$.
 - $(M N . K)$ means $((M N . K)$.
 $(M N_1 N_2\cdots N_m . K)$ means $(((\cdots((M N_1) N_2)\cdots) N_m) . K)$.
 - (^($x y$) $M$) means (^($x$)(^($y$) $M$)).
-(^($x_1 x_2 \cdots$ $x_n$) $M$) means (^($x_1$)(^($x_2$)($\cdots$(^($x_n$) $M$)$\cdots$))).
-- (^($x$ . $k$) $M$) means (^($x$)(^ $k$ $M$)).
+(^($x_1 x_2\cdots x_n$) $M$) means (^($x_1$)(^($x_2$)($\cdots$(^($x_n$) $M$)$\cdots$))).
+- (^($x . k$) $M$) means (^($x$)(^ $k$ $M$)).
 (^($x_1 x_2 \... xn . k) M) means (^(x1)(^(x2)(...(^(xn)(^ k M))...))).
 - (^ k M N1 N2 ... Nm) means (^ k (M N1 N2 ... Nm)).
 - (^(x1 x2 ... xn) M N1 N2 ... Nm) means (^(x1 x2 ... xn)(M N1 N2 ... Nm)).
