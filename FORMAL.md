@@ -12,16 +12,16 @@ They are defined so that:
 
 ## Bound variables and free variables
 
-A variable x of a function abstraction (^(x) M) or a continuation abstraction (^ x M) is a bound variable.
+A variable x of a function abstraction (^($x$) $M$) or a continuation abstraction (^ $x\ M$) is a bound variable.
 Variables that are contained in a hat term and are not bound variables, are free variables.
-FV(M) is a set of free variables of M if M is a hat term.
+FV($M$) is a set of free variables of $M$ if $M$ is a hat term.
 This is defined so that:
-- FV(x) is a set that contains just x.
-- FV(M N) and FV(M . N) are a union of FV(M) and FV(N) if M and N are hat terms.
-- FV(^(x) M) and FV(^ x M) are a set removed x from FV(M) if x is a variable and M is a hat term.
+- FV($x$) is a set that contains just $x$.
+- FV($M N$) and FV($M . N$) are a union of FV($M$) and FV($N$) if $M$ and $N$ are hat terms.
+- FV(^($x$) $M$) and FV(^ $x\ M$) are a set removed $x$ from FV($M$) if $x$ is a variable and $M$ is a hat term.
 
-Variables except free variable of M are said to be **fresh** for M if M is a hat term.
-That is, bound variables of M and variables not contained in M are fresh for M.
+Variables except free variable of $M$ are said to be **fresh** for $M$ if $M$ is a hat term.
+That is, bound variables of $M$ and variables not contained in $M$ are fresh for $M$.
 
 ## Substitution
 
