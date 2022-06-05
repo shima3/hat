@@ -82,7 +82,6 @@ $(M N_1 N_2 \cdots N_m . K)$ means $(((\cdots((M N_1) N_2)\cdots) N_m) . K)$.
 ## Functions
 
 (defineCPS $f\ M$) defines a function named $f$ as $M$ where $f$ is a sequence of characters and $M$ is a hat expression.
-$(f \cdots)$ &rArr; $(M \cdots)$ means that $M$ is substituted for $f$ in any function application ($f \cdots$) if $f$ is defined as $M$.
 
 For example, the following two definitions are used for the boolean values True and False:
 ```
@@ -93,13 +92,14 @@ We can define a control statement IfThenElse:
 ```
 (defineCPS IfThenElse ^(p x y) p x y ^(f) f)
 ```
-
-(IfThenElse True $X\ Y$) is reduced to $X$ as follows:  
+$M$ can be substituted for $f$ in hat expressions if $f$ is defined as $M$.
+$(f \cdots)$ &rArr; $(M \cdots)$ means that $M$ is substituted for $f$ in the function application.
+For example, (IfThenElse True $X\ Y$) is reduced to $X$ as follows:  
 (IfThenElse True $X\ Y$)  
-&rarr;((^(p x y) p x y ^(f) f) True $X\ Y$)  
+&rArr;((^(p x y) p x y ^(f) f) True $X\ Y$)  
 &rarr;((^(x y) True x y ^(f) f) $X\ Y$)  
 &rarr;(True $X\ Y$ ^(f) f)  
-&rarr;((^(x y . return) return x) $X\ Y$ . (^(f) f))  
+&rArr;((^(x y . return) return x) $X\ Y$ . (^(f) f))  
 &rarr;((^ return return $X$) . (^(f) f))  
 &rarr;((^(f) f) $X$)  
 &rarr;$X$
