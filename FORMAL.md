@@ -109,20 +109,19 @@ We can define logic operators:
 (defineCPS Not ^(p) p False True)
 ```
 
-(IfThenElse (And True False) *T* *E*) is reduced to *E* as follows:  
-(IfThenElse (And True False) *T* *E*)  
-&rarr;((^(p t e) p t e ^(f) f) (And True False) *T* *E*)  
-&rarr;((And True False) *T* *E* ^(f) f)  
-&rarr;(((^(p q) p q p) True False) *T* *E* ^(f) f)  
-&rarr;((True False True) *T* *E* ^(f) f)  
-&rarr;(((^(x y . return) return x) False True) *T* *E* ^(f) f)  
-&rarr;((^ return return False) . (^(*t*) *t* *T* *E* ^(f) f))  
-&rarr;((^(*t*) *t* *T* *E* ^(f) f) False)  
-&rarr;(False *T* *E* ^(f) f)  
-&rarr;((^(x y . return) return y) *T* *E* ^(f) f)  
-&rarr;((^ return return *E*) . (^(f) f))  
-&rarr;((^(f) f) *E*)  
-&rarr;*E*  
+(IfThenElse (And True False) *X* *Y*) is reduced to *Y* as follows:  
+(IfThenElse (And True False) *X* *Y*)  
+&rarr;((^(p x y) p x y ^(f) f) (And True False) *X* *Y*)  
+&rarr;((And True False) *X* *Y* ^(f) f)  
+&rarr;(((^(p q) p q p) True False) *X* *Y* ^(f) f)  
+&rarr;((True False True) *X* *Y* ^(f) f)  
+&rarr;(((^(x y . return) return x) False True) *X* *Y* ^(f) f)  
+&rarr;((^ return return False) *X* *Y* ^(f) f)  
+&rarr;(False *X* *Y* ^(f) f)  
+&rarr;((^(x y . return) return y) *X* *Y* ^(f) f)  
+&rarr;((^ return return *Y*) . (^(f) f))  
+&rarr;((^(f) f) *Y*)  
+&rarr;*Y*  
 
 <!--
 &larr;
