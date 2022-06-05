@@ -109,10 +109,10 @@ We can define logic operators:
 (defineCPS Not ^(p) p False True)
 ```
 
-(IfThenElse (And True False) *X* *Y*) is reduced to *Y* as follows:  
-(IfThenElse (And True False) *X* *Y*)  
-&rarr;((^(p x y) p x y ^(f) f) (And True False) *X* *Y*)  
-&rarr;((And True False) *X* *Y* ^(f) f)  
+(IfThenElse (And True False) $X\ Y$) is reduced to $Y$ as follows:  
+(IfThenElse (And True False) $X\ Y$)  
+&rarr;((^(p x y) p x y ^(f) f) (And True False) $X\ Y$)  
+&rarr;((And True False) $X\ Y$ ^(f) f)  
 &rarr;(((^(p q) p q p) True False) *X* *Y* ^(f) f)  
 &rarr;((True False True) *X* *Y* ^(f) f)  
 &rarr;(((^(x y . return) return x) False True) *X* *Y* ^(f) f)  
