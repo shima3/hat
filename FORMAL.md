@@ -81,7 +81,7 @@ $(M N_1 N_2 \cdots N_m . K)$ means $(((\cdots((M N_1) N_2)\cdots) N_m) . K)$.
 
 ## Functions
 
-(defineCPS *f* *M*) defines a function named *f* as *M* where *f* is a sequence of characters and *M* is a hat expression.
+(defineCPS $f M$) defines a function named $f$ as $M$ where $f$ is a sequence of characters and $M$ is a hat expression.
 For example, the following two definitions are used for the boolean values True and False:
 ```
 (defineCPS True ^(x y . return) return x)
@@ -92,8 +92,8 @@ We can define a control statement IfThenElse:
 (defineCPS IfThenElse ^(p x y) p x y ^(f) f)
 ```
 
-(IfThenElse True *X* *Y*) is reduced to *X* as follows:  
-(IfThenElse True *X* *Y*)  
+(IfThenElse True $X$ $Y$) is reduced to *X* as follows:  
+(IfThenElse True $X$ $Y$)  
 &rarr;((^(p x y) p x y ^(f) f) True *X* *Y*)  
 &rarr;((^(x y) True x y ^(f) f) *X* *Y*)  
 &rarr;(True *X* *Y* ^(f) f)  
