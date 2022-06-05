@@ -82,8 +82,7 @@ $(M N_1 N_2 \cdots N_m . K)$ means $(((\cdots((M N_1) N_2)\cdots) N_m) . K)$.
 ## Functions
 
 (defineCPS $f\ M$) defines a function named $f$ as $M$ where $f$ is a sequence of characters and $M$ is a hat expression.
-$M$ is substituted for $f$.
-$N$ &rArr; $N[f\leftarrow M]$
+$(f \cdots)$ &rArr; $(M \cdots]$ means that $M$ is substituted for $f$.
 
 For example, the following two definitions are used for the boolean values True and False:
 ```
