@@ -45,22 +45,18 @@ Here, the variable y2 must be fresh for M and N.
 Suppose *x*, *y* and *z* are variables, and *M*, *N*, *M2* and *N2* are hat terms.
 *M* &rarr; *N* means that *M* is reduced to *N*.
 The reduction rules are as follow:
-
 - ((^(*x*) *M*) *N*) &rarr; *M*[*x*:=*N*] if *x* is fresh for *N*.
 ((^(*x*) *M*) *N*) &rarr; *M*[*x*:=*x2*][*x2*:=*N*] if *x* is a free variable of *N*.
 Here, *x2* must be fresh for *M* and *N*.
-
 - ((^ *x* *M*) . *N*) &rarr; (*M*[*x*:=*N*] . *N*) if *x* is fresh for *N*.
 ((^ *x* *M*) . *N*) &rarr; (*M*[*x*:=*x2*][*x2*:=*N*] . *N*) if *x* is a free variable of *N*.
 Here, *x2* must be fresh for *M* and *N*.
-
-- ((^(x) M) . N) &rarr; (N (^(x) M)).
-
-- ((^ x M) N) &rarr; (M . x)[x:=(^(y) y N)] if x is fresh for N.
-((^ x M) N) &rarr; (M[x:=x2] . x2)[x2:=(^(y) y N)] if x is a free variable of N.
-Here, y must be different from x and be fresh for N, and x2 must be fresh for M and N.
-
-- ((M N) N2) &rarr; (M2 N2) if (M N) &rarr; M2.
+- ((^(*x*) *M*) . *N*) &rarr; (*N* (^(*x*) *M*)).
+- ((^ *x* *M*) *N*) &rarr; (*M* . *x*)[*x*:=(^(*y*) *y* *N*)] if *x* is fresh for *N*.
+((^ *x* *M*) *N*) &rarr; (*M*[*x*:=*x2*] . *x2*)[*x2*:=(^(*y*) *y* *N*)] if *x* is a free variable of *N*.
+Here, *y* must be different from *x* and be fresh for *N*, and *x2* must be fresh for *M* and *N*.
+- ((*M* *N*) *N2*) &rarr; (*M2* *N2*) if (*M* *N*) &rarr; *M2*.
+- ((*M* . *N*) . *N2*) &rarr; (*M2* . *N2*) if (*M* . *N*) &rarr; *M2*.
 
 ## Hat expressions
 
