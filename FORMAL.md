@@ -42,10 +42,11 @@ Here, the variable y2 must be fresh for M and N.
 
 ## Reduction
 
-Suppose x, y and z are variables, and M and N are hat terms.
+Suppose *x*, *y* and *z* are variables, and *M*, *N*, and *N2* are hat terms.
+*M* &rarr; *N* means that *M* is reduced to *N*.
 The reduction rules are as follow:
 
-- ((^(x) M) N) is reduced to M[x:=N] if x is fresh for N.
+- ((^(x) M) N) &rarr; M[x:=N] if x is fresh for N.
 ((^(x) M) N) is reduced to M[x:=x2][x2:=N] if x is a free variable of N.
 Here, x2 must be fresh for M and N.
 
@@ -58,6 +59,8 @@ Here, x2 must be fresh for M and N.
 - ((^ x M) N) is reduced to (M . x)[x:=(^(y) y N)] if x is fresh for N.
 ((^ x M) N) is reduced to (M[x:=x2] . x2)[x2:=(^(y) y N)] if x is a free variable of N.
 Here, y must be different from x and be fresh for N, and x2 must be fresh for M and N.
+
+- ((M N1) N2) 
 
 ## Hat expressions
 
