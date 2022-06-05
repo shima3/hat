@@ -62,15 +62,15 @@ Here, $t$ must be different from $x$ and be fresh for $N$, and $x'$ must be fres
 
 Hat expressions are hat terms applied the following conventions to keep the notation uncluttered.
 - $(M N_1 N_2)$ means $((M N_1) N_2)$.
-$(M N_1 N_2\cdots N_m)$ means $((\cdots((M N_1) N_2)\cdots) N_m)$.
+$(M N_1 N_2 \cdots N_m)$ means $((\cdots((M N_1) N_2)\cdots) N_m)$.
 - $(M N . K)$ means $((M N . K)$.
-$(M N_1 N_2\cdots N_m . K)$ means $(((\cdots((M N_1) N_2)\cdots) N_m) . K)$.
+$(M N_1 N_2 \cdots N_m . K)$ means $(((\cdots((M N_1) N_2)\cdots) N_m) . K)$.
 - (^($x y$) $M$) means (^($x$)(^($y$) $M$)).
-(^($x_1 x_2\cdots x_n$) $M$) means (^($x_1$)(^($x_2$)($\cdots$(^($x_n$) $M$)$\cdots$))).
+(^($x_1 x_2 \cdots x_n$) $M$) means (^($x_1$)(^($x_2$)($\cdots$(^($x_n$) $M$)$\cdots$))).
 - (^($x$ . $k$) $M$) means (^($x$)(^ $k$ $M$)).
-(^($x_1 x_2\cdots x_n . k$) $M$) means (^($x_1$)(^($x_2$)($\cdots$(^($x_n$)(^ $k\ M$))$\cdots$))).
-- (^ $k\ M N_1 N_2\cdots N_m$) means (^ $k (M N_1 N_2\cdots N_m$)).
-- (^(x1 x2 ... xn) M N1 N2 ... Nm) means (^(x1 x2 ... xn)(M N1 N2 ... Nm)).
+(^($x_1 x_2 \cdots x_n . k$) $M$) means (^($x_1$)(^($x_2$)($\cdots$(^($x_n$)(^ $k\ M$))$\cdots$))).
+- (^ $k\ M N_1 N_2 \cdots N_m$) means (^ $k (M N_1 N_2 \cdots N_m$)).
+- (^($x_1 x_2\cdots x_n$) $M N_1 N_2 \cdots N_m$) means (^(x1 x2 ... xn)(M N1 N2 ... Nm)).
 - (^(x1 x2 ... xn . k) M N1 N2 ... Nm) means (^(x1 x2 ... xn . k)(M N1 N2 ... Nm)).
 - (^ k M N1 N2 ... Nm . K) means (^ k (M N1 N2 ... Nm . K)).
 - (^(x1 x2 ... xn) M N1 N2 ... Nm . K) means (^(x1 x2 ... xn)(M N1 N2 ... Nm . K)).
