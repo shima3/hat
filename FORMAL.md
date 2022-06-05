@@ -13,10 +13,12 @@ They are defined so that:
 - (^($x$) $M$) is a **function abstraction** if $x$ is a variable name and $M$ is a hat term.
 - (^ $x\ M$) is a **continuation abstraction** if $x$ is a variable name and $M$ is a hat term.
 
-continuation application and continuation abstraction are
-
-Lisp-family programming language.
-S-expression
+Continuation application and continuation abstraction are similar to function application and function abstraction, respectively.
+But, they are distinguished for continuation passing style.
+Continuation application passes a continuation to a function.
+Continuation abstraction is a function that receives a continuatoin.
+Function application is same with that of lambda calculus.
+Function abstraction (^($x$) $M$) is same with lambda abstraction $\lambda x. M$.
 
 ## Bound variables and free variables
 
