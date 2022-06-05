@@ -121,9 +121,9 @@ We can define logic operators:
 &rarr;((^($t$) $t\ X\ Y$ ^(f) f) False)  
 &rarr;(False $X\ Y$ ^(f) f)  
 &rarr;((^(x y . return) return y) $X\ Y$ ^(f) f)  
-&rarr;((^ return return *Y*) . (^(f) f))  
-&rarr;((^(f) f) *Y*)  
-&rarr;*Y*  
+&rarr;((^ return return $Y$) . (^(f) f))  
+&rarr;((^(f) f) $Y$)  
+&rarr;$Y$  
 
 <!--
 &larr;
