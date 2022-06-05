@@ -96,13 +96,13 @@ We can define a control statement IfThenElse:
 (IfThenElse True *T* *E*) is reduced to *T* as follows:  
 (IfThenElse True *T* *E*)  
 &rarr;((^(p t e) p t e ^(f) f) True *T* *E*)  
-&rarr;((^(t e) True t e ^(f) f) *T *E*)  
 &rarr;((^(t e) True t e ^(f) f) *T* *E*)  
-&rarr;(True T E ^(f) f)  
-&rarr;((^(x y . return) return x) T E . (^(f) f))  
-&rarr;((^ return return T) . (^(f) f))  
-&rarr;((^(f) f) T)  
-&rarr;T  
+&rarr;((^(t e) True t e ^(f) f) *T* *E*)  
+&rarr;(True *T* *E* ^(f) f)  
+&rarr;((^(x y . return) return x) *T* *E* . (^(f) f))  
+&rarr;((^ return return *T*) . (^(f) f))  
+&rarr;((^(f) f) *T*)  
+&rarr;*T*  
 
 We can define logic operators:
 ```
@@ -111,21 +111,20 @@ We can define logic operators:
 (defineCPS Not ^(p) p False True)
 ```
 
-`IfThenElse (And True False) T E` is reduced to ``
-
-`(And True False)`  
-&darr;
-`((^(p q) p q p) True False)`  
-&darr;
-`((^(q) True q True) False)`  
-&darr;
-`(True False True)`  
-&darr;
-`((^(x y . return) return x) False True)`  
-&darr;
-`((^(y . return) return False) True)`  
-&darr;
-`(^ return return False)`  
+(IfThenElse (And True False) *T* *E*) is reduced to *E*  
+(IfThenElse (And True False) *T* *E*)  
+&rarr;((^(p t e) p t e ^(f) f) (And True False) *T* *E*)  
+&rarr;((And True False) *T* *E* ^(f) f)  
+&rarr;(((^(p q) p q p) True False) *T* *E* ^(f) f)  
+&rarr;((True False True) *T* *E* ^(f) f)  
+&rarr;(((^(x y . return) return x) False True) *T* *E* ^(f) f)  
+&rarr;((^ return return False) . (^(*t*) *t* *T* *E* ^(f) f))  
+&rarr;((^(*t*) *t* *T* *E* ^(f) f) False)  
+&rarr;(False *T* *E* ^(f) f)  
+&rarr;((^(x y . return) return y) *T* *E* ^(f) f)  
+&rarr;((^ return return *E*) . (^(f) f))  
+&rarr;((^(f) f) *E*)  
+&rarr;*E*  
 
 <!--
 &larr;
