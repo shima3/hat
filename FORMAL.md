@@ -64,7 +64,7 @@ Hat expressions are hat terms applied the following conventions to keep the nota
 - ($M$ $N_1$ $N_2$) means (($M$ $N_1$) $N_2$).
 ($M$ $N_1$ $N_2$ ... $N_m$) means ((...(($M$ $N_1$) $N_2$) ...) $N_m$).
 - ($M$ $N$ . $K$) means (($M$ $N$) . $K$).
-$(M N_1 N_2\cdots N_m . K)$ means $(((\cdots((M N_1) N_2)\cdots) N_m) . K)$.
+$(M\ N_1\ N_2\ \cdots\ N_m\ .\ K)$ means $(((\cdots((M\ N_1)\ N_2)\cdots)\ N_m)\ .\ K)$.
 - (^(x y) M) means (^(x)(^(y) M)).
 (^(x1 x2 ... xn) M) means (^(x1)(^(x2)(...(^(xn) M)...))).
 - (^(x . k) M) means (^(x)(^ k M)).
