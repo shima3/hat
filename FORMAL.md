@@ -90,19 +90,18 @@ For example, the following two definitions are used for the boolean values True 
 ```
 We can define a control statement IfThenElse:
 ```
-(defineCPS IfThenElse ^(p t e) p t e ^(f) f)
+(defineCPS IfThenElse ^(p x y) p x y ^(f) f)
 ```
 
-(IfThenElse True *T* *E*) is reduced to *T* as follows:  
-(IfThenElse True *T* *E*)  
-&rarr;((^(p t e) p t e ^(f) f) True *T* *E*)  
-&rarr;((^(t e) True t e ^(f) f) *T* *E*)  
-&rarr;((^(t e) True t e ^(f) f) *T* *E*)  
-&rarr;(True *T* *E* ^(f) f)  
-&rarr;((^(x y . return) return x) *T* *E* . (^(f) f))  
-&rarr;((^ return return *T*) . (^(f) f))  
-&rarr;((^(f) f) *T*)  
-&rarr;*T*  
+(IfThenElse True *X* *Y*) is reduced to *X* as follows:  
+(IfThenElse True *X* *Y*)  
+&rarr;((^(p x y) p x y ^(f) f) True *X* *Y*)  
+&rarr;((^(x y) True x y ^(f) f) *X* *Y*)  
+&rarr;(True *X* *Y* ^(f) f)  
+&rarr;((^(x y . return) return x) *X* *Y* . (^(f) f))  
+&rarr;((^ return return *X*) . (^(f) f))  
+&rarr;((^(f) f) *X*)  
+&rarr;*X*  
 
 We can define logic operators:
 ```
@@ -111,7 +110,7 @@ We can define logic operators:
 (defineCPS Not ^(p) p False True)
 ```
 
-(IfThenElse (And True False) *T* *E*) is reduced to *E*  
+(IfThenElse (And True False) *T* *E*) is reduced to *E* as follows:  
 (IfThenElse (And True False) *T* *E*)  
 &rarr;((^(p t e) p t e ^(f) f) (And True False) *T* *E*)  
 &rarr;((And True False) *T* *E* ^(f) f)  
