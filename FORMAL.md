@@ -28,7 +28,7 @@ That is, bound variables of $M$ and variables not contained in $M$ are fresh for
 The notation $M[x\leftarrow N]$ indicates substitution of $N$ for $x$ in $M$ if $M$ and $N$ are hat terms and $x$ is a variable.
 This is defined so that:
 - $x[x\leftarrow N] = N$
-- y[x:=N] = y if y is a variable different from x.
+- $y[x\leftarrow N] = y$ if $y$ is a variable different from $x$.
 - (M1 M2)[x:=N] = (M1[x:=N] M2[x:=N])
 - (M1 . M2)[x:=N] = (M1[x:=N] . M2[x:=N])
 - (^(x) M)[x:=N] = (^(x) M)
