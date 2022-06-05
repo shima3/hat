@@ -42,21 +42,21 @@ Here, the variable y2 must be fresh for M and N.
 
 ## Reduction
 
-Suppose $x$, *x'* and *t* are variables, and *M*, *N*, $M_2$ and *N2* are hat terms.
-*M* &rarr; *N* means that *M* is reduced to *N*.
+Suppose $x$, $x'$ and $t$ are variables, and $M$, $N$, $M_2$ and $N_2$ are hat terms.
+$M$ &rarr; $N$ means that $M$ is reduced to $N$.
 The reduction rules are as follow:
-- ((^(*x*) *M*) *N*) &rarr; *M*[*x*:=*N*] if *x* is fresh for *N*.
-((^(*x*) *M*) *N*) &rarr; *M*[*x*:=*x2*][*x2*:=*N*] if *x* is a free variable of *N*.
-Here, *x2* must be fresh for *M* and *N*.
-- ((^ *x* *M*) . *N*) &rarr; (*M*[*x*:=*N*] . *N*) if *x* is fresh for *N*.
-((^ *x* *M*) . *N*) &rarr; (*M*[*x*:=*x2*][*x2*:=*N*] . *N*) if *x* is a free variable of *N*.
-Here, *x2* must be fresh for *M* and *N*.
-- ((^(*x*) *M*) . *N*) &rarr; (*N* (^(*x*) *M*)).
-- ((^ *x* *M*) *N*) &rarr; (*M* . *x*)[*x*:=(^(*t*) *t* *N*)] if *x* is fresh for *N*.
-((^ *x* *M*) *N*) &rarr; (*M*[*x*:=*x2*] . *x2*)[*x2*:=(^(*t*) *t* *N*)] if *x* is a free variable of *N*.
-Here, *t* must be different from *x* and be fresh for *N*, and *x2* must be fresh for *M* and *N*.
-- ((*M* *N*) *N2*) &rarr; (*M2* *N2*) if (*M* *N*) &rarr; *M2*.
-- ((*M* . *N*) . *N2*) &rarr; (*M2* . *N2*) if (*M* . *N*) &rarr; *M2*.
+- ((^($x$) $M$) $N$) &rarr; $M$[$x$:=$N$] if $x$ is fresh for $N$.
+((^($x$) $M$) $N$) &rarr; $M$[$x$:=$x'$][$x'$:=$N$] if $x$ is a free variable of $N$.
+Here, $x'$ must be fresh for $M$ and $N$.
+- ((^ $x$ $M$) . $N$) &rarr; ($M$[$x$:=$N$] . $N$) if $x$ is fresh for $N$.
+((^ $x$ $M$) . $N$) &rarr; ($M$[$x$:=$x'$][$x'$:=$N$] . $N$) if $x$ is a free variable of $N$.
+Here, $x'$ must be fresh for $M$ and $N$.
+- ((^($x$) $M$) . $N$) &rarr; ($N$ (^($x$) $M$)).
+- ((^ $x$ $M$) $N$) &rarr; ($M$ . $x$)[$x$:=(^($t$) $t$ $N$)] if $x$ is fresh for $N$.
+((^ $x$ $M$) $N$) &rarr; ($M$[$x$:=$x'$] . $x'$)[$x'$:=(^($t$) $t$ $N$)] if $x$ is a free variable of $N$.
+Here, $t$ must be different from $x$ and be fresh for $N$, and $x'$ must be fresh for $M$ and $N$.
+- (($M$ $N$) $N_2$) &rarr; ($M_2$ $N_2$) if ($M$ $N$) &rarr; $M_2$.
+- (($M$ . $N$) . $N_2$) &rarr; ($M_2$ . $N_2$) if ($M$ . $N$) &rarr; $M_2$.
 
 ## Hat expressions
 
