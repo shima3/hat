@@ -1,3 +1,4 @@
+# Formal specification of the Hat programming language
 
 ## Hat terms
 
@@ -91,16 +92,17 @@ We can define a control statement IfThenElse:
 ```
 (defineCPS IfThenElse ^(p t e) p t e ^(f) f)
 ```
-`(IfThenElse True T E)` is reduced to T as follows:  
-`(IfThenElse True T E)`  
-&rarr;`((^(p t e) p t e ^(f) f) True T E)`  
-&rarr;`((^(t e) True t e ^(f) f) T E)`  
-&rarr;`((^(t e) True t e ^(f) f) T E)`  
-&rarr;`(True T E ^(f) f)`  
-&rarr;`((^(x y . return) return x) T E . (^(f) f))`  
-&rarr;`((^ return return T) . (^(f) f))`  
-&rarr;`((^(f) f) T)`  
-&rarr;`T`  
+
+(IfThenElse True *T* *E*) is reduced to *T* as follows:  
+(IfThenElse True *T* *E*)  
+&rarr;((^(p t e) p t e ^(f) f) True *T* *E*)  
+&rarr;((^(t e) True t e ^(f) f) *T *E*)  
+&rarr;((^(t e) True t e ^(f) f) *T* *E*)  
+&rarr;(True T E ^(f) f)  
+&rarr;((^(x y . return) return x) T E . (^(f) f))  
+&rarr;((^ return return T) . (^(f) f))  
+&rarr;((^(f) f) T)  
+&rarr;T  
 
 We can define logic operators:
 ```
@@ -108,6 +110,8 @@ We can define logic operators:
 (defineCPS Or ^(p q) p p q)
 (defineCPS Not ^(p) p False True)
 ```
+
+`IfThenElse (And True False) T E` is reduced to ``
 
 `(And True False)`  
 &darr;
