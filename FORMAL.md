@@ -14,7 +14,7 @@ They are defined so that:
 - (^ $x\ M$) is a **continuation abstraction** if $x$ is a variable name and $M$ is a hat term.
 
 Continuation application and continuation abstraction are similar to function application and function abstraction, respectively.
-But, they are distinguished for continuation passing style.
+But, they are distinguished in order to describe functions in continuation passing style.
 Continuation application passes a continuation to a function.
 Continuation abstraction is a function that receives a continuatoin.
 Function application is same with that of lambda calculus.
@@ -134,6 +134,14 @@ For example, (IfThenElse (And True False) $X\ Y$) is reduced to $Y$ as follows:
 &rarr;((^ return return $Y$) . (^(f) f))  
 &rarr;((^(f) f) $Y$)  
 &rarr;$Y$  
+
+## Recursion
+
+A fixed-point combinator is defined recursively as follows:
+```
+(defineCPS Fix ^(f) f (Fix f))
+```
+
 
 <!--
 &larr;
