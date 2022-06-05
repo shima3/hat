@@ -42,7 +42,7 @@ Here, the variable y2 must be fresh for M and N.
 
 ## Reduction
 
-Suppose *x*, *x'* and *t* are variables, and *M*, *N*, $M_2$ and *N2* are hat terms.
+Suppose $x$, *x'* and *t* are variables, and *M*, *N*, $M_2$ and *N2* are hat terms.
 *M* &rarr; *N* means that *M* is reduced to *N*.
 The reduction rules are as follow:
 - ((^(*x*) *M*) *N*) &rarr; *M*[*x*:=*N*] if *x* is fresh for *N*.
