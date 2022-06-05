@@ -74,7 +74,7 @@ $(M N_1 N_2 \cdots N_m . K)$ means $(((\cdots((M N_1) N_2)\cdots) N_m) . K)$.
 - (^($x_1 x_2 \cdots x_n . k$) $M N_1 N_2 \cdots N_m$) means (^($x_1 x_2 \cdots x_n . k$)($M N_1 N_2 \cdots N_m$)).
 - (^ $k M N_1 N_2 \cdots N_m . K$) means (^ $k (M N_1 N_2 \cdots N_m . K$)).
 - (^($x_1 x_2 \cdots x_n$) $M N_1 N_2 \cdots N_m . K$) means (^($x_1 x_2 \cdots x_n$)($M N_1 N_2 \cdots N_m . K$)).
-- (^(x1 x2 ... xn . k) M N1 N2 ... Nm . K) means (^(x1 x2 ... xn . k)(M N1 N2 ... Nm . K)).
+- (^($x_1 x_2 \cdots x_n . k$) $M N_1 N_2 \cdots N_m . K$) means (^($x_1 x_2 \cdots x_n . k$)($M N_1 N_2 \cdots N_m . K$)).
 - (M ^ k N) means (M . (^ k N)).
 - (M ^(x1 x2 ... xn) N) means (M . (^(x1 x2 ... xn) N)).
 - (M ^(x1 x2 ... xn . k) N) means (M . (^(x1 x2 ... xn . k) N)).
