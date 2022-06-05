@@ -1,4 +1,7 @@
-# Formal specification of the Hat programming language
+# Formal specification of the hat programming language
+
+The hat programming language is based on lambda calculus in continuation passing style.
+This page describes a specification of the language and differences from lambda calculus.
 
 ## Hat terms
 
@@ -9,6 +12,11 @@ They are defined so that:
 - ($M\ .\ N$) is a **continuation application** if $M$ and $N$ are hat terms.
 - (^($x$) $M$) is a **function abstraction** if $x$ is a variable name and $M$ is a hat term.
 - (^ $x\ M$) is a **continuation abstraction** if $x$ is a variable name and $M$ is a hat term.
+
+continuation application and continuation abstraction are
+
+Lisp-family programming language.
+S-expression
 
 ## Bound variables and free variables
 
