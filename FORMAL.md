@@ -61,8 +61,8 @@ Here, $t$ must be different from $x$ and be fresh for $N$, and $x'$ must be fres
 ## Hat expressions
 
 Hat expressions are hat terms applied the following conventions to keep the notation uncluttered.
-- (M N1 N2) means ((M N1) N2).
-(M N1 N2 ... Nm) means ((...((M N1) N2) ...) Nm).
+- ($M$ $N_1$ $N_2$) means (($M$ $N_1$) $N_2$).
+($M$ $N_1$ $N_2$ ... $N_m$) means ((...(($M$ $N_1$) $N_2$) ...) $N_m$).
 - (M N . K) means ((M N) . K).
 (M N1 N2 ... Nm . K) means (((...((M N1) N2) ...) Nm) . K).
 - (^(x y) M) means (^(x)(^(y) M)).
