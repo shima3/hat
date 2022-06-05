@@ -31,7 +31,7 @@ This is defined so that:
 - $y[x\leftarrow N] = y$ if $y$ is a variable different from $x$.
 - $(M_1\ M_2)[x\leftarrow N] = (M_1[x\leftarrow N]\ M_2[x\leftarrow N])$
 - $(M_1\ .\ M_2)[x\leftarrow N] = (M_1[x\leftarrow N] . M_2[x\leftarrow N])$
-- (^(x) M)[x:=N] = (^(x) M)
+- (^($x$) $M$)[$x\leftarrow N$] = (^($x$) $M$)
 - (^ x M)[x:=N] = (^ x M)
 - (^(y) M)[x:=N] = (^(y) M[x:=N]) if the variable y is different from x and fresh for N.
 - (^ y M)[x:=N] = (^ y M[x:=N]) if the variable y is different from x and fresh for N.
