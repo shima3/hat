@@ -70,10 +70,10 @@ $(M N_1 N_2 \cdots N_m . K)$ means $(((\cdots((M N_1) N_2)\cdots) N_m) . K)$.
 - (^($x$ . $k$) $M$) means (^($x$)(^ $k$ $M$)).
 (^($x_1 x_2 \cdots x_n . k$) $M$) means (^($x_1$)(^($x_2$)($\cdots$(^($x_n$)(^ $k\ M$))$\cdots$))).
 - (^ $k\ M N_1 N_2 \cdots N_m$) means (^ $k (M N_1 N_2 \cdots N_m$)).
-- (^($x_1 x_2 \cdots x_n$) $M N_1 N_2 \cdots N_m$) means (^($x1 x2 \cdots x_n$)($M N_1 N_2 \cdots N_m$)).
+- (^($x_1 x_2 \cdots x_n$) $M N_1 N_2 \cdots N_m$) means (^($x_1 x_2 \cdots x_n$)($M N_1 N_2 \cdots N_m$)).
 - (^($x_1 x_2 \cdots x_n . k$) $M N_1 N_2 \cdots N_m$) means (^($x_1 x_2 \cdots x_n . k$)($M N_1 N_2 \cdots N_m$)).
 - (^ $k M N_1 N_2 \cdots N_m . K$) means (^ $k (M N_1 N_2 \cdots N_m . K$)).
-- (^(x1 x2 ... xn) M N1 N2 ... Nm . K) means (^(x1 x2 ... xn)(M N1 N2 ... Nm . K)).
+- (^($x_1 x_2 \cdots x_n$) $M N_1 N_2 \cdots N_m . K$) means (^($x_1 x_2 \cdots x_n$)($M N_1 N_2 \cdots N_m . K$)).
 - (^(x1 x2 ... xn . k) M N1 N2 ... Nm . K) means (^(x1 x2 ... xn . k)(M N1 N2 ... Nm . K)).
 - (M ^ k N) means (M . (^ k N)).
 - (M ^(x1 x2 ... xn) N) means (M . (^(x1 x2 ... xn) N)).
