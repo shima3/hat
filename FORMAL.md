@@ -29,8 +29,8 @@ The notation $M[x\leftarrow N]$ indicates substitution of $N$ for $x$ in $M$ if 
 This is defined so that:
 - $x[x\leftarrow N] = N$
 - $y[x\leftarrow N] = y$ if $y$ is a variable different from $x$.
-- $(M_1 M_2)[x\leftarrow N] = (M_1[x\leftarrow N] M_2[x\leftarrow N])$
-- (M1 . M2)[x:=N] = (M1[x:=N] . M2[x:=N])
+- $(M_1\ M_2)[x\leftarrow N] = (M_1[x\leftarrow N]\ M_2[x\leftarrow N])$
+- $(M_1\ .\ M_2)[x\leftarrow N] = (M_1[x\leftarrow N] . M_2[x\leftarrow N])$
 - (^(x) M)[x:=N] = (^(x) M)
 - (^ x M)[x:=N] = (^ x M)
 - (^(y) M)[x:=N] = (^(y) M[x:=N]) if the variable y is different from x and fresh for N.
