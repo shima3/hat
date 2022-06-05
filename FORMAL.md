@@ -82,7 +82,6 @@ $(M N_1 N_2 \cdots N_m . K)$ means $(((\cdots((M N_1) N_2)\cdots) N_m) . K)$.
 ## Functions
 
 (defineCPS $f\ M$) defines a function named $f$ as $M$ where $f$ is a sequence of characters and $M$ is a hat expression.
-
 For example, the following two definitions are used for the boolean values True and False:
 ```
 (defineCPS True ^(x y . return) return x)
@@ -110,19 +109,18 @@ We can define logic operators:
 (defineCPS Or ^(p q) p p q)
 (defineCPS Not ^(p) p False True)
 ```
-
-(IfThenElse (And True False) $X\ Y$) is reduced to $Y$ as follows:  
+For example, (IfThenElse (And True False) $X\ Y$) is reduced to $Y$ as follows:  
 (IfThenElse (And True False) $X\ Y$)  
-&rarr;((^(p x y) p x y ^(f) f) (And True False) $X\ Y$)  
+&rArr;((^(p x y) p x y ^(f) f) (And True False) $X\ Y$)  
 &rarr;((And True False) $X\ Y$ ^(f) f)  
-&rarr;(((^(p q) p q p) True False) $X\ Y$ ^(f) f)  
+&rArr;(((^(p q) p q p) True False) $X\ Y$ ^(f) f)  
 &rarr;((True False True) $X\ Y$ ^(f) f)  
-&rarr;(((^(x y . return) return x) False True) $X\ Y$ ^(f) f)  
+&rArr;(((^(x y . return) return x) False True) $X\ Y$ ^(f) f)  
 &rarr;((^ return return False) $X\ Y$ ^(f) f)  
 &rarr;((^ return return False) . (^($t$) $t\ X\ Y$ ^(f) f))  
 &rarr;((^($t$) $t\ X\ Y$ ^(f) f) False)  
 &rarr;(False $X\ Y$ ^(f) f)  
-&rarr;((^(x y . return) return y) $X\ Y$ ^(f) f)  
+&rArr;((^(x y . return) return y) $X\ Y$ ^(f) f)  
 &rarr;((^ return return $Y$) . (^(f) f))  
 &rarr;((^(f) f) $Y$)  
 &rarr;$Y$  
