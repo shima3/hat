@@ -37,8 +37,8 @@ This is defined so that:
 - (^ $y\ M$)[$x\leftarrow N$] = (^ $y\ M$[$x\leftarrow N$]) if the variable $y$ is different from $x$ and fresh for N.
 - (^($y$) $M$)[$x\leftarrow N$] = (^($y'$) M[$y\leftarrow y'$][$x\leftarrow N$]) if the variable $y$ is different from $x$ and a free variable of $N$.
 Here, the variable $y'$ must be fresh for $M$ and $N$.
-- (^ y M)[x:=N] = (^ y2 M[y:=y2][x:=N]) if the variable y is different from x and a free variable of N.
-Here, the variable y2 must be fresh for M and N.
+- (^ $y\ M$)[$x\leftarrow N$] = (^ $y' M[y\leftarrow y'][x\leftarrow N]$) if the variable $y$ is different from $x$ and a free variable of $N$.
+Here, the variable $y'$ must be fresh for $M$ and $N$.
 
 ## Reduction
 
