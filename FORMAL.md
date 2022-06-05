@@ -12,13 +12,13 @@ They are defined so that:
 
 ## Bound variables and free variables
 
-A variable x of a function abstraction (^($x$) $M$) or a continuation abstraction (^ $x\ M$) is a bound variable.
+A variable x of a function abstraction (^($x$) $M$) or a continuation abstraction (^ $x M$) is a bound variable.
 Variables that are contained in a hat term and are not bound variables, are free variables.
 FV($M$) is a set of free variables of $M$ if $M$ is a hat term.
 This is defined so that:
 - FV($x$) is a set that contains just $x$.
 - FV($M N$) and FV($M . N$) are a union of FV($M$) and FV($N$) if $M$ and $N$ are hat terms.
-- FV(^($x$) $M$) and FV(^ $x\ M$) are a set removed $x$ from FV($M$) if $x$ is a variable and $M$ is a hat term.
+- FV(^($x$) $M$) and FV(^ $x M$) are a set removed $x$ from FV($M$) if $x$ is a variable and $M$ is a hat term.
 
 Variables except free variable of $M$ are said to be **fresh** for $M$ if $M$ is a hat term.
 That is, bound variables of $M$ and variables not contained in $M$ are fresh for $M$.
@@ -68,8 +68,8 @@ $(M N_1 N_2 \cdots N_m . K)$ means $(((\cdots((M N_1) N_2)\cdots) N_m) . K)$.
 - (^($x y$) $M$) means (^($x$)(^($y$) $M$)).
 (^($x_1 x_2 \cdots x_n$) $M$) means (^($x_1$)(^($x_2$)($\cdots$(^($x_n$) $M$)$\cdots$))).
 - (^($x$ . $k$) $M$) means (^($x$)(^ $k$ $M$)).
-(^($x_1 x_2 \cdots x_n . k$) $M$) means (^($x_1$)(^($x_2$)($\cdots$(^($x_n$)(^ $k\ M$))$\cdots$))).
-- (^ $k\ M N_1 N_2 \cdots N_m$) means (^ $k (M N_1 N_2 \cdots N_m$)).
+(^($x_1 x_2 \cdots x_n . k$) $M$) means (^($x_1$)(^($x_2$)($\cdots$(^($x_n$)(^ $k M$))$\cdots$))).
+- (^ $k M N_1 N_2 \cdots N_m$) means (^ $k (M N_1 N_2 \cdots N_m$)).
 - (^($x_1 x_2 \cdots x_n$) $M N_1 N_2 \cdots N_m$) means (^($x_1 x_2 \cdots x_n$)($M N_1 N_2 \cdots N_m$)).
 - (^($x_1 x_2 \cdots x_n . k$) $M N_1 N_2 \cdots N_m$) means (^($x_1 x_2 \cdots x_n . k$)($M N_1 N_2 \cdots N_m$)).
 - (^ $k M N_1 N_2 \cdots N_m . K$) means (^ $k (M N_1 N_2 \cdots N_m . K$)).
@@ -81,7 +81,7 @@ $(M N_1 N_2 \cdots N_m . K)$ means $(((\cdots((M N_1) N_2)\cdots) N_m) . K)$.
 
 ## Functions
 
-(defineCPS $f\ M$) defines a function named $f$ as $M$ where $f$ is a sequence of characters and $M$ is a hat expression.
+(defineCPS $f M$) defines a function named $f$ as $M$ where $f$ is a sequence of characters and $M$ is a hat expression.
 For example, the following two definitions are used for the boolean values True and False:
 ```
 (defineCPS True ^(x y . return) return x)
@@ -92,12 +92,12 @@ We can define a control statement IfThenElse:
 (defineCPS IfThenElse ^(p x y) p x y ^(f) f)
 ```
 
-(IfThenElse True $X\ Y$) is reduced to $X$ as follows:  
-(IfThenElse True $X\ Y$)  
-&rarr;((^(p x y) p x y ^(f) f) True $X\ Y$)  
-&rarr;((^(x y) True x y ^(f) f) $X\ Y$)  
-&rarr;(True $X\ Y$ ^(f) f)  
-&rarr;((^(x y . return) return x) $X\ Y$ . (^(f) f))  
+(IfThenElse True $X Y$) is reduced to $X$ as follows:  
+(IfThenElse True $X Y$)  
+&rarr;((^(p x y) p x y ^(f) f) True $X Y$)  
+&rarr;((^(x y) True x y ^(f) f) $X Y$)  
+&rarr;(True $X Y$ ^(f) f)  
+&rarr;((^(x y . return) return x) $X Y$ . (^(f) f))  
 &rarr;((^ return return $X$) . (^(f) f))  
 &rarr;((^(f) f) $X$)  
 &rarr;$X$
@@ -109,18 +109,18 @@ We can define logic operators:
 (defineCPS Not ^(p) p False True)
 ```
 
-(IfThenElse (And True False) $X\ Y$) is reduced to $Y$ as follows:  
-(IfThenElse (And True False) $X\ Y$)  
-&rarr;((^(p x y) p x y ^(f) f) (And True False) $X\ Y$)  
-&rarr;((And True False) $X\ Y$ ^(f) f)  
-&rarr;(((^(p q) p q p) True False) $X\ Y$ ^(f) f)  
-&rarr;((True False True) $X\ Y$ ^(f) f)  
-&rarr;(((^(x y . return) return x) False True) $X\ Y$ ^(f) f)  
-&rarr;((^ return return False) $X\ Y$ ^(f) f)  
-&rarr;((^ return return False) . (^($t$) $t\ X\ Y$ ^(f) f))  
-&rarr;((^($t$) $t\ X\ Y$ ^(f) f) False)  
-&rarr;(False $X\ Y$ ^(f) f)  
-&rarr;((^(x y . return) return y) $X\ Y$ ^(f) f)  
+(IfThenElse (And True False) $X Y$) is reduced to $Y$ as follows:  
+(IfThenElse (And True False) $X Y$)  
+&rarr;((^(p x y) p x y ^(f) f) (And True False) $X Y$)  
+&rarr;((And True False) $X Y$ ^(f) f)  
+&rarr;(((^(p q) p q p) True False) $X Y$ ^(f) f)  
+&rarr;((True False True) $X Y$ ^(f) f)  
+&rarr;(((^(x y . return) return x) False True) $X Y$ ^(f) f)  
+&rarr;((^ return return False) $X Y$ ^(f) f)  
+&rarr;((^ return return False) . (^($t$) $t X Y$ ^(f) f))  
+&rarr;((^($t$) $t X Y$ ^(f) f) False)  
+&rarr;(False $X Y$ ^(f) f)  
+&rarr;((^(x y . return) return y) $X Y$ ^(f) f)  
 &rarr;((^ return return $Y$) . (^(f) f))  
 &rarr;((^(f) f) $Y$)  
 &rarr;$Y$  
