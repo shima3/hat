@@ -62,7 +62,7 @@ Here, $t$ must be different from $x$ and be fresh for $N$, and $x'$ must be fres
 
 Hat expressions are hat terms applied the following conventions to keep the notation uncluttered.
 - $(M N_1 N_2)$ means $((M N_1) N_2)$.
-($M N_1 N_2\cdots N_m$) means (($\cdots$(($M N_1$) $N_2$) $\cdots$) $N_m$).
+$(M N_1 N_2\cdots N_m)$ means $((\cdots((M N_1) N_2)\cdots) N_m)$.
 - ($M$ $N$ . $K$) means (($M$ $N$ . $K$).
 ($M\ N_1\ N_2\ \cdots\ N_m$ . $K$) means ((($\cdots$(($M\ N_1$) $N_2$)$\cdots$) $N_m$) . $K$).
 - (^($x$ $y$) $M$) means (^($x$)(^($y$) $M$)).
