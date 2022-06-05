@@ -33,7 +33,7 @@ This is defined so that:
 - $(M_1\ .\ M_2)[x\leftarrow N] = (M_1[x\leftarrow N] . M_2[x\leftarrow N])$
 - (^($x$) $M$)[$x\leftarrow N$] = (^($x$) $M$)
 - (^ $x\ M$)[$x\leftarrow N$] = (^ $x\ M$)
-- (^(y) M)[x:=N] = (^(y) M[x:=N]) if the variable y is different from x and fresh for N.
+- (^($y$) $M$)[$x\leftarrow N$] = (^($y$) $M$[$x\leftarrow N$]) if the variable y is different from $x$ and fresh for $N$.
 - (^ y M)[x:=N] = (^ y M[x:=N]) if the variable y is different from x and fresh for N.
 - (^(y) M)[x:=N] = (^(y2) M[y:=y2][x:=N]) if the variable y is different from x and a free variable of N.
 Here, the variable y2 must be fresh for M and N.
