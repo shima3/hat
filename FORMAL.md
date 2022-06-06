@@ -143,11 +143,10 @@ Church numerals, which are the natural numbers in lambda calculus, can be define
 (defineCPS C1 ^(f x . return) f x ^(x) return x)
 (defineCPS C2 ^(f x . return) f (f x)^(x) return x)
 (defineCPS C3 ^(f x . return) f (f (f x))^(x) return x)
-・
-・
-・
+    :
+    :
+    :
 ```
-
 
 ## Recursion
 
