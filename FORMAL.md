@@ -146,7 +146,11 @@ Church numerals, which are the natural numbers in lambda calculus, can be define
 ```
 We can define also arithmetic operators for Church numerals: addition, subtraction, multiplication, and so on.
 But, modern CPUs can perform these operators more efficiently not only for natural numbers, but also integers and decimal numbers.
-Therefore, the hat programming language supports arithmetic operators: addition (+), subtraction (-), multiplication (*), and division (/).
+Therefore, the hat programming language supports arithmetic operators like other programming languages: addition (Add), subtraction (Sub), multiplication (Mul), and division (Div).
+- (Plus $x\ y$) returns the value of $x$ plus $y$.
+- (Minus $x\ y$) returns the value of $x$ minus $y$.
+- (Mul $x\ y$) returns the value of $x$ multiplied by $y$.
+- (Div $x\ y$) returns the value of $x$ divided by $y$.
 
 ## Recursion
 
