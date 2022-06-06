@@ -144,8 +144,9 @@ Church numerals, which are the natural numbers in lambda calculus, can be define
 (defineCPS C2 ^(f x . return) f (f x)^(x) return x)
 (defineCPS C3 ^(f x . return) f (f (f x))^(x) return x)
 ```
-We can define arithmetic operators for Church numerals: addition, subtraction, multiplication, and so on.
-But, they are less efficient than operators performed directly by modern CPUs.
+We can define also arithmetic operators for Church numerals: addition, subtraction, multiplication, and so on.
+But, modern CPUs can perform these operators more efficiently not only for natural numbers, but also integers and decimal numbers.
+Therefore, the hat programming language supports arithmetic operators: addition (+), subtraction (-), multiplication (*), and division (/).
 
 ## Recursion
 
