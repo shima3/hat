@@ -135,18 +135,17 @@ For example, (IfThenElse (And True False) $X\ Y$) is reduced to $Y$ as follows:
 &rarr;((^(f) f) $Y$)  
 &rarr;$Y$  
 
-## Church numerals
+## Numerals
 
-Church numerals, which are the natural numbers in lambda calculus, can be defined as follows:
+Church numerals, which are the natural numbers in lambda calculus, can be defined in the hat programming language as follows:
 ```
 (defineCPS C0 ^(f x . return) return x)
 (defineCPS C1 ^(f x . return) f x ^(x) return x)
 (defineCPS C2 ^(f x . return) f (f x)^(x) return x)
 (defineCPS C3 ^(f x . return) f (f (f x))^(x) return x)
-    :
-    :
-    :
 ```
+We can define arithmetic operators for Church numerals: addition, subtraction, multiplication, and so on.
+But, they are less efficient than operators performed directly by modern CPUs.
 
 ## Recursion
 
