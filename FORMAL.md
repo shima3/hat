@@ -135,12 +135,30 @@ For example, (IfThenElse (And True False) $X\ Y$) is reduced to $Y$ as follows:
 &rarr;((^(f) f) $Y$)  
 &rarr;$Y$  
 
+## Church numerals
+
+Church numerals, which are the natural numbers in lambda calculus, can be defined as follows:
+```
+(defineCPS C0 ^(f x . return) return x)
+(defineCPS C1 ^(f x . return) f x ^(x) return x)
+(defineCPS C2 ^(f x . return) f (f x)^(x) return x)
+(defineCPS C3 ^(f x . return) f (f (f x))^(x) return x)
+・
+・
+・
+```
+
+
 ## Recursion
 
-A fixed-point combinator is defined recursively as follows:
+Recursion of a named function is done by explicitly calling the function by name.
+For example, a fixed-point combinator can be defined as follows:
 ```
 (defineCPS Fix ^(f) f (Fix f))
 ```
+Fixed-point combinators can be used to implement recursive definition of anonymous functions.
+Recursion of an anonymous function can be done by using such a fixed-point combinator.
+
 
 
 <!--
