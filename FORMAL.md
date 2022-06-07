@@ -40,7 +40,7 @@ This is defined so that:
 - $x[x\leftarrow N] = N$
 - $y[x\leftarrow N] = y$ if $y$ is a variable different from $x$.
 - (^() $M_1\ M_2$)[$x\leftarrow N$] = (^() $M_1[x\leftarrow N]\ M_2[x\leftarrow N]$)
-- $(^() M_1\ .\ M_2)[x\leftarrow N] = (^() M_1[x\leftarrow N] . M_2[x\leftarrow N])$
+- (^() $M_1\ .\ M_2$)[$x\leftarrow N$] = (^() $M_1[x\leftarrow N] . M_2[x\leftarrow N]$)
 - (^($x$) $M$)[$x\leftarrow N$] = (^($x$) $M$)
 - (^ $x\ M$)[$x\leftarrow N$] = (^ $x\ M$)
 - (^($y$) $M$)[$x\leftarrow N$] = (^($y$) $M$[$x\leftarrow N$]) if the variable y is different from $x$ and fresh for $N$.
