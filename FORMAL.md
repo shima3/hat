@@ -47,7 +47,7 @@ This is defined so that:
 - (^ $y\ M$)[$x\leftarrow N$] = (^ $y\ M$[$x\leftarrow N$]) if the variable $y$ is different from $x$ and fresh for N.
 - (^($y$) $M$)[$x\leftarrow N$] = (^($y'$) M[$y\leftarrow y'$][$x\leftarrow N$]) if the variable $y$ is different from $x$ and a free variable of $N$.
 Here, the variable $y'$ must be fresh for $M$ and $N$.
-- (^ $y\ M$)[$x\leftarrow N$] = (^ $y' M[y\leftarrow y'][x\leftarrow N]$) if the variable $y$ is different from $x$ and a free variable of $N$.
+- (^ $y\ M$)[$x\leftarrow N$] = (^ $y'\ M[y\leftarrow y'][x\leftarrow N]$) if the variable $y$ is different from $x$ and a free variable of $N$.
 Here, the variable $y'$ must be fresh for $M$ and $N$.
 
 ## Reduction
@@ -55,7 +55,7 @@ Here, the variable $y'$ must be fresh for $M$ and $N$.
 Suppose $x$, $x'$ and $t$ are variables, and $M$, $N$, $M_2$ and $N_2$ are hat terms.
 $M$ &rarr; $N$ means that $M$ is reduced to $N$.
 The reduction rules are as follow:
-- ((^($x$) $M$) $N$) &rarr; $M$[$x$:=$N$] if $x$ is fresh for $N$.
+- (^() (^($x$) $M$) $N$) &rarr; $M$[$x$:=$N$] if $x$ is fresh for $N$.
 (^() (^($x$) $M$) $N$) &rarr; $M$[$x$:=$x'$][$x'$:=$N$] if $x$ is a free variable of $N$.
 Here, $x'$ must be fresh for $M$ and $N$.
 - (^() (^ $x$ $M$) . $N$) &rarr; (^() $M$[$x$:=$N$] . $N$) if $x$ is fresh for $N$.
@@ -71,7 +71,7 @@ Here, $t$ must be different from $x$ and be fresh for $N$, and $x'$ must be fres
 ## Hat expressions
 
 Hat expressions are hat terms applied the following conventions to keep the notation uncluttered.
-- $(^() M N_1 N_2)$ means $(^() (^() M N_1) N_2)$.
+- (^() $M N_1 N_2$) means (^() (^() $M N_1$) $N_2$).
 $(^() M N_1 N_2 \cdots N_m)$ means $(^()(^()\cdots(^()(^() M N_1) N_2)\cdots) N_m)$.
 - $(^() M N . K)$ means $(^() (^() M N ) . K)$.
 $(M N_1 N_2 \cdots N_m . K)$ means $(^()(^()(^()\cdots(^()(^() M N_1) N_2)\cdots) N_m) . K)$.
