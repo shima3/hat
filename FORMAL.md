@@ -7,7 +7,7 @@ This page describes a specification of the language and differences from lambda 
 
 **Hat terms** are variable names, function applications, continuation applications, function abstraction, or continuation abstractions.
 They are defined so that:
-- A **variable name** is a sequence of characters which must starts with a letter (a, b, ..., z) or the dollar sign ($), and can contain letters and digits (0, 1, ..., 9), e.g. x, xy, x2, $sum, $12.
+- A **variable name** is a sequence of characters which must starts with a lowercase letter (a, b, ..., z) or the dollar sign ($), and can contain letters and digits (0, 1, ..., 9), e.g. x, xy, x2, $sum, $12.
 - (^() $M\ N$) is a **function application** if $M$ and $N$ are hat terms.
 - (^() $M\ .\ N$) is a **continuation application** if $M$ and $N$ are hat terms.
 - (^($x$) $M$) is a **function abstraction** if $x$ is a variable name and $M$ is a hat term.
@@ -94,6 +94,7 @@ Function abstraction, continuation abstraction, continuation application, or fun
 ## Functions
 
 (defineCPS $f\ M$) defines a function named $f$ as $M$ where $f$ is a sequence of characters and $M$ is a hat expression.
+A function name is a sequence of characters which must starts with an uppercase letter (A, B, ..., Z), and can contain letters and digits (0, 1, ..., 9).
 For example, the following two definitions are used for the boolean values True and False:
 ```
 (defineCPS True ^(x y . return) return x)
@@ -114,6 +115,7 @@ For example, (^() IfThenElse True $X\ Y$) is reduced to $X$ as follows:
 &rarr;(^()(^ return return $X$) . (^(f) f))  
 &rarr;(^()(^(f) f) $X$)  
 &rarr;$X$
+
 We can define logic operators:
 ```
 (defineCPS And ^(p q) p q p)
@@ -148,10 +150,10 @@ Church numerals, which are the natural numbers in lambda calculus, can be define
 We can define also arithmetic operators for Church numerals: addition, subtraction, multiplication, and so on.
 But, modern CPUs can perform these operators more efficiently not only for natural numbers, but also integers and decimal numbers.
 Therefore, the hat programming language supports arithmetic operators like other programming languages: addition (Add), subtraction (Sub), multiplication (Mul), and division (Div).
-- (Add $x\ y$) returns the sum of $x$ and $y$.
-- (Sub $x\ y$) returns the value of $y$ subtracted from $x$.
-- (Mul $x\ y$) returns the product of $x$ and $y$.
-- (Div $x\ y$) returns the value of $x$ divided by $y$.
+- (Number+ $x\ y$) returns the sum of $x$ and $y$.
+- (Number- $x\ y$) returns the value of $y$ subtracted from $x$.
+- (Number* $x\ y$) returns the product of $x$ and $y$.
+- (Number/ $x\ y$) returns the value of $x$ divided by $y$.
 
 ## Recursion
 
