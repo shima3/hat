@@ -74,12 +74,12 @@ Hat expressions are hat terms applied the following conventions to keep the nota
 - (^() $M\ N_1\ N_2$) means (^() (^() $M\ N_1$) $N_2$).
 (^() $M\ N_1\ N_2 \cdots N_m$) means (^()(^()$\cdots$(^()(^() $M\ N_1$) $N_2$)$\cdots$) $N_m$).
 - (^() $M\ N\ .\ K$) means (^() (^() $M\ N$) . $K$).
-(^() $M\ N_1\ N_2\ \cdots\ N_m\ .\ K$) means (^()(^()(^()\cdots(^()(^() $M\ N_1$) $N_2$)$\cdots$) $N_m$) . $K$).
-- (^($x y$) $M$) means (^($x$)(^($y$) $M$)).
-(^($x_1 x_2 \cdots x_n$) $M$) means (^($x_1$)(^($x_2$)($\cdots$(^($x_n$) $M$)$\cdots$))).
+(^() $M\ N_1\ N_2\ \cdots\ N_m\ .\ K$) means (^()(^()(^()$\cdots$(^()(^() $M\ N_1$) $N_2$)$\cdots$) $N_m$) . $K$).
+- (^($x\ y$) $M$) means (^($x$) (^($y$) $M$)).
+(^($x_1\ x_2\ \cdots\ x_n$) $M$) means (^($x_1$)(^($x_2$)($\cdots$(^($x_n$) $M$)$\cdots$))).
 - (^($x$ . $k$) $M$) means (^($x$)(^ $k$ $M$)).
-(^($x_1 x_2 \cdots x_n . k$) $M$) means (^($x_1$)(^($x_2$)($\cdots$(^($x_n$)(^ $k M$))$\cdots$))).
-- (^ $k M N_1 N_2 \cdots N_m$) means (^ $k (^() M N_1 N_2 \cdots N_m$)).
+(^($x_1\ x_2\ \cdots\ x_n\ .\ k$) $M$) means (^($x_1$)(^($x_2$)($\cdots$(^($x_n$)(^ $k M$))$\cdots$))).
+- (^ $k\ M\ N_1\ N_2\ \cdots\ N_m$) means (^ $k$ (^() $M\ N_1\ N_2\ \cdots\ N_m$)).
 - (^($x_1 x_2 \cdots x_n$) $M N_1 N_2 \cdots N_m$) means (^($x_1 x_2 \cdots x_n$)(^() $M N_1 N_2 \cdots N_m$)).
 - (^($x_1 x_2 \cdots x_n . k$) $M N_1 N_2 \cdots N_m$) means (^($x_1 x_2 \cdots x_n . k$)(^() $M N_1 N_2 \cdots N_m$)).
 - (^ $k M N_1 N_2 \cdots N_m . K$) means (^ $k (^() M N_1 N_2 \cdots N_m . K$)).
