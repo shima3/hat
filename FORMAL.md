@@ -70,7 +70,9 @@ Here, $t$ must be different from $x$ and be fresh for $N$, and $x'$ must be fres
 
 ## Hat expressions
 
-Hat expressions are hat terms applied the following conventions to keep the notation uncluttered.
+Function abstraction, continuation abstraction, continuation application, or function application
+
+*Hat expressions* are hat terms applied the following conventions to keep the notation uncluttered.
 - (^() $M\ N_1\ N_2$) means (^() (^() $M\ N_1$) $N_2$).
 (^() $M\ N_1\ N_2 \cdots N_m$) means (^()(^()$\cdots$(^()(^() $M\ N_1$) $N_2$)$\cdots$) $N_m$).
 - (^() $M\ N\ .\ K$) means (^() (^() $M\ N$) . $K$).
@@ -102,8 +104,8 @@ We can define a control statement IfThenElse:
 (defineCPS IfThenElse ^(p x y) p x y ^(f) f)
 ```
 $M$ can be substituted for $f$ in hat expressions if $f$ is defined as $M$.
-$(^() f \cdots)$ &rArr; $(^() M \cdots)$ means that $M$ is substituted for $f$ in the function application.
-For example, (^() IfThenElse True $X\ Y$) is reduced to (^() $X$) as follows:  
+(^() $f\ \cdots$) &rArr; (^() $M\ \cdots$) means that $M$ is substituted for $f$ in the function application.
+For example, (^() IfThenElse True $X\ Y$) is reduced to $X$ as follows:  
 (^() IfThenElse True $X\ Y$)  
 &rArr;((^(p x y) p x y ^(f) f) True $X\ Y$)  
 &rarr;((^(x y) True x y ^(f) f) $X\ Y$)  
@@ -111,15 +113,14 @@ For example, (^() IfThenElse True $X\ Y$) is reduced to (^() $X$) as follows:
 &rArr;(^()(^(x y . return) return x) $X\ Y$ . (^(f) f))  
 &rarr;(^()(^ return return $X$) . (^(f) f))  
 &rarr;(^()(^(f) f) $X$)  
-&rarr;(^() $X$)
-
+&rarr;$X$
 We can define logic operators:
 ```
 (defineCPS And ^(p q) p q p)
 (defineCPS Or ^(p q) p p q)
 (defineCPS Not ^(p) p False True)
 ```
-For example, (^() IfThenElse (^() And True False) $X\ Y$) is reduced to (^() $Y$) as follows:  
+For example, (^() IfThenElse (^() And True False) $X\ Y$) is reduced to $Y$ as follows:  
 (^() IfThenElse (^() And True False) $X\ Y$)  
 &rArr;(^() (^(p x y) p x y ^(f) f) (^() And True False) $X\ Y$)  
 &rarr;(^() (^() And True False) $X\ Y$ ^(f) f)  
@@ -133,7 +134,7 @@ For example, (^() IfThenElse (^() And True False) $X\ Y$) is reduced to (^() $Y$
 &rArr;(^() (^(x y . return) return y) $X\ Y$ ^(f) f)  
 &rarr;(^() (^ return return $Y$) . (^(f) f))  
 &rarr;(^() (^(f) f) $Y$)  
-&rarr;(^() $Y$)  
+&rarr;$Y$  
 
 ## Numerals
 
