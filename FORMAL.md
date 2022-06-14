@@ -7,7 +7,7 @@ This page describes a specification of the language and differences from lambda 
 
 **Hat terms** are variable names, function applications, continuation applications, function abstraction, or continuation abstractions.
 They are defined so that:
-- A **variable name** is a sequence of characters which must starts with a lowercase letter (a, b, ..., z) or the dollar sign (\$), and can contain letters and digits (0, 1, ..., 9), e.g. x, xy, x2, \$sum, \$12.
+- A **variable name** is a sequence of characters which must starts with a dollar sign (\$), and can contain letters and digits (0, 1, ..., 9), e.g. $x, $xy, $x2, \$sum, \$12.
 - (^() $M\ N$) is a **function application** if $M$ and $N$ are hat terms.
 - (^() $M\ .\ N$) is a **continuation application** if $M$ and $N$ are hat terms.
 - (^($x$) $M$) is a **function abstraction** if $x$ is a variable name and $M$ is a hat term.
@@ -22,8 +22,8 @@ Function abstraction (^($x$) $M$) is same with lambda abstraction $\lambda x. M$
 
 ## Bound variables and free variables
 
-A variable x of a function abstraction (^($x$) $M$) or a continuation abstraction (^ $x\ M$) is a bound variable.
-Variables that are contained in a hat term and are not bound variables, are free variables.
+A variable $x$ of a function abstraction (^($x$) $M$) or a continuation abstraction (^ $x\ M$) is a **bound variable**.
+Variables that are contained in a hat term and are not bound variables, are **free variables**.
 FV($M$) is a set of free variables of $M$ if $M$ is a hat term.
 This is defined so that:
 - FV($x$) is a set that contains just $x$.
@@ -70,9 +70,7 @@ Here, $t$ must be different from $x$ and be fresh for $N$, and $x'$ must be fres
 
 ## Hat expressions
 
-Function abstraction, continuation abstraction, continuation application, or function application
-
-*Hat expressions* are hat terms applied the following conventions to keep the notation uncluttered.
+*Hat expressions* are hat terms applied the following conventions in order to keep the notation uncluttered.
 - (^() $M\ N_1\ N_2$) means (^() (^() $M\ N_1$) $N_2$).
 (^() $M\ N_1\ N_2 \cdots N_m$) means (^()(^()$\cdots$(^()(^() $M\ N_1$) $N_2$)$\cdots$) $N_m$).
 - (^() $M\ N\ .\ K$) means (^() (^() $M\ N$) . $K$).
@@ -90,6 +88,7 @@ Function abstraction, continuation abstraction, continuation application, or fun
 - (^() $M$ ^ $k\ N$) means (^() $M$ . (^ $k\ N$)).
 - (^() $M$ ^($x_1\ x_2\ \cdots\ x_n$) $N$) means (^() $M$ . (^($x_1\ x_2\ \cdots\ x_n$) $N$)).
 - (^() $M$ ^($x_1\ x_2\ \cdots\ x_n\ .\ k$) $N$) means (^() $M$ . (^($x_1\ x_2\ \cdots\ x_n\ .\ k$) $N$)).
+- (^() $M$ .. $N_1\ N_2\ \cdots\ N_m$)
 
 ## Functions
 
@@ -150,10 +149,12 @@ Church numerals, which are the natural numbers in lambda calculus, can be define
 We can define also arithmetic operators for Church numerals: addition, subtraction, multiplication, and so on.
 But, modern CPUs can perform these operators more efficiently not only for natural numbers, but also integers and decimal numbers.
 Therefore, the hat programming language supports arithmetic operators like other programming languages: addition (Add), subtraction (Sub), multiplication (Mul), and division (Div).
-- (Number+ $x\ y$) returns the sum of $x$ and $y$.
-- (Number- $x\ y$) returns the value of $y$ subtracted from $x$.
-- (Number* $x\ y$) returns the product of $x$ and $y$.
-- (Number/ $x\ y$) returns the value of $x$ divided by $y$.
+- (^() Add $x\ y$) returns the sum of $x$ and $y$.
+- (^() Sub $x\ y$) returns the value of $y$ subtracted from $x$.
+- (^() Mul $x\ y$) returns the product of $x$ and $y$.
+- (^() Div $x\ y$) returns the value of $x$ divided by $y$.
+- (^() Mod $x\ y$) returns the value of $x$ divided by $y$.
+- (^() DivMod $x\ y$) returns the value of $x$ divided by $y$.
 
 ## Recursion
 

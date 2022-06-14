@@ -1,0 +1,75 @@
+----------Mon Dec 27 11:32:29 JST 2021
+$ test/01-hello/1.sh gauche/interpret.sh src/hat.scm -I include | diff - test/01-hello/1.out
+Exit code = 0
+$ test/02-prime/1.sh gauche/interpret.sh src/hat.scm -I include | diff - test/02-prime/1.out
+Exit code = 0
+$ test/03-list/1.sh gauche/interpret.sh src/hat.scm -I include | diff - test/03-list/1.out
+Exit code = 0
+$ test/04-stream/1.sh gauche/interpret.sh src/hat.scm -I include | diff - test/04-stream/1.out
+Exit code = 0
+$ test/06-actor/1.sh gauche/interpret.sh src/hat.scm -I include | diff - test/06-actor/1.out
+Exit code = 0
+$ test/07-stack/1.sh gauche/interpret.sh src/hat.scm -I include | diff - test/07-stack/1.out
+Exit code = 0
+$ test/08-non-detereministic/1.sh gauche/interpret.sh src/hat.scm -I include | diff - test/08-non-detereministic/1.out
+*** ERROR: pair required, but got ()
+    While loading "./gauche/aid-interpret.scm" at line 96
+Stack Trace:
+_______________________________________
+  0  (car L)
+        at "include/scheme.sch":157
+  1  (call-with-values (lambda () (apply (eval1 func) args)) (lamb ...
+        at "./src/hat.scm":718
+  2  (step-app app default-continuation)
+        at "./src/hat.scm":369
+  3  (current-actor-set! actor)
+        at "./src/hat.scm":361
+  4  (step-loop)
+        at "./src/hat.scm":408
+2,11c2,3
+< forEach 1
+< forEach 1
+< forEach 1
+< forEach 1
+< main 2
+< unless 1
+< unless 1
+< unless 1
+< forEach 2
+< forEach 1
+---
+> 3124
+> end
+Exit code = 1
+$ test/09-group-stage/1.sh gauche/interpret.sh src/hat.scm -I include | diff - test/09-group-stage/1.out
+2d1
+< 
+4d2
+< 
+6d3
+< 
+8d4
+< 
+10d5
+< 
+12d6
+< 
+14d7
+< 
+16d8
+< 
+18d9
+< 
+20d10
+< 
+22d11
+< 
+Exit code = 1
+$ test/10-delay/1.sh gauche/interpret.sh src/hat.scm -I include | diff - test/10-delay/1.out
+Exit code = 0
+$ test/11-concurrent/1.sh gauche/interpret.sh src/hat.scm -I include | diff - test/11-concurrent/1.out
+Exit code = 0
+
+real	0m28.387s
+user	0m31.648s
+sys	0m0.655s

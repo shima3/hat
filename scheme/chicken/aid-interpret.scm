@@ -1,5 +1,0 @@
-(include "chicken/wrapper.scm")
-(let ((args (command-line-arguments)))
-  ;; (display "load ")(display (car args))(newline)
-  (load (car args))
-  (apply main-proc args))

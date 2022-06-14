@@ -1,0 +1,3 @@
+test/all.sh src/hat.scm diff compile chicken
+test/all.sh src/hat.scm diff interpret chicken
+test/all.sh src/hat.scm diff interpret gauche
