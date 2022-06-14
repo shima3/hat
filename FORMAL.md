@@ -88,7 +88,7 @@ Here, $t$ must be different from $x$ and be fresh for $N$, and $x'$ must be fres
 - (^() $M$ ^ $k\ N$) means (^() $M$ . (^ $k\ N$)).
 - (^() $M$ ^($x_1\ x_2\ \cdots\ x_n$) $N$) means (^() $M$ . (^($x_1\ x_2\ \cdots\ x_n$) $N$)).
 - (^() $M$ ^($x_1\ x_2\ \cdots\ x_n\ .\ k$) $N$) means (^() $M$ . (^($x_1\ x_2\ \cdots\ x_n\ .\ k$) $N$)).
-- (^() $M .. N_1\ N_2\ \cdots\ N_m$)
+- (^() $M$ .. $N_1\ N_2\ \cdots\ N_m$)
 
 ## Functions
 
