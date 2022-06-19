@@ -100,9 +100,9 @@ For example, the following two definitions are used for the boolean values `True
 (defineCPS True ^($x $y . $ret) $ret $x)
 (defineCPS False ^($x $y . $ret) $ret $y)
 ```
-We can define a control statement IfThenElse:
+We can define a control statement `IfThenElse`:
 ```
-(defineCPS IfThenElse ^(p x y) p x y ^(f) f)
+(defineCPS IfThenElse ^($p $x $y) $p $x $y ^($f) $f)
 ```
 $M$ can be substituted for $f$ in hat expressions if $f$ is defined as $M$.
 (^() $f\ \cdots$) &rArr; (^() $M\ \cdots$) means that $M$ is substituted for $f$ in the function application.
