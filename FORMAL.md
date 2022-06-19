@@ -95,10 +95,10 @@ Here, $t$ must be different from $x$ and be fresh for $N$, and $x'$ must be fres
 
 (defineCPS $f\ M$) defines a function named $f$ as $M$ where $f$ is a sequence of characters and $M$ is a hat expression.
 A function name is a sequence of characters which must starts with an uppercase letter (A, B, ..., Z), and can contain letters and digits (0, 1, ..., 9).
-For example, the following two definitions are used for the boolean values True and False:
+For example, the following two definitions are used for the boolean values `True` and `False`:
 ```
-(defineCPS True ^(x y . return) return x)
-(defineCPS False ^(x y . return) return y)
+(defineCPS True ^($x $y . $ret) $ret $x)
+(defineCPS False ^($x $y . $ret) $ret $y)
 ```
 We can define a control statement IfThenElse:
 ```
