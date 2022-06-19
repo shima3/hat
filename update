@@ -2,7 +2,8 @@
 git pull
 # git add .
 git add -u
-git status | awk '/^$/{flag=0;}/^Changes to be committed:/{flag=1;}/^#\t/{if(flag) print substr($0, 3);}/^\t/{if(flag) print substr($0, 2);}' > .git/status.txt
 # git commit -am "$(date '+%Y/%m/%d')"
-git commit -a --file .git/status.txt
+# git status | awk '/^$/{flag=0;}/^Changes to be committed:/{flag=1;}/^#\t/{if(flag) print substr($0, 3);}/^\t/{if(flag) print substr($0, 2);}' > .git/status.txt
+# git commit -a --file .git/status.txt
+git status | awk '/^$/{flag=0;}/^Changes to be committed:/{flag=1;}/^#\t/{if(flag) print substr($0, 3);}/^\t/{if(flag) print substr($0, 2);}' | git commit --all --file -
 git push
