@@ -122,20 +122,20 @@ We can define logic operators:
 (defineCPS Or ^(p q) p p q)  
 (defineCPS Not ^(p) p False True)
 ```
-For example, (^() IfThenElse (^() And True False) $X\ Y$) is reduced to $Y$ as follows:  
-(^() IfThenElse (^() And True False) $X\ Y$)  
-&rArr;(^() (^(p x y) p x y ^(f) f) (^() And True False) $X\ Y$)  
-&rarr;(^() (^() And True False) $X\ Y$ ^(f) f)  
-&rArr;(^() (^() (^(p q) p q p) True False) $X\ Y$ ^(f) f)  
-&rarr;(^() (^() True False True) $X\ Y$ ^(f) f)  
-&rArr;(^() (^() (^(x y . return) return x) False True) $X\ Y$ ^(f) f)  
-&rarr;(^() (^ return return False) $X\ Y$ ^(f) f)  
-&rarr;(^() (^ return return False) . (^($t$) $t\ X\ Y$ ^(f) f))  
-&rarr;(^() (^($t$) $t\ X\ Y$ ^(f) f) False)  
-&rarr;(^() False $X\ Y$ ^(f) f)  
-&rArr;(^() (^(x y . return) return y) $X\ Y$ ^(f) f)  
-&rarr;(^() (^ return return $Y$) . (^(f) f))  
-&rarr;(^() (^(f) f) $Y$)  
+For example, `(^() IfThenElse (^() And True False) `$X\ Y$`)` is reduced to $Y$ as follows:  
+`(^() IfThenElse (^() And True False) `$X\ Y$`)`  
+&rArr;`(^() (^($p $x $y) $p $x $y ^($f) $f) (^() And True False) `$X\ Y$`)`  
+&rarr;`(^() (^() And True False) `$X\ Y$` ^($f) $f)`  
+&rArr;`(^() (^() (^($p $q) $p $q $p) True False) `$X\ Y$` ^($f) $f)`  
+&rarr;`(^() (^() True False True) `$X\ Y$` ^($f) $f)`  
+&rArr;`(^() (^() (^($x $y . $ret) $ret $x) False True) `$X\ Y$` ^($f) $f)`  
+&rarr;`(^() (^ $ret $ret False) `$X\ Y$` ^($f) $f)`  
+&rarr;`(^() (^ $ret $ret False) . (^(`$t$`) `$t\ X\ Y$` ^($f) $f))`  
+&rarr;`(^() (^(`$t$`) `$t\ X\ Y$` ^($f) $f) False)`  
+&rarr;`(^() False `$X\ Y$` ^($f) $f)`  
+&rArr;`(^() (^($x $y . $ret) $ret $y) `$X\ Y$` ^($f) $f)`  
+&rarr;`(^() (^ $ret $ret `$Y$`) . (^($f) $f))`  
+&rarr;`(^() (^($f) $f) `$Y$`)`  
 &rarr;$Y$  
 
 ## Numerals
