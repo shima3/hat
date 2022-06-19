@@ -105,7 +105,7 @@ We can define a control statement `IfThenElse`:
 (defineCPS IfThenElse ^($p $x $y) $p $x $y ^($f) $f)
 ```
 $M$ can be substituted for $f$ in hat expressions if $f$ is defined as $M$.
-(^() $f\ \cdots$) &rArr; (^() $M\ \cdots$) means that $M$ is substituted for $f$ in the function application.
+`(^() $f\ \cdots$) &rArr; (^() $M\ \cdots$)` means that $M$ is substituted for $f$ in the function application.
 For example, (^() IfThenElse True $X\ Y$) is reduced to $X$ as follows:  
 (^() IfThenElse True $X\ Y$)  
 &rArr;((^(p x y) p x y ^(f) f) True $X\ Y$)  
