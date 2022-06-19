@@ -106,20 +106,20 @@ We can define a control statement `IfThenElse`:
 ```
 $M$ can be substituted for $f$ in hat expressions if $f$ is defined as $M$.
 `(^() `$f\ \cdots$`) `&rArr;` (^() `$M\ \cdots$`)` means that $M$ is substituted for $f$ in the function application.
-For example, (^() IfThenElse True $X\ Y$) is reduced to $X$ as follows:  
-(^() IfThenElse True $X\ Y$)  
-&rArr;((^(p x y) p x y ^(f) f) True $X\ Y$)  
-&rarr;((^(x y) True x y ^(f) f) $X\ Y$)  
-&rarr;(^() True $X\ Y$ ^(f) f)  
-&rArr;(^()(^(x y . return) return x) $X\ Y$ . (^(f) f))  
-&rarr;(^()(^ return return $X$) . (^(f) f))  
-&rarr;(^()(^(f) f) $X$)  
+For example, `(^() IfThenElse True `$X\ Y$`)` is reduced to $X$ as follows:  
+`(^() IfThenElse True `$X\ Y$`)`  
+&rArr;`((^($p $x $y) $p $x $y ^($f) $f) True `$X\ Y$`)`  
+&rarr;`((^($x $y) True $x $y ^($f) $f) `$X\ Y$`)`  
+&rarr;`(^() True `$X\ Y$` ^(f) f)`  
+&rArr;`(^() (^($x $y . $ret) $ret $x) `$X\ Y$` . (^($f) $f))`  
+&rarr;`(^() (^ $ret $ret `$X$`) . (^($f) $f))`  
+&rarr;`(^() (^($f) $f) `$X$`)`  
 &rarr;$X$
 
 We can define logic operators:
 ```
-(defineCPS And ^(p q) p q p)
-(defineCPS Or ^(p q) p p q)
+(defineCPS And ^(p q) p q p)  
+(defineCPS Or ^(p q) p p q)  
 (defineCPS Not ^(p) p False True)
 ```
 For example, (^() IfThenElse (^() And True False) $X\ Y$) is reduced to $Y$ as follows:  
