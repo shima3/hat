@@ -1,9 +1,13 @@
 #!/bin/bash
-git pull
-# git add .
-git add -u
-# git commit -am "$(date '+%Y/%m/%d')"
-# git status | awk '/^$/{flag=0;}/^Changes to be committed:/{flag=1;}/^#\t/{if(flag) print substr($0, 3);}/^\t/{if(flag) print substr($0, 2);}' > .git/status.txt
-# git commit -a --file .git/status.txt
-git status | awk '/^$/{flag=0;}/^Changes to be committed:/{flag=1;}/^#\t/{if(flag) print substr($0, 3);}/^\t/{if(flag) print substr($0, 2);}' | git commit --all --file -
-git push
+if git pull --no-edit
+then
+    # git add .
+    git add -u
+    # git commit -am "$(date '+%Y/%m/%d')"
+    # git status | awk '/^$/{flag=0;}/^Changes to be committed:/{flag=1;}/^#\t/{if(flag) print substr($0, 3);}/^\t/{if(flag) print substr($0, 2);}' > .git/status.txt
+    # git commit -a --file .git/status.txt
+    # git status | awk '/^$/{flag=0;}/^Changes to be committed:/{flag=1;}/^#\t/{if(flag) print substr($0, 3);}/^\t/{if(flag) print substr($0, 2);}' | git commit --all --file -
+    git status --untracked-files=no > .git/STATUS
+    awk '{i=index($0, "\t"); if(i>0) print substr($0, i+1);}' .git/STATUS | git commit --all --file -
+    git push
+fi
