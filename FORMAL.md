@@ -1,17 +1,15 @@
 # Formal specification of the hat programming language
 
 The hat programming language is based on lambda calculus in continuation passing style.
-This page describes a specification of the language and differences from lambda calculus.
+This page describes a specification of the language and differences from lambda calculus in direct style.
 
 ## Hat terms
-
-$\newcommand{\HAT}{^\wedge}$
 
 **Hat terms** are variable names, function applications, continuation applications, function abstraction, or continuation abstractions.
 They are defined so that:
 - A **variable name** is a sequence of characters which must starts with a dollar sign (\$), and can contain letters and digits (0, 1, ..., 9), e.g. $x, $xy, $x2, \$sum, \$12.
-- $\mathtt (\HAT^\wedge() M\ N)$ is a **function application** if $M$ and $N$ are hat terms.
-- (^() $M\ .\ N$) is a **continuation application** if $M$ and $N$ are hat terms.
+- (^( ) $M$ $N$) is a **function application** if $M$ and $N$ are hat terms.
+- (^( ) $M$ . $N$) is a **continuation application** if $M$ and $N$ are hat terms.
 - (^($x$) $M$) is a **function abstraction** if $x$ is a variable name and $M$ is a hat term.
 - (^ $x\ M$) is a **continuation abstraction** if $x$ is a variable name and $M$ is a hat term.
 
