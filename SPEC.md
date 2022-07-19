@@ -1,4 +1,4 @@
-# Formal specification of the hat programming language
+# Specification of the hat programming language
 
 The hat programming language is based on lambda calculus in continuation passing style.
 This page describes a specification of the language and differences from lambda calculus in direct style.
@@ -20,18 +20,14 @@ Continuation abstraction is a function that receives a continuatoin.
 Function application is same with that of lambda calculus.
 Function abstraction (^($x$) $M$) is same with lambda abstraction $\lambda x. M$.
 
-## Bound variables and free variables
+## Free and fresh variables
 
-A variable $x$ of a function abstraction (^($x$) $M$) or a continuation abstraction (^ $x\ M$) is a **bound variable**.
-Variables that are contained in a hat term and are not bound variables, are **free variables**.
-FV($M$) is a set of free variables of $M$ if $M$ is a hat term.
-This is defined so that:
-- FV($x$) is a set that contains just $x$.
-- FV(^( ) $M\ N$) and FV(^( ) $M\ .\ N$) are a union of FV($M$) and FV($N$) if $M$ and $N$ are hat terms.
-- FV(^($x$) $M$) and FV(^ $x\ M$) are a set removed $x$ from FV($M$) if $x$ is a variable and $M$ is a hat term.
+The set of free variables of a hat term $M$, is denoted as FV($M$) and is defined inductively:
+- FV($x$) is the set that contains just $x$, where $x$ is a variable.
+- Either of FV(^( ) $M\ N$) or FV(^( ) $M\ .\ N$) is the union of FV($M$) and FV($N$), where either of $M$ or $N$ is a hat term.
+- Either of FV(^($x$) $M$) or FV(^ $x\ M$) is the set difference of FV($M$) and $\{x\}$, where $x$ is a variable and $M$ is a hat term.
 
-Variables except free variable of $M$ are said to be **fresh** for $M$ if $M$ is a hat term.
-That is, bound variables of $M$ and variables not contained in $M$ are fresh for $M$.
+Variables not in FV($M$) are said to be **fresh** for $M$, where $M$ is a hat term.
 
 ## Substitution
 
@@ -43,11 +39,11 @@ This is defined so that:
 - (^( ) $M_1\ .\ M_2$)[$x\leftarrow N$] = (^( ) $M_1[x\leftarrow N]\ .\ M_2[x\leftarrow N]$)
 - (^($x$) $M$)[$x\leftarrow N$] = (^($x$) $M$)
 - (^ $x\ M$)[$x\leftarrow N$] = (^ $x\ M$)
-- (^($y$) $M$)[$x\leftarrow N$] = (^($y$) $M$[$x\leftarrow N$]) if the variable y is different from $x$ and fresh for $N$.
-- (^ $y\ M$)[$x\leftarrow N$] = (^ $y\ M$[$x\leftarrow N$]) if the variable $y$ is different from $x$ and fresh for N.
-- (^($y$) $M$)[$x\leftarrow N$] = (^($y'$) M[$y\leftarrow y'$][$x\leftarrow N$]) if the variable $y$ is different from $x$ and a free variable of $N$.
+- (^($y$) $M$)[$x\leftarrow N$] = (^($y$) $M$[$x\leftarrow N$]) if the variable $y$ is different from $x$ and fresh for $N$.
+- (^ $y\ M$)[$x\leftarrow N$] = (^ $y\ M$[$x\leftarrow N$]) if the variable $y$ is different from $x$ and fresh for $N$.
+- (^($y$) $M$)[$x\leftarrow N$] = (^($y'$) M[$y\leftarrow y'$][$x\leftarrow N$]) if the variable $y$ is different from $x$ and in FV($N$).
 Here, the variable $y'$ must be fresh for $M$ and $N$.
-- (^ $y\ M$)[$x\leftarrow N$] = (^ $y'\ M[y\leftarrow y'][x\leftarrow N]$) if the variable $y$ is different from $x$ and a free variable of $N$.
+- (^ $y\ M$)[$x\leftarrow N$] = (^ $y'\ M[y\leftarrow y'][x\leftarrow N]$) if the variable $y$ is different from $x$ and in FV($N$).
 Here, the variable $y'$ must be fresh for $M$ and $N$.
 
 ## Reduction
@@ -55,15 +51,15 @@ Here, the variable $y'$ must be fresh for $M$ and $N$.
 Suppose $x$, $x'$ and $t$ are variables, and $M$, $N$, $M_2$ and $N_2$ are hat terms.
 $M$ &rarr; $N$ means that $M$ is reduced to $N$.
 The reduction rules are as follow:
-- (^( ) (^($x$) $M$) $N$) &rarr; $M$[$x$:=$N$] if $x$ is fresh for $N$.
-(^( ) (^($x$) $M$) $N$) &rarr; $M$[$x$:=$x'$][$x'$:=$N$] if $x$ is a free variable of $N$.
+- (^( ) (^($x$) $M$) $N$) &rarr; $M$[$x\leftarrow N$] if $x$ is fresh for $N$.
+(^( ) (^($x$) $M$) $N$) &rarr; $M$[$x\leftarrow x'$][$x'\leftarrow N$] if $x$ is a free variable of $N$.
 Here, $x'$ must be fresh for $M$ and $N$.
-- (^( ) (^ $x$ $M$) . $N$) &rarr; (^( ) $M$[$x$:=$N$] . $N$) if $x$ is fresh for $N$.
-(^( ) (^ $x$ $M$) . $N$) &rarr; (^( ) $M$[$x$:=$x'$][$x'$:=$N$] . $N$) if $x$ is a free variable of $N$.
+- (^( ) (^ $x$ $M$) . $N$) &rarr; (^ $k$ $M$[$x\leftarrow$(^($t$) $t$ $N$ . $k$)]) if $x$ is fresh for $N$.
+(^( ) (^ $x$ $M$) . $N$) &rarr; (^( ) $M$[$x\leftarrow x'$][$x'\leftarrow N$] . $N$) if $x$ is a free variable of $N$.
 Here, $x'$ must be fresh for $M$ and $N$.
 - (^( ) (^($x$) $M$) . $N$) &rarr; (^( ) $N$ (^($x$) $M$)).
-- (^( ) (^ $x$ $M$) $N$) &rarr; (^( ) $M$ . $x$)[$x$:=(^($t$) $t$ $N$)] if $x$ is fresh for $N$.
-(^( ) (^ $x$ $M$) $N$) &rarr; (^( ) $M$[$x$:=$x'$] . $x'$)[$x'$:=(^($t$) $t$ $N$)] if $x$ is a free variable of $N$.
+- (^( ) (^ $x$ $M$) $N$) &rarr; (^( ) $M$ . $x$)[$x\leftarrow$(^($t$) $t$ $N$)] if $x$ is fresh for $N$.
+(^( ) (^ $x$ $M$) $N$) &rarr; (^( ) $M$[$x\leftarrow x'$] . $x'$)[$x'\leftarrow$(^($t$) $t$ $N$)] if $x$ is a free variable of $N$.
 Here, $t$ must be different from $x$ and be fresh for $N$, and $x'$ must be fresh for $M$ and $N$.
 - (^( ) (^( ) $M$ $N$) $N_2$) &rarr; (^( ) $M_2$ $N_2$) if (^( ) $M$ $N$) &rarr; $M_2$.
 - (^( ) (^( ) $M$ . $N$) . $N_2$) &rarr; (^( ) $M_2$ . $N_2$) if (^( ) $M$ . $N$) &rarr; $M_2$.
