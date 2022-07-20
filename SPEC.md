@@ -12,6 +12,7 @@ They are defined so that:
 - (^( ) $M$ . $N$) is a **continuation application** if $M$ and $N$ are hat terms.
 - (^($x$) $M$) is a **function abstraction** if $x$ is a variable name and $M$ is a hat term.
 - (^ $x\ M$) is a **continuation abstraction** if $x$ is a variable name and $M$ is a hat term.
+- (^^ $M$ . $N$) is a **continuation pair** if $M$ and $N$ are hat terms.
 
 Continuation application and continuation abstraction are similar to function application and function abstraction, respectively.
 But, they are distinguished in order to describe functions in continuation passing style.
@@ -24,7 +25,7 @@ Function abstraction (^($x$) $M$) is same with lambda abstraction $\lambda x. M$
 
 The set of free variables of a hat term $M$, is denoted as FV($M$) and is defined inductively:
 - FV($x$) is the set that contains just $x$, where $x$ is a variable.
-- Either of FV(^( ) $M\ N$) or FV(^( ) $M\ .\ N$) is the union of FV($M$) and FV($N$), where either of $M$ or $N$ is a hat term.
+- Either of FV(^( ) $M\ N$) or FV(^( ) $M\ .\ N$) is the union of FV($M$) and FV($N$), where $M$ and $N$ are hat terms.
 - Either of FV(^($x$) $M$) or FV(^ $x\ M$) is the set difference of FV($M$) and $\{x\}$, where $x$ is a variable and $M$ is a hat term.
 
 Variables not in FV($M$) are said to be **fresh** for $M$, where $M$ is a hat term.
