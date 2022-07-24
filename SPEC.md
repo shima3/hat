@@ -5,14 +5,14 @@ This page describes a specification of the language and differences from lambda 
 
 ## Hat terms
 
-**Hat terms** are variable names, function applications, continuation applications, function abstraction, or continuation abstractions.
+**Hat terms** are variable names, function applications, continuation applications, function abstractions, continuation abstractions or continuations.
 They are defined so that:
 - A **variable name** is a sequence of characters which must starts with a dollar sign (\$), and can contain letters and digits (0, 1, ..., 9), e.g. $x, $xy, $x2, \$sum, \$12.
-- (^( ) $M$ $N$) is a **function application** if $M$ and $N$ are hat terms.
-- (^( ) $M$ . $N$) is a **continuation application** if $M$ and $N$ are hat terms.
 - (^($x$) $M$) is a **function abstraction** if $x$ is a variable name and $M$ is a hat term.
+- (^( ) $M$ $N$) is a **function application** if $M$ and $N$ are hat terms.
 - (^ $x\ M$) is a **continuation abstraction** if $x$ is a variable name and $M$ is a hat term.
-- (^^ $M$ . $N$) is a **continuation pair** if $M$ and $N$ are hat terms.
+- (^( ) $M$ . $N$) is a **continuation application** if $M$ and $N$ are hat terms.
+- (^^ $M$ $N$) is a **continuation** if $M$ and $N$ are hat terms.
 
 Continuation application and continuation abstraction are similar to function application and function abstraction, respectively.
 But, they are distinguished in order to describe functions in continuation passing style.
@@ -21,53 +21,47 @@ Continuation abstraction is a function that receives a continuatoin.
 Function application is same with that of lambda calculus.
 Function abstraction (^($x$) $M$) is same with lambda abstraction $\lambda x. M$.
 
-## Free and fresh variables
+## Free variables
 
-The set of free variables of a hat term $M$, is denoted as FV($M$) and is defined inductively:
-- FV($x$) is the set that contains just $x$, where $x$ is a variable.
-- Either of FV(^( ) $M\ N$) or FV(^( ) $M\ .\ N$) is the union of FV($M$) and FV($N$), where $M$ and $N$ are hat terms.
-- Either of FV(^($x$) $M$) or FV(^ $x\ M$) is the set difference of FV($M$) and $\{x\}$, where $x$ is a variable and $M$ is a hat term.
-
-Variables not in FV($M$) are said to be **fresh** for $M$, where $M$ is a hat term.
+The set of free variables of a hat term $M$, is denoted as $\text{FV}M$ and is defined inductively:
+- $\text{FV}x$ is the set that contains just $x$, where $x$ is a variable.
+- Either of $\text{FV}$(^( ) $M$ $N$), $\text{FV}$(^( ) $M$ . $N$), or $\text{FV}$(^^ $M$ $N$) is the union of $\text{FV}M$ and $\text{FV}N$, where $M$ and $N$ are hat terms.
+- Either of $\text{FV}$(^($x$) $M$) or $\text{FV}$(^ $x\ M$) is the set difference of $\text{FV}M$ and $\{x\}$, where $x$ is a variable and $M$ is a hat term.
 
 ## Substitution
 
-The notation $M[x\leftarrow N]$ indicates substitution of $N$ for $x$ in $M$ if $M$ and $N$ are hat terms and $x$ is a variable.
+The notation $M[x\leftarrow N]$ indicates substitution of $N$ for $x$ in $M$ if $M$ and $N$ are hat terms, and $x$ is a variable.
 This is defined so that:
 - $x[x\leftarrow N] = N$
-- $y[x\leftarrow N] = y$ if $y$ is a variable different from $x$.
+- $y[x\leftarrow N] = y$ if $x\neq y$.
 - (^( ) $M_1\ M_2$)[$x\leftarrow N$] = (^( ) $M_1[x\leftarrow N]\ M_2[x\leftarrow N]$)
 - (^( ) $M_1\ .\ M_2$)[$x\leftarrow N$] = (^( ) $M_1[x\leftarrow N]\ .\ M_2[x\leftarrow N]$)
 - (^($x$) $M$)[$x\leftarrow N$] = (^($x$) $M$)
 - (^ $x\ M$)[$x\leftarrow N$] = (^ $x\ M$)
-- (^($y$) $M$)[$x\leftarrow N$] = (^($y$) $M$[$x\leftarrow N$]) if the variable $y$ is different from $x$ and fresh for $N$.
-- (^ $y\ M$)[$x\leftarrow N$] = (^ $y\ M$[$x\leftarrow N$]) if the variable $y$ is different from $x$ and fresh for $N$.
-- (^($y$) $M$)[$x\leftarrow N$] = (^($y'$) M[$y\leftarrow y'$][$x\leftarrow N$]) if the variable $y$ is different from $x$ and in FV($N$).
-Here, the variable $y'$ must be fresh for $M$ and $N$.
-- (^ $y\ M$)[$x\leftarrow N$] = (^ $y'\ M[y\leftarrow y'][x\leftarrow N]$) if the variable $y$ is different from $x$ and in FV($N$).
-Here, the variable $y'$ must be fresh for $M$ and $N$.
+- (^($y$) $M$)[$x\leftarrow N$] = (^($y$) $M$[$x\leftarrow N$]) if $x\neq y$ and $y\notin\text{FV}N$.
+- (^ $y\ M$)[$x\leftarrow N$] = (^ $y\ M$[$x\leftarrow N$]) if $x\neq y$ and $y\notin\text{FV}N$.
+- (^($y$) $M$)[$x\leftarrow N$] = (^($y'$) $M[y\leftarrow y'][x\leftarrow N]$) if $x\neq y$, $y\in\text{FV}N$, $y'\notin\text{FV}M$ and $y'\notin\text{FV}N$ .
+- (^ $y\ M$)[$x\leftarrow N$] = (^ $y'\ M[y\leftarrow y'][x\leftarrow N]$) if $x\neq y$, $y\in\text{FV}N$, $y'\notin\text{FV}M$ and $y'\notin\text{FV}N$.
+- (^^ $M_1$ $M_2$)[$x\leftarrow N$] = (^^ $M_1[x\leftarrow N]$ $M_2[x\leftarrow N]$)
 
 ## Reduction
 
-Suppose $x$, $x'$ and $t$ are variables, and $M$, $N$, $M_2$ and $N_2$ are hat terms.
+Suppose $x$, $y$ and $k$ are variables, and $M$, $N$, $M_2$ and $N_2$ are hat terms.
 $M$ &rarr; $N$ means that $M$ is reduced to $N$.
 The reduction rules are as follow:
-- (^( ) (^($x$) $M$) $N$) &rarr; $M$[$x\leftarrow N$] if $x$ is fresh for $N$.
-(^( ) (^($x$) $M$) $N$) &rarr; $M$[$x\leftarrow x'$][$x'\leftarrow N$] if $x$ is a free variable of $N$.
-Here, $x'$ must be fresh for $M$ and $N$.
-- (^( ) (^ $x$ $M$) . $N$) &rarr; (^ $k$ $M$[$x\leftarrow$(^($t$) $t$ $N$ . $k$)]) if $x$ is fresh for $N$.
-(^( ) (^ $x$ $M$) . $N$) &rarr; (^( ) $M$[$x\leftarrow x'$][$x'\leftarrow N$] . $N$) if $x$ is a free variable of $N$.
-Here, $x'$ must be fresh for $M$ and $N$.
+- (^( ) (^($x$) $M$) $N$) &rarr; $M$[$x\leftarrow N$].
+- (^( ) (^ $x$ $M$) . $N$) &rarr; (^( ) $M[x\leftarrow N]$) if $N$ is a continuation.
+- (^( ) (^ $x$ $M$) . $N$) &rarr; (^ $k$ $M$[$x\leftarrow$(^^ $N$ $k$)]) if $N$ is not a continuation and $^\exists k\notin\text{FV}M\cup\text{FV}N$.
 - (^( ) (^($x$) $M$) . $N$) &rarr; (^( ) $N$ (^($x$) $M$)).
-- (^( ) (^ $x$ $M$) $N$) &rarr; (^( ) $M$ . $x$)[$x\leftarrow$(^($t$) $t$ $N$)] if $x$ is fresh for $N$.
-(^( ) (^ $x$ $M$) $N$) &rarr; (^( ) $M$[$x\leftarrow x'$] . $x'$)[$x'\leftarrow$(^($t$) $t$ $N$)] if $x$ is a free variable of $N$.
-Here, $t$ must be different from $x$ and be fresh for $N$, and $x'$ must be fresh for $M$ and $N$.
+- (^( ) (^ $x$ $M$) $N$) &rarr; (^ $k$ $M$ . $x$)[$x\leftarrow$(^^ (^($y$) $y$ $N$) $k$)] if $^\exists y\notin\text{FV}N$, and $^\exists k\notin\text{FV}M\cup\text{FV}N$.
 - (^( ) (^( ) $M$ $N$) $N_2$) &rarr; (^( ) $M_2$ $N_2$) if (^( ) $M$ $N$) &rarr; $M_2$.
 - (^( ) (^( ) $M$ . $N$) . $N_2$) &rarr; (^( ) $M_2$ . $N_2$) if (^( ) $M$ . $N$) &rarr; $M_2$.
+- (^( ) (^^ $M$ $N$) $N_2$) &rarr; (^^ (^( ) $M$ $N_2$) $N$).
+- (^( ) (^^ $M$ $N$) . $N_2$) &rarr; (^( ) $M$ . (^^ $N_2$ $N$)).
 
 ## Hat expressions
 
-*Hat expressions* are hat terms applied the following conventions in order to keep the notation uncluttered.
+**Hat expressions** are hat terms applied the following conventions in order to keep the notation uncluttered.
 - (^( ) $M\ N_1\ N_2$) means (^( ) (^( ) $M\ N_1$) $N_2$).
 (^( ) $M\ N_1\ N_2 \cdots N_m$) means (^( )(^( )$\cdots$(^( )(^( ) $M\ N_1$) $N_2$)$\cdots$) $N_m$).
 - (^( ) $M\ N\ .\ K$) means (^( ) (^( ) $M\ N$) . $K$).
