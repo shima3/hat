@@ -1,0 +1,194 @@
+\documentclass[twocolumn]{jarticle}
+\usepackage{newtxtext}
+\usepackage{amsmath,amssymb}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs=true}
+% \usepackage{autobreak}
+
+\setlength{\textwidth}{24zw}
+%余白の設定ここから
+\setlength{\topmargin}{25mm}
+\addtolength{\topmargin}{-1in}
+\setlength{\oddsidemargin}{15mm}
+\addtolength{\oddsidemargin}{-1.1in}
+\setlength{\evensidemargin}{20mm}
+\addtolength{\evensidemargin}{-1in}
+\setlength{\textwidth}{182mm}
+\setlength{\textheight}{265mm}
+\setlength{\headsep}{0mm}
+\setlength{\headheight}{0mm}
+\setlength{\topskip}{0mm}
+%余白の設定ここまで
+%twocolumn（2列）の間の空白の大きさ設定
+\columnsep=8mm
+\setlength{\baselineskip}{16pt}
+\setlength{\headsep}{-5mm}
+\renewcommand{\baselinestretch}{0.85}
+% 図と図の間のスペース
+\setlength\floatsep{0truemm}
+% 本文と図の間のスペース
+\setlength\textfloatsep{0truemm}
+% 本文中の図のスペース
+\setlength\intextsep{0pt}
+% 図とキャプションの間のスペース
+\setlength\abovecaptionskip{0truemm}
+\setlength{\leftmargini}{10pt} 
+% \setlength{\mathindent}{\parindent}
+
+% ハット記号
+\def\hat{\mbox{\^{ }}}
+% 縦棒
+\def\|{$|$}
+% 縦棒の後，改行を許す
+% \def\|{ $|$ \allowbreak}
+% ・・・
+\def\c...{\mbox{$\cdots\mbox{}$}\allowbreak}
+% 非終端記号
+\newcommand{\NT}[1]{\ensuremath{\langle\mbox{#1}\rangle}\allowbreak}
+% 二重鍵括弧
+\newcommand{\dlrBrack}[1]{\ensuremath{[\![#1]\allowbreak\!]}}
+% 左矢印
+\newcommand{\lto}{\ensuremath{\leftarrow}}
+% 右矢印
+\newcommand{\lrto}{ \ensuremath{\rightarrow} \allowbreak}
+% \newcommand{\lrto}{ \ensuremath{\longrightarrow} \allowbreak}
+% コード
+\newcommand{\C}[1]{\mbox{\tt#1}}
+% ドットの前後に空白
+\newcommand{\D}{\mbox{\tt\ .\ }}
+% Schemeの意味関数
+\newcommand{\sS}[1]{\ensuremath{\mathcal{E}}\dlrBrack{\mbox{\tt#1}}}
+% \newcommand{\sS}[1]{\ensuremath{\varepsilon}\dlrBrack{\mbox{\tt#1}}}
+% Hatの意味関数
+\newcommand{\sH}[1]{\ensuremath{\mathcal{H}}\dlrBrack{\mbox{\tt#1}}}
+% 継続付き関数
+\newcommand{\FC}[2]{\mbox{\tt F.C #1\D#2}}
+% 式に含まれる自由変数の集合
+\newcommand{\FV}[1]{\ensuremath{\mathcal{F}}\dlrBrack{\C{#1}}}
+
+% ぶら下げ
+\newenvironment{hang}[1][\parindent]
+  {\def\item{\par\hangindent=#1\noindent}}
+  {\par}
+
+\begin{document}
+\title{Hat言語の仕様}
+\author{島 和之}
+\maketitle
+
+HatはSchemeと同様に静的スコープを持つ動的型付けのプログラミング言語である．
+ただし，その評価戦略はSchemeとは異なり，名前呼びである．
+つまり，引数として与えられた式の評価が必要な場合，呼び出された関数で明示的に評価する必要がある．
+一方，使わない引数を評価する無駄を省くことができる．
+また，プログラマが遅延評価を用いた独自の制御構造を実現できる．
+
+\section{形式的構文}
+
+この節では，Hatの形式的構文を示す．
+記述を簡潔にするため，BNFを以下のように拡張する．
+\begin{itemize}
+\item\NT{thing}$^*$は\NT{thing}の0個以上の出現を意味する．
+\item\NT{thing}$^+$は\NT{thing}の1個以上の出現を意味する．
+\end{itemize}
+上記のように拡張したBNFで，Hatプログラム\NT{\tt hat program}の構文を以下に示す．
+\begin{hang}\tt % \item 019IOlq
+\item\NT{hat program}\lrto\par
+  \NT{includer}$^*$ \NT{hat definition}$^*$
+\item\NT{includer}\lrto
+  (include \NT{string})
+\item\NT{hat definition}\lrto\par
+  (defineCPS \NT{identifier} \NT{hat function}$^+$)
+\item\NT{hat function}\lrto
+  \hat\ \NT{hat head} \NT{hat body}
+\item\NT{hat head}\lrto(\NT{identifier}$^*$)
+\item\NT{hat body}\lrto\NT{hat expression}$^+$
+\item\NT{hat expression}\lrto\NT{identifier} \| \NT{datum} \| (\NT{hat function}$^+$)
+\end{hang}
+
+上記で未定義の記号 \NT{variable}, \NT{literal}, \NT{lambda expression} の定義はR5RSと同じである．
+\NT{variable}は変数を示す．
+\NT{literal}は真偽値，数値，文字列，quoteを付けたシンボルやリストなどを示す．
+\NT{lambda expression}はラムダ式を示す．
+
+\section{形式的意味論}
+
+この節ではHatプログラムに対する形式的な表示的意味論を定める．
+以下のように記号を定義する．
+
+\[\begin{array}{rcll}
+I      &\in& \mbox{Ide}           & \mbox{識別子（変数）}\\
+E      &\in& \mbox{Exp}           & \mbox{式} \\
+\rho   &\in& U = \mbox{Ide} \to L & 環境  \\
+\kappa &\in& K = E* \to C         & 式の継続 \\
+\end{array}\]
+
+\begin{eqnarray*}
+v, v_1, v_2,\ldots &\in& \NT{hat variable} \\
+f, f_1, f_2,\ldots &\in& \NT{hat function} \\
+c, c_1, c_2,\ldots &\in& \NT{hat call} \\
+e, e_1, e_2,\ldots &\in& \NT{hat expression} \\
+L, L_1, L_2,\ldots &\in& \NT{lambda expression}
+\end{eqnarray*}
+
+\C{(defineCPS $v$ $f$)}は$(v, f)\in\rho$を意味する．
+ここで，$\rho$は変数に対応する関数を示す環境であり，\NT{hat variable}と\NT{hat function}からなる二項組の集合として定義される．
+以下，\sH{$e$}はHatの式$e$に対する数学的意味を返す意味関数，\sS{$e$}はSchemeの式$e$に対する数学的意味を返す意味関数，\FV{$e$}は式$e$に含まれる自由変数の集合とする．
+
+\NT{hat variable}の意味は次のように定義される．
+\begin{eqnarray}
+  \sH{$v$}=
+  \begin{cases}
+  \sH{($f$)} & \llap{if $((v,\exists f)\in\rho)$} \\
+  \mbox{wrong ``undefined variable''} \\
+  & \llap{otherwise}
+  \end{cases}
+\end{eqnarray}
+
+\NT{hat function}の意味は以下のように定義される．
+\begin{multline}
+  \sH{($f$)}= \\
+  \begin{cases}
+    \lambda x.x(\lambda v_1.\sH{(\hat($v_2\ \cdots\ v_n$) $c$)}) \\
+    & \llap{if $(f=\C{\hat($v_1\ v_2\ \cdots\ v_n$) $c$})\land(n\geq 1)$} \\
+%    & \llap{$\land(\exists v\not\in\{v_1, v_2,\ldots, v_n\}\cup\FV{$c$})$} \\
+    \sH{($c$)} & \llap{if $(f=\C{\hat( ) $c$})$} \\
+    \lambda x.x(\lambda v_1.\sH{(\hat($v_2\ \cdots\ v_n\D v_{n+1}$) $c$)}) \\
+    & \llap{if $(f=\C{\hat($v_1\ v_2\ \cdots\ v_n\D v_{n+1}$) $c$})$} \\
+    & \llap{$\land(n\geq 1)$} \\
+%    & \llap{$\land(\exists v\not\in\{v_1, v_2,\ldots, v_n, v_{n+1}\}\cup\FV{$c$})$} \\
+    \lambda x.x(\lambda v_1.\sH{(\hat$\ v_2\ c$)}) \\
+    & \llap{if $(f=\C{\hat($v_1\D v_2$) $c$})$} \\
+%    & \llap{$\land(\exists v\not\in\{v_1, v_2\}\cup\FV{$c$})$} \\
+    \lambda v.\sH{($c$)}v & \llap{if $(f=\C{\hat\ $v\ c$})$}
+  \end{cases}
+\end{multline}
+
+\NT{hat call}の意味は以下のように定義される．
+\begin{multline}
+  \sH{($c$)}= \\
+  \begin{cases}
+    \lambda x.x(\sS{$L$}e_1e_2\cdots e_n) \\
+    & \llap{if $(c=\C{$L\ e_1\ e_2\ \cdots\ e_n$})$} \\
+    \sH{(($f$) $e_1\ e_2\ \cdots e_n$)} \\
+    & \llap{if $(c=\C{$v\ e_1\  e_2\ \cdots\ e_n$})$} \\
+    & \llap{$\land(n\geq 0)\land((v,\exists f)\in\rho)$} \\
+    \sH{(($f$) $e_1\ e_2\ \cdots e_{n-1}$)}(\lambda x.x e_n) \\
+    & \llap{if $(c=\C{($f$) $e_1\  e_2\ \cdots\ e_n$})\land(n\geq 1)$} \\
+    \sH{($f$)} & \llap{if $(c=\C{($f$)})$} \\
+%    \lambda x.x \\
+%    & \llap{if $(c=\C{( ) $e_1\  e_2\ \cdots\ e_n$})\land(n\geq 1)$} \\
+    \sH{($c_1$\hat($v$) $v\ e_1\ e_2\ \cdots e_n$)} \\
+    & \llap{if $(c=\C{($c_1$) $e_1\  e_2\ \cdots\ e_n$})$} \\
+    & \llap{$\land (n\geq 1) \land v\not\in$ \FV{($c$)}} \\
+    \sH{($c_1$)} & \llap{if $(c=\C{($c_1$)})$} \\
+    \lambda x.\sH{($\kappa_1\ e_1\ e_2\ \cdots\ e_n$)}x_1 \\
+    & \llap{if $(c=\C{(\FC{$\kappa_1$}{$x_1$}) $e_1\ e_2\ \cdots\ e_n$})$} \\
+    \sH{($e_1\ e_2\ \cdots\ e_n$\D($f$))} \\
+    % \lambda x.\sH{($e_1\ e_2\ \cdots\ e_n$)}\C{(\FC{($f$)}{$x$})} \\
+    & \llap{if $(c=\C{$e_1\ e_2\ \cdots\ e_n\ f$})\land(n\geq 1)$} \\
+    \lambda x.\sH{($e_1\ e_2\ \cdots\ e_n$)}\C{(\FC{$\kappa$}{$x$})} \\
+    & \llap{if $(c=\C{$e_1\ e_2\ \cdots\ e_n\D\kappa$})\land(n\geq 1)$} \\
+  \end{cases}
+\end{multline}
+
+\end{document}
