@@ -96,18 +96,21 @@ HatはSchemeと同様に静的スコープを持つ動的型付けのプログ�
   \NT{includer}$^*$ \NT{definition}$^*$
 \item\NT{includer}\lrto
   (include \NT{string})
-\item\NT{definition}\lrto
+\item\NT{definition}\lrto\par
   (defun \NT{identifier} \NT{hat function})
 \item\NT{hat function}\lrto
   \hat\ \NT{head} \NT{body}
 \item\NT{head}\lrto
   (\NT{identifier}$^*$)
 \item\NT{body}\lrto
-  \NT{expression}$^+$ | \NT{expression}$^+$ \NT{hat function}
+  \NT{expression}$^+$\par
+  | \NT{expression}$^+$ \NT{hat function}
 \item\NT{body}\lrto
   \NT{command} | \NT{command} \NT{hat function}
 \item\NT{command}\lrto
-  \NT{operator}\NT{operand}$^*$
+  \NT{expression}$^+$
+\item\NT{command}\lrto
+  \NT{operator} \NT{operand}$^*$
 \item\NT{expression}\lrto
   \NT{identifier} \| \NT{datum} \| (\NT{hat function})
 \end{hang}
