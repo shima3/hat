@@ -124,14 +124,9 @@ HatはSchemeと同様に静的スコープを持つ動的型付けのプログ�
 \item\NT{command}\lrto
   \NT{expression}$^+$
   
-\item\NT{hat function}\lrto
-  \hat\ \NT{head} \NT{body}
-\item\NT{head}\lrto
-  (\NT{symbol}$^*$)
 \item\NT{body}\lrto
-  \NT{command} \| \NT{command} \NT{hat function}
-\item\NT{command}\lrto
   \NT{operator} \NT{operand}$^*$
+  \| \NT{operator} \NT{operand}$^*$ \NT{hat function}
 \item\NT{operator}\lrto
   \NT{expression}
 \item\NT{oprand}\lrto
