@@ -38,9 +38,9 @@
 % ハット記号
 \def\hat{\mbox{\^{ }}}
 % 縦棒
-\def\|{$|$}
+% \def\|{$|$}
 % 縦棒の後，改行を許す
-% \def\|{ $|$ \allowbreak}
+\def\|{ $|$ \allowbreak}
 % ・・・
 \def\c...{\mbox{$\cdots\mbox{}$}\allowbreak}
 % 非終端記号
@@ -107,7 +107,7 @@ HatはSchemeと同様に静的スコープを持つ動的型付けのプログ�
 \item\NT{head}\lrto
   (\NT{symbol}$^*$)
 \item\NT{body}\lrto
-  \NT{expression}$^+$\par
+  \NT{expression}$^+$
   \| \NT{expression}$^+$ \NT{hat function}
 \item\NT{body}\lrto
   \NT{expression}$^+$
