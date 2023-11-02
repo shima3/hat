@@ -99,7 +99,10 @@ HatはSchemeと同様に静的スコープを持つ動的型付けのプログ�
 \item\NT{definition}\lrto\par
   (defun \NT{symbol} \NT{hat function})
 \item\NT{hat function}\lrto
-  \hat\ \NT{head} \NT{body}
+  \hat\ \NT{head} \NT{body}\par
+  \| \hat\ \NT{head} \NT{body} \NT{hat function}
+\item\NT{body}\lrto
+  \NT{expression}$^+$
 \item\NT{head}\lrto
   (\NT{symbol}$^*$)
 \item\NT{body}\lrto
