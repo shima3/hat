@@ -90,19 +90,20 @@ HatはSchemeと同様に静的スコープを持つ動的型付けのプログ�
 \item\NT{thing}$^*$は\NT{thing}の0個以上の出現を意味する．
 \item\NT{thing}$^+$は\NT{thing}の1個以上の出現を意味する．
 \end{itemize}
-上記のように拡張したBNFで，Hatプログラム\NT{\tt hat program}の構文を以下に示す．
+上記のように拡張したBNFで，Hatプログラム\NT{\tt program}の構文を以下に示す．
 \begin{hang}\tt % \item 019IOlq
-\item\NT{hat program}\lrto\par
-  \NT{includer}$^*$ \NT{hat definition}$^*$
+\item\NT{program}\lrto\par
+  \NT{includer}$^*$ \NT{definition}$^*$
 \item\NT{includer}\lrto
   (include \NT{string})
-\item\NT{hat definition}\lrto\par
-  (defineCPS \NT{identifier} \NT{hat function}$^+$)
-\item\NT{hat function}\lrto
-  \hat\ \NT{hat head} \NT{hat body}
-\item\NT{hat head}\lrto(\NT{identifier}$^*$)
-\item\NT{hat body}\lrto\NT{hat expression}$^+$
-\item\NT{hat expression}\lrto\NT{identifier} \| \NT{datum} \| (\NT{hat function}$^+$)
+\item\NT{definition}\lrto\par
+  (defun \NT{identifier} \NT{hat function})
+\item\NT{hat function}\lrto\hat\ \NT{head} \NT{body}
+\item\NT{head}\lrto(\NT{identifier}$^*$)
+\item\NT{body}\lrto\NT{expression}$^+$ | \NT{expression}$^+$ \NT{hat function}
+\item\NT{body}\lrto\NT{command} | \NT{command} \NT{hat function}
+\item\NT{command}\lrto\NT{operator}\NT{operand}$^*$
+\item\NT{expression}\lrto\NT{identifier} \| \NT{datum} \| (\NT{hat function})
 \end{hang}
 
 上記で未定義の記号 \NT{variable}, \NT{literal}, \NT{lambda expression} の定義はR5RSと同じである．
