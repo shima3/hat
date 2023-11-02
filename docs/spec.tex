@@ -98,22 +98,45 @@ HatはSchemeと同様に静的スコープを持つ動的型付けのプログ�
   (include \NT{string})
 \item\NT{definition}\lrto\par
   (defun \NT{symbol} \NT{hat function})
+
 \item\NT{hat function}\lrto
   \hat\ \NT{head} \NT{body}\par
   \| \hat\ \NT{head} \NT{body} \NT{hat function}
+\item\NT{head}\lrto
+  (\NT{symbol}$^*$)
 \item\NT{body}\lrto
   \NT{expression}$^+$
+
+\item\NT{hat function}\lrto
+  \hat\ \NT{head} \NT{body}
 \item\NT{head}\lrto
   (\NT{symbol}$^*$)
 \item\NT{body}\lrto
   \NT{expression}$^+$\par
   \| \NT{expression}$^+$ \NT{hat function}
+  
+\item\NT{hat function}\lrto
+  \hat\ \NT{head} \NT{body}
+\item\NT{head}\lrto
+  (\NT{symbol}$^*$)
 \item\NT{body}\lrto
   \NT{command} \| \NT{command} \NT{hat function}
 \item\NT{command}\lrto
   \NT{expression}$^+$
+  
+\item\NT{hat function}\lrto
+  \hat\ \NT{head} \NT{body}
+\item\NT{head}\lrto
+  (\NT{symbol}$^*$)
+\item\NT{body}\lrto
+  \NT{command} \| \NT{command} \NT{hat function}
 \item\NT{command}\lrto
   \NT{operator} \NT{operand}$^*$
+\item\NT{operator}\lrto
+  \NT{expression}
+\item\NT{oprand}\lrto
+  \NT{expression}
+
 \item\NT{expression}\lrto\par
   \NT{symbol} \| \NT{datum} \| (\NT{hat function})
 \end{hang}
