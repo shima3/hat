@@ -97,23 +97,16 @@ HatはSchemeと同様に静的スコープを持つ動的型付けのプログ�
 \item\NT{includer}\lrto
   (include \NT{string})
 \item\NT{definition}\lrto
-  (defun \NT{symbol} \NT{hat function})
-\item\NT{definition}\lrto
   (defun \NT{symbol} \NT{function})
-\item\NT{hat function}\lrto
-  \hat\ \NT{head} \NT{body}
 \item\NT{function}\lrto
   \hat\ \NT{head} \NT{body}
 \item\NT{head}\lrto
   (\NT{symbol}$^*$)
 \item\NT{body}\lrto
-  \NT{expression}$^+$
-  \| \NT{expression}$^+$ \NT{hat function}
-\item\NT{body}\lrto
-  \NT{expression}$^+$
+  \NT{expression}$^+$\par
   \| \NT{expression}$^+$ \NT{function}
 \item\NT{expression}\lrto
-  \NT{datum} \| (\NT{hat function})
+  \NT{datum} \| (\NT{function})
 \end{hang}
 
 上記で未定義の記号 \NT{variable}, \NT{literal}, \NT{lambda expression} の定義はR5RSと同じである．
