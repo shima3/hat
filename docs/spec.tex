@@ -103,10 +103,16 @@ HatはSchemeと同様に静的スコープを持つ動的型付けのプログ�
 \item\NT{head}\lrto
   (\NT{symbol}$^*$)
 \item\NT{body}\lrto
-  \NT{operator} \NT{operand}$^*$
+  \NT{operator} \NT{operand}$^*$ \par
   \| \NT{operator} \NT{operand}$^*$ \NT{function}
-\item\NT{expression}\lrto
-  \NT{datum} \| (\NT{function})
+\item\NT{operator}\lrto
+  \NT{symbol} \| (\NT{function}) \| \NT{list}
+\item\NT{operand}\lrto
+  \NT{datum} \| ((\NT{function}))
+\item\NT{datum}\lrto
+  \NT{number} \| \NT{string} \| \NT{symbol} \| \NT{list}
+\item\NT{list}\lrto
+  (\NT{datum}$^*$)
 \end{hang}
 
 上記で未定義の記号 \NT{variable}, \NT{literal}, \NT{lambda expression} の定義はR5RSと同じである．
