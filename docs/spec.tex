@@ -42,6 +42,7 @@
 % 縦棒の後，改行を許す
 \def\|{ $|$ \allowbreak}
 \def\*{$^*$}
+\def\+{$^+$}
 % ・・・
 \def\c...{\mbox{$\cdots\mbox{}$}\allowbreak}
 % 非終端記号
@@ -89,13 +90,12 @@ HatはSchemeと同様に静的スコープを持つ動的型付けのプログ�
 記述を簡潔にするため，BNFを以下のように拡張する．
 \begin{itemize}
 \item\NT{thing}\*は\NT{thing}の0個以上の出現を意味する．
-\item\NT{thing}$^*$は\NT{thing}の0個以上の出現を意味する．
-\item\NT{thing}$^+$は\NT{thing}の1個以上の出現を意味する．
+\item\NT{thing}\+は\NT{thing}の1個以上の出現を意味する．
 \end{itemize}
 上記のように拡張したBNFで，Hatプログラムの構文\NT{\tt program}の生成規則を以下に示す．
 \begin{hang}\tt % \item 019IOlq
 \item\NT{program}\lrto
-  \NT{includer}$^*$ \NT{definition}$^*$
+  \NT{includer}\* \NT{definition}\*
 \item\NT{includer}\lrto
   (include \NT{string})
 \item\NT{definition}\lrto\par
@@ -103,7 +103,7 @@ HatはSchemeと同様に静的スコープを持つ動的型付けのプログ�
 \item\NT{hat expression}\lrto
   \hat\ \NT{head} \NT{body}
 \item\NT{head}\lrto
-  (\NT{identifier}$^*$)
+  (\NT{identifier}\*)
 \item\NT{body}\lrto
   \NT{operator} \NT{operands}
 \item\NT{operator}\lrto
@@ -111,18 +111,18 @@ HatはSchemeと同様に静的スコープを持つ動的型付けのプログ�
   \| (\NT{hat expression}) \par
   \| (\NT{operands})
 \item\NT{operands}\lrto
-  \NT{expression}$^*$\par
-  \| \NT{expression}$^*$ \NT{hat expression}
+  \NT{expression}\* \par
+  \| \NT{expression}\* \NT{hat expression}
 \item\NT{expression}\lrto\par
   \NT{simple datum}
   \| (\NT{hat expression}) \par
   \| (\NT{operands})
-  \| '(\NT{datum}$^*$)
+  \| '(\NT{datum}\*)
 \item\NT{simple datum}\lrto \par
   \NT{number} \| \NT{string} \| \NT{identifier}
 \item\NT{datum}\lrto
   \NT{simple datum}
-  \| (\NT{datum}$^*$)
+  \| (\NT{datum}\*)
 \end{hang}
 
 上記で未定義の記号 \NT{variable}, \NT{literal}, \NT{lambda expression} の定義はR5RSと同じである．
