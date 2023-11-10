@@ -41,6 +41,7 @@
 % \def\|{$|$}
 % 縦棒の後，改行を許す
 \def\|{ $|$ \allowbreak}
+\def\*{$^*$}
 % ・・・
 \def\c...{\mbox{$\cdots\mbox{}$}\allowbreak}
 % 非終端記号
@@ -87,6 +88,7 @@ HatはSchemeと同様に静的スコープを持つ動的型付けのプログ�
 この節では，Hatの形式的構文を示す．
 記述を簡潔にするため，BNFを以下のように拡張する．
 \begin{itemize}
+\item\NT{thing}\*は\NT{thing}の0個以上の出現を意味する．
 \item\NT{thing}$^*$は\NT{thing}の0個以上の出現を意味する．
 \item\NT{thing}$^+$は\NT{thing}の1個以上の出現を意味する．
 \end{itemize}
