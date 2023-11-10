@@ -104,17 +104,19 @@ HatはSchemeと同様に静的スコープを持つ動的型付けのプログ�
   (\NT{identifier}$^*$)
 \item\NT{body}\lrto
   \NT{operator} \NT{operands}
-\item\NT{operator}\lrto\par
-  \NT{identifier} \| (\NT{hat expression}) \| (\NT{operands})
+\item\NT{operator}\lrto
+  \NT{identifier}
+  \| (\NT{hat expression}) \par
+  \| (\NT{operands})
 \item\NT{operands}\lrto
   \NT{expression}$^*$\par
   \| \NT{expression}$^*$ \NT{hat expression}
-\item\NT{expression}\lrto
+\item\NT{expression}\lrto\par
   \NT{simple datum}
-  \| (\NT{hat expression})
+  \| (\NT{hat expression}) \par
   \| (\NT{operands})
   \| '(\NT{datum}$^*$)
-\item\NT{simple datum}\lrto
+\item\NT{simple datum}\lrto \par
   \NT{number} \| \NT{string} \| \NT{identifier}
 \item\NT{datum}\lrto
   \NT{simple datum}
