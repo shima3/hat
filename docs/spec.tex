@@ -97,12 +97,13 @@ HatはSchemeと同様に静的スコープを持つ動的型付けのプログ�
 \item\NT{includer}\lrto
   (include \NT{string})
 \item\NT{definition}\lrto
-  (defun \NT{symbol} \NT{hat expression})
+  (defun\NT{symbol}\NT{hat expression})
 \item\NT{hat expression}\lrto
   \hat\ \NT{head} \NT{body}
 \item\NT{head}\lrto
   (\NT{symbol}$^*$)
-\item\NT{body}\lrto
+\item\NT{body}\lrto\NT{operator}\NT{operands}
+\item\NT{operator}\lrto\NT{symbol}\|(\NT{hat expression})\|
   \NT{expression}$^+$ \par
   \| \NT{expression}$^+$ \NT{hat expression}
 \item\NT{expression}\lrto
