@@ -1,0 +1,12 @@
+(include "util.sch")
+(include "whyfp.sch")
+
+(defineCPS main ^()
+  cons "A" nil ^(list)
+  cons "B" list ^(list)
+  getFirst list ^(e1)
+  print("e1=" e1 "\n")^()
+  getRest list ^(list)
+  getFirst list ^(e2)
+  print("e2=" e2 "\n")^()
+  exit 0)

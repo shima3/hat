@@ -1,0 +1,20 @@
+(include "util.sch")
+(include "whyfp.sch")
+
+(defineCPS listPrint ^(list . return)
+  if(isNil list) return
+  ( getFirst list ^(first)
+    print(first "\n")^()
+    getRest list ^(rest)
+    listPrint rest . return ))
+
+(defineCPS main ^()
+  if(isNil nil)
+  (print("真\n"))
+  (print("偽\n"))^()
+  (^(out) out "A" "B")^(list)
+  listPrint list ^()
+  if(isNil list)
+  (print("真\n"))
+  (print("偽\n"))^()
+  exit 0)

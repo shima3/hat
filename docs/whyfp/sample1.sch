@@ -1,0 +1,11 @@
+(include "util.sch")
+(include "whyfp.sch")
+
+(defineCPS main ^()
+  (^(out) out "A" "B")^(list)
+  getFirst list ^(e1)
+  print("e1=" e1 "\n")^()
+  getRest list ^(list2)
+  getFirst list2 ^(e2)
+  print("e2=" e2 "\n")^()
+  exit 0)
