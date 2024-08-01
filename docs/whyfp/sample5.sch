@@ -6,6 +6,7 @@
   * x x)
 
 (defineCPS listPrint ^(list . return)
+  list ^(list)
   if(isNil list) return
   ( getFirst list ^(first)
     print(first "\n")^()
@@ -13,7 +14,7 @@
     listPrint rest . return ))
 
 (defineCPS main ^()
-  (^(out) out 2 3 4)^(list)
+  cons 2 (cons 3 (cons 4 nil))^(list)
   map square list ^(result)
   listPrint result ^()
   exit 0)

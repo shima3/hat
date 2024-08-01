@@ -2,6 +2,7 @@
 (include "whyfp.sch")
 
 (defineCPS listPrint ^(list . return)
+  list ^(list)
   if(isNil list) return
   ( getFirst list ^(first)
     print(first "\n")^()
@@ -12,7 +13,7 @@
   if(isNil nil)
   (print("真\n"))
   (print("偽\n"))^()
-  (^(out) out "A" "B")^(list)
+  cons "A" (cons "B" nil)^(list)
   listPrint list ^()
   if(isNil list)
   (print("真\n"))

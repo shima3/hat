@@ -2,7 +2,7 @@
 (include "whyfp.sch")
 
 (defineCPS main ^()
-  (^(out) out "A" "B")^(list)
+  cons "A" (cons "B" nil)^(list)
   getFirst list ^(e1)
   print("e1=" e1 "\n")^()
   getRest list ^(list2)
