@@ -1,0 +1,21 @@
+(include "util.sch")
+(include "whyfp.sch")
+
+(defineCPS printPosList ^(list . return)
+  if(isNil list) return
+  ( getFirst list ^(first)
+    printPosition first ^()
+    getRest list ^(rest)
+    printPosList rest . return ))
+
+(defineCPS main ^()
+  print("main 1\n")^()
+  initPosition "  O       " "X" ^(p)
+  print("main 2\n")^()
+  printPosition p ^()
+  print("main 3\n")^()
+  moves p ^(list)
+  print("main 4\n")^()
+  printPosList list ^()
+  print("main 5\n")^()
+  exit 0)
