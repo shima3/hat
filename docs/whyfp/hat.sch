@@ -44,7 +44,7 @@ Hat言語のみで定義された関数群
 |#
 
 #|
-空列
+空列 empty sequence
 |#
 (defineCPS seq_empty ^(R . return)
   return true)

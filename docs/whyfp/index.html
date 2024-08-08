@@ -114,6 +114,7 @@
     <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
     <script type="text/javascript" src="/hat/assets/js/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="/hat/assets/js/jquery-linedtextarea.js"></script>
+    <script src="whyfp.js"></script>
   </head>
   <!-- body id="body" class="markdown-body" -->
   <body id="body">
@@ -121,7 +122,8 @@
     <!-- form action="#" -->
     <div style="width:49%; height:100%; float:left; overflow:scroll;">
       <h1><img src="/hat/assets/images/favicon.ico" height="30" />Why Functional Programming Matters のサンプルコードを Hat 言語で実装する</h1>
-      <h2>リストの要素の取得</h2>
+
+      <h2 id="sample1" style="clear: both;">リストの要素の取得</h2>
       <div class="sourcefile right-float">
 	<input type="text" value="sample1.sch" disabled />
 	<input type="button" value="Run"
@@ -137,7 +139,7 @@
       8行目のgetRestで先頭の除く残りのリストを変数list2に代入します。
       理解を確かめるため、リストの要素を3個とし、各要素を表示するように変更してみてください。
 
-      <h2>リストへの要素の追加</h2>
+      <h2 id="sample2" style="clear: both;">リストへの要素の追加</h2>
       <div class="sourcefile right-float">
 	<input type="text" value="sample2.sch" disabled />
 	<input type="button" value="Run"
@@ -151,14 +153,14 @@
       5, 6行目のconsでリストの先頭に要素を追加します。
       7, 10行目のgetFirstでリストの先頭の要素を取得し、8, 11行目のprintで表示します。
       9行目のgetRestで先頭の除く残りのリストを変数listに代入します。
-      Sample1.schではlist2に代入していましたが、Sample2.schのように同じ（名前の）変数に代入することも可能です。
+      sample1.schではlist2に代入していましたが、sample2.schのように同じ（名前の）変数に代入することも可能です。
       理解を確かめるため、リストの要素を3個とし、各要素を表示するように変更してみてください。
 
-      <h2>空リストの判定</h2>
+      <h2 id="sample3" style="clear: both;">空リストの判定</h2>
       <div class="sourcefile right-float">
         <input type="text" value="sample3.sch" disabled />
         <input type="button" value="Run" onclick="runCode(this);"/><br>
-        <textarea id="text" class="lined" cols="50" rows="21"
+        <textarea id="text" class="lined" cols="50" rows="22"
 	          spellcheck="false"></textarea>
       </div>
       sample3.schの右のRunボタンを押して実行してください。
@@ -176,7 +178,7 @@
       9行目のgetRestでlistの先頭を除く残りのリストを取得し、10行目のlistPrintで出力します。
       理解を確かめるため、リストの要素を3個とし、各要素を表示するように変更してみてください。
 
-      <h2>高階関数 reduce</h2>
+      <h2 id="sample4" style="clear: both;">高階関数 reduce</h2>
       <div class="sourcefile right-float">
         <input type="text" value="sample4.sch" disabled />
         <input type="button" value="Run" onclick="runCode(this);"/><br>
@@ -192,7 +194,7 @@
       reduceは、初期値を0として、listの各要素に対し、関数+を適用し、総和を返します。
       理解を確かめるため、総乗を表示するように変更してみてください。
 
-      <h2>高階関数 map</h2>
+      <h2 id="sample5" style="clear: both;">高階関数 map</h2>
       <div class="sourcefile right-float">
         <input type="text" value="sample5.sch" disabled />
         <input type="button" value="Run" onclick="runCode(this);"/><br>
@@ -208,12 +210,12 @@
       squareは4〜6行目で定義されていて、与えられた数値xの2乗を返します。
       理解を確かめるため、3乗を表示するように変更してみてください。
 
-      <h2>mapの遅延評価</h2>
-      <div class="sourcefile right-float">
+      <h2 id="sample6" style="clear: both;">mapの遅延評価</h2>
+      <div class="sourcefile right-float"">
         <input type="text" value="sample6.sch" disabled />
-        <input type="button" value="Run" onclick="runCode(this);"/><br>
-        <textarea id="text" class="lined" cols="50" rows="25"
-	          spellcheck="false"></textarea>
+        <input type="button" value="Run" onclick="runCode(this);"/>
+        <br><textarea id="text" class="lined" cols="50" rows="25"
+	              spellcheck="false"></textarea>
       </div>
       sample6.schの右のRunボタンを押して実行してください。
       Terminal:の下の枠内にmainやsquareで始まる行と4, 9, 16という行を表示します。
@@ -226,18 +228,67 @@
       しかし、squre x=3とsqure x=4はmain 2を表示した後に表示しています。
       これは、20行目ですべて計算せず、22行目で表示するときに遅延評価するからです。
 
-	      </div><div id="wrapper" style="width:49%; float:right;"><div id="upper">
-		Terminal:
-	    <input type="button" name="clear" value="Clear"
-		   onclick="terminal.value=''"/>
-	      <textarea class="code full" id="terminal" style="height:10em; box-sizeing:border-box;"></textarea>
-	      Canvas:
-	    <input type="button" id="stop" value="Stop"
-		   onclick="HatInterpreter.stop()"/>
-	    <input type="button" id="restart" value="Restart"
-		   onclick="HatInterpreter.restart()"/>
-	    <input type="button" name="clear" value="Clear"
-		   onclick="resetCanvas()"/></div><div id="wrapper2" style="height:100%;"><canvas id="canvas" class="checker"></canvas><canvas id="canvas2" class="checker" style="display:none;"></div></div>
+      <h2 id="sample7" style="clear: both;">三目並べの局面</h2>
+      <div class="sourcefile right-float">
+        <input type="text" value="sample7.sch" disabled />
+        <input type="button" value="Run" onclick="runCode(this);"/>
+        <br><textarea id="text" class="lined" cols="50" rows="22"
+	              spellcheck="false"></textarea>
+      </div>
+      sample7.schの右のRunボタンを押して実行してください。
+      Terminal:の下の枠内に、mainで始まる行、三目並べの盤面、Turn:で始まる行を表示します。
+      <br>
+      sample7.schの13行目でinitPosition関数を呼び出し、局面を変数pに代入します。
+      局面とは、盤面と次の手を打つのが誰の番かを示すものです。
+      第1引数は9文字の文字列で盤面のマルとバツを示します。
+      最初の3文字が1行目、次の3文字が2行目、最後の3文字が3行目に対応します。
+      第2引数"X"は、次がバツの番であることを意味します。
+      sample7.schの15行目でprintPosition関数を呼び出し、最初の局面pを表示します。
+      printPosition関数は、縦棒、マイナス、プラスの文字を使って盤面を示し、Turn:で始まる行で次の番がマルかバツかを示します。
+      この例では、initPositonの第1引数の3文字目がOなので、盤面の右上にOと表示します。
+      <br>
+      sample7.schの17行目でmoves関数を呼び出し、局面pの次に可能な局面のリストをlistに代入します。
+      19行目でprintPosList関数を呼び出し、listに含まれる局面をすべて表示します。
+      <br>
+      printPosList関数は4行目から9行目で定義されています。
+      5行目でisNil関数を呼び出し、listが空ならばreturnを呼び出し、戻ります。
+      listが空でなければ、6行目で先頭の値をfirst、8行目で残りの列をrestに代入します。
+      7行目でprintPosition関数を呼び出し、firstの局面を表示します。
+      9行目でprintPosList関数を再帰呼び出しし、restに含まれる局面を表示します。
+      <br>
+      理解を確かめるため、13行目の文字列を変更して動作を確認してみてください。
+
+      <!--
+      <h2 id="sampleX" style="clear: both;"></h2>
+      <div class="sourcefile right-float">
+        <input type="text" value="sampleX.sch" disabled />
+        <input type="button" value="Run" onclick="runCode(this);"/>
+        <br><textarea id="text" class="lined" cols="50" rows="25"
+	              spellcheck="false"></textarea>
+      </div>
+      <br>
+      <br>
+      -->
+    </div>
+    <div id="wrapper" style="width:49%; float:right;">
+      <div id="upper">
+	Terminal:
+	<input type="button" name="clear" value="Clear"
+	       onclick="terminal.value=''"/>
+	<textarea class="code full" id="terminal" style="height:30em; box-sizeing:border-box;"></textarea>
+      </div>
+      Canvas:
+      <input type="button" id="stop" value="Stop"
+	     onclick="HatInterpreter.stop()"/>
+      <input type="button" id="restart" value="Restart"
+	     onclick="HatInterpreter.restart()"/>
+      <input type="button" name="clear" value="Clear"
+	     onclick="resetCanvas()"/>
+      <div id="wrapper2" style="height:100%;">
+        <canvas id="canvas" class="checker"></canvas>
+        <canvas id="canvas2" class="checker" style="display:none;"></canvas>
+      </div>
+    </div>
   </body>
 </html>
 <script type="text/javascript">
