@@ -11,13 +11,13 @@ function initialPosition(){
 }
 */
 
-function initPosition(board_str, turn_char){
+function initPosition(board_str, turn_mark){
     let b=[];
     for(let i=0; i<9; ++i)
         b[i]=board_str.charAt(i);
     return {
         board: b,
-        turn: turn_char=='O'
+        turn: turn_mark=='O'
     };
 }
 
@@ -46,12 +46,12 @@ function getBoard(pos){
         getBoardRow(b, 2);
 }
 
-function getTurn(pos){
-    return pos.turn? 'O': 'X';
+function getMark(turn){
+    return turn? 'O': 'X';
 }
 
 function moves(pos){
-    let mark=pos.turn? 'O': 'X';
+    let mark=getMark(pos.turn);
     let list=[];
     for(let y=0; y<3; ++y){
         for(let x=0; x<3; ++x){
@@ -99,12 +99,17 @@ function check2diagonal(board, mark){ // 斜め方向の並び
     return count;
 }
 
+// コンピュータのマークが'O'のときtrue、'X'のときfalse
+computerTurn=false;
+
 function static(pos){
     let b=pos.board;
-    return check3line(b, 'O')+
-        check3row(b, 'O')+
-        check2diagonal(b, 'O')-
-        check3line(b, 'X')-
-        check3row(b, 'X')-
-        check2diagonal(b, 'X');
+    let cm=getMark(computerTurn); // コンピュータのマーク
+    let um=getMark(!computerTurn); // ユーザのマーク
+    return check3line(b, cm)+
+        check3row(b, cm)+
+        check2diagonal(b, cm)-
+        check3line(b, um)-
+        check3row(b, um)-
+        check2diagonal(b, um);
 }

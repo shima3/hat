@@ -187,11 +187,6 @@ https://ja.wikipedia.org/wiki/%E3%83%A1%E3%83%A2%E5%8C%96#:~:text=%EF%BC%88Wikip
 ;;  ( reduce f x (getRest list)^(y)
 ;;    f (getFirst list) y ))
 
-(defineCPS compose ^(f g x) f (g x))
-
-(defineCPS map ^(f list)
-  reduce (compose cons f) nil list)
-
 #|
 (defineCPS map ^(f seq . return)
   print("map 1\n")^()
@@ -293,17 +288,105 @@ https://ja.wikipedia.org/wiki/%E3%83%A1%E3%83%A2%E5%8C%96#:~:text=%EF%BC%88Wikip
   JavaScript "moves" pos ^(seq)
   return seq)
 
-(defineCPS node ^(label subtrees get)
+#|
+whyfp.pdf p.6 function composition
+Hat言語ではピリオドが別の意味になるので、f . g の代わりに compose f g とする。
+|#
+(defineCPS compose ^(f g x) f (g x))
+
+(defineCPS map ^(f list)
+  reduce (compose cons f) nil list)
+
+#|
+whyfp.pdf p.7 では、ノードを作る関数をnodeとしているが、ノード自身と紛らわしいので、makeNodeとする。
+|#
+(defineCPS makeNode ^(label subtrees get)
   get label subtrees)
 
 (defineCPS nodeGetLabel ^(node)
-  node (^(label subtrees . return) return label))
+  node (^(pos subtrees . return) return pos))
 
 (defineCPS nodeGetSubtrees ^(node)
-  node (^(label subtrees . return) return subtrees))
+  node (^(pos subtrees . return) return subtrees))
 
+#|
+whyfp.pdf p.7 の redtree と redtree'
+|#
+(defineCPS redtree ^(f g a n)
+  nodeGetLabel n ^(label)
+  nodeGetSubtrees n ^(subtrees)
+  f label (redtree' f g a subtrees))
+
+(defineCPS redtree' ^(f g a treeList)
+  if(isNil treeList) a
+  ( getFirst treeList ^(first)
+    getRest treeList ^(rest)
+    g (redtree f g a first)(redtree' f g a rest)
+    ))
+
+#|
+whyfp.pdf p.8 の maptree
+|#
+(defineCPS maptree ^(f)
+  redtree (compose makeNode f) cons nil)
+
+#|
+whyfp.pdf p.16 の reptree と gametree
+Mirandaとほぼ同じ。
+|#
 (defineCPS reptree ^(f a)
-  node a (map (reptree f) (f a)))
+  makeNode a (map (reptree f) (f a)))
 
-(defineCPS gametree ^(p)
-  reptree moves p)
+(defineCPS gametree ^(pos)
+  reptree moves pos)
+
+#|
+whyfp.pdf p.16 の static
+盤面posを評価し、コンピュータに有利（ユーザに不利）なほど大きい（負の数も含む）数値を返す。
+Mirandaのコードは示されていない。
+|#
+(defineCPS static ^(pos . return)
+  JavaScript "static" pos ^(num)
+  return num)
+
+#|
+whyfp.pdf p.18
+max: 数値リストの最大値を返す。
+min: 数値リストの最小値を返す。
+Mirandaのコードは示されていない。
+|#
+(defineCPS max ^(nums)
+  getFirst nums ^(first)
+  getRest nums ^(rest)
+  if(isNil rest) first
+  ( max rest ^(maxrest)
+    if(> first maxrest) first maxrest))
+
+(defineCPS min ^(nums)
+  getFirst nums ^(first)
+  getRest nums ^(rest)
+  if(isNil rest) first
+  ( min rest ^(minrest)
+    if(> first minrest) first minrest))
+
+#|
+whyfp.pdf p.18 の maximise と minimise
+Hat言語にはパターンマッチがないので、nodeからラベルと部分木を取得し、条件分岐している。
+|#
+(defineCPS maximise ^(node)
+  nodeGetSubtrees node ^(sub)
+  if(isNil sub)(nodeGetLabel node)
+  (max (map minimise sub)))
+
+(defineCPS minimise ^(node)
+  nodeGetSubtrees node ^(sub)
+  if(isNil sub)(nodeGetLabel node)
+  (min (map maximise sub)))
+
+#|
+whyfp.pdf p.18 の３段落目と４段落目の間の evaluate
+分かりやすくするため、composeを使わずに定義した。
+|#
+(defineCPS evaluate ^(pos)
+  maximise (maptree static (gametree pos)))
+
