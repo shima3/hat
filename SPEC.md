@@ -13,8 +13,8 @@ This document separates the **lexical definitions** (used for tokenization) and 
 
 ```ebnf
 String      = '"', { StringCharacter }, '"' ;
-
 StringCharacter = Character | EscapeSequence ;
+Character   = ? any valid character except '"', '\', and Newline ? ;
 EscapeSequence  = "\", ( '"' | "\" | "n" | "t" | "r" ) ;
 
 Identifier  = IdentifierChar, { IdentifierChar } ;
@@ -29,7 +29,37 @@ Space       = " " ;
 Tab         = "\t" ;
 Newline     = "\n" | "\r\n" ;
 
-Character   = ? any valid string character except Newline ? ;
+Comment     = LineComment | BlockComment ;
+LineComment = ";", { LineCommentCharacter }, Newline ;
+LineCommentCharacter = ? any valid character except Newline ? ;
+
+BlockComment = "#|", { BlockCommentContent }, "|#" ;
+BlockCommentContent = BlockCommentText | BlockComment ;
+BlockCommentText    = ? character sequence not containing #| or |# ? ;
+```
+
+## Syntactic Definitions (Grammar)
+
+```ebnf
+HatProgram  = { Statement } ;
+
+Statement   = Includer | Definition ;
+
+Includer    = "(", "include", String, ")" ;
+
+Definition  = "(", "define", Identifier, Function, ")" ;
+
+Function    = "^", Head, Body ;
+
+Head        = "(", { Identifier }, ")" ;
+
+Body        = [ FilenameMetadata ], [ LinenoMetadata ],
+              Expression, { Expression }, [ Function ] ;
+
+FilenameMetadata = "(", "_FILENAME_", String, ")" ;
+LinenoMetadata   = "(", "_LINENO_", Digit, { Digit }, ")" ;
+
+Expression  = Identifier | String | "(", Function, ")" ;
 ```
 
 ## Hat terms
