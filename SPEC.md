@@ -3,6 +3,35 @@
 The hat programming language is based on lambda calculus in continuation passing style (CPS).
 This page describes a specification of the language and differences from lambda calculus in direct style.
 
+# EBNF Syntax Definition
+
+This document separates the **lexical definitions** (used for tokenization) and **syntactic definitions** (used for parsing).
+
+---
+
+## Lexical Definitions (Tokens)
+
+```ebnf
+String      = '"', { StringCharacter }, '"' ;
+
+StringCharacter = Character | EscapeSequence ;
+EscapeSequence  = "\", ( '"' | "\" | "n" | "t" | "r" ) ;
+
+Identifier  = IdentifierChar, { IdentifierChar } ;
+IdentifierChar = Letter | Digit | SymbolChar ;
+
+Letter      = "a"..."z" | "A"..."Z" | "_" ;
+Digit       = "0"..."9" ;
+SymbolChar  = "!" | "?" | "*" | "+" | "-" | "/" | "=" | "<" | ">" | "$" | "%" | "&" | "|" | "." ;
+
+Whitespace  = Space | Tab | Newline ;
+Space       = " " ;
+Tab         = "\t" ;
+Newline     = "\n" | "\r\n" ;
+
+Character   = ? any valid string character except Newline ? ;
+
+
 ## Hat terms
 
 **Hat terms** are variable names, function applications, continuation applications, function abstractions, continuation abstractions or continuations.
