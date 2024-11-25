@@ -30,9 +30,7 @@ Tab         = "\t" ;
 Newline     = "\n" | "\r\n" ;
 
 Character   = ? any valid string character except Newline ? ;
-
----
-
+```
 
 ## Hat terms
 
