@@ -3,6 +3,65 @@
 The hat programming language is based on lambda calculus in continuation passing style (CPS).
 This page describes a specification of the language and differences from lambda calculus in direct style.
 
+# EBNF Syntax Definition
+
+This document separates the **lexical definitions** (used for tokenization) and **syntactic definitions** (used for parsing).
+
+---
+
+## Lexical Definitions (Tokens)
+
+```ebnf
+String      = '"', { StringCharacter }, '"' ;
+StringCharacter = Character | EscapeSequence ;
+Character   = ? any valid character except '"', '\', and Newline ? ;
+EscapeSequence  = "\", ( '"' | "\" | "n" | "t" | "r" ) ;
+
+Identifier  = IdentifierChar, { IdentifierChar } ;
+IdentifierChar = Letter | Digit | SymbolChar ;
+
+Letter      = "a"..."z" | "A"..."Z" | "_" ;
+Digit       = "0"..."9" ;
+SymbolChar  = "!" | "?" | "*" | "+" | "-" | "/" | "=" | "<" | ">" | "$" | "%" | "&" | "|" | "." ;
+
+Whitespace  = Space | Tab | Newline ;
+Space       = " " ;
+Tab         = "\t" ;
+Newline     = "\n" | "\r\n" ;
+
+Comment     = LineComment | BlockComment ;
+LineComment = ";", { LineCommentCharacter }, Newline ;
+LineCommentCharacter = ? any valid character except Newline ? ;
+
+BlockComment = "#|", { BlockCommentContent }, "|#" ;
+BlockCommentContent = BlockCommentText | BlockComment ;
+BlockCommentText    = ? character sequence not containing #| or |# ? ;
+```
+
+## Syntactic Definitions (Grammar)
+
+```ebnf
+HatProgram  = { Statement } ;
+
+Statement   = Includer | Definition ;
+
+Includer    = "(", "include", String, ")" ;
+
+Definition  = "(", "define", Identifier, Function, ")" ;
+
+Function    = "^", Head, Body ;
+
+Head        = "(", { Identifier }, ")" ;
+
+Body        = [ FilenameMetadata ], [ LinenoMetadata ],
+              Expression, { Expression }, [ Function ] ;
+
+FilenameMetadata = "(", "_FILENAME_", String, ")" ;
+LinenoMetadata   = "(", "_LINENO_", Digit, { Digit }, ")" ;
+
+Expression  = Identifier | String | "(", Function, ")" ;
+```
+
 ## Hat terms
 
 **Hat terms** are variable names, function applications, continuation applications, function abstractions, continuation abstractions or continuations.

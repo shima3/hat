@@ -309,52 +309,44 @@ whyfp.pdf p.7 では、ノードを作る関数をnodeとしているが、ノ�
 (defineCPS nodeGetSubtrees ^(node)
   node (^(pos subtrees . return) return subtrees))
 
-#|
-whyfp.pdf p.7 の redtree と redtree'
-|#
+;; whyfp.pdf p.7 の redtree と redtree'
+;; Hat言語では関数名に ' は使えないので redtree2 とする。
 (defineCPS redtree ^(f g a n)
   nodeGetLabel n ^(label)
   nodeGetSubtrees n ^(subtrees)
-  f label (redtree' f g a subtrees))
+  f label (redtree2 f g a subtrees))
 
-(defineCPS redtree' ^(f g a treeList)
+(defineCPS redtree2 ^(f g a treeList)
   if(isNil treeList) a
   ( getFirst treeList ^(first)
     getRest treeList ^(rest)
-    g (redtree f g a first)(redtree' f g a rest)
+    g (redtree f g a first)(redtree2 f g a rest)
     ))
 
 #|
-whyfp.pdf p.8 の maptree
-|#
+;; whyfp.pdf p.8 の maptree
 (defineCPS maptree ^(f)
   redtree (compose makeNode f) cons nil)
 
-#|
-whyfp.pdf p.16 の reptree と gametree
-Mirandaとほぼ同じ。
-|#
+;; whyfp.pdf p.16 の reptree と gametree
+;; Mirandaとほぼ同じ。
 (defineCPS reptree ^(f a)
   makeNode a (map (reptree f) (f a)))
 
 (defineCPS gametree ^(pos)
   reptree moves pos)
 
-#|
-whyfp.pdf p.16 の static
-盤面posを評価し、コンピュータに有利（ユーザに不利）なほど大きい（負の数も含む）数値を返す。
-Mirandaのコードは示されていない。
-|#
+;; whyfp.pdf p.16 の static
+;; 盤面posを評価し、コンピュータに有利（ユーザに不利）なほど大きい（負の数も含む）数値を返す。
+;; Mirandaのコードは示されていない。
 (defineCPS static ^(pos . return)
   JavaScript "static" pos ^(num)
   return num)
 
-#|
-whyfp.pdf p.18
-max: 数値リストの最大値を返す。
-min: 数値リストの最小値を返す。
-Mirandaのコードは示されていない。
-|#
+;; whyfp.pdf p.18
+;; max: 数値リストの最大値を返す。
+;; min: 数値リストの最小値を返す。
+;; Mirandaのコードは示されていない。
 (defineCPS max ^(nums)
   getFirst nums ^(first)
   getRest nums ^(rest)
@@ -369,10 +361,8 @@ Mirandaのコードは示されていない。
   ( min rest ^(minrest)
     if(> first minrest) first minrest))
 
-#|
-whyfp.pdf p.18 の maximise と minimise
-Hat言語にはパターンマッチがないので、nodeからラベルと部分木を取得し、条件分岐している。
-|#
+;; whyfp.pdf p.18 の maximise と minimise
+;; Hat言語にはパターンマッチがないので、nodeからラベルと部分木を取得し、条件分岐している。
 (defineCPS maximise ^(node)
   nodeGetSubtrees node ^(sub)
   if(isNil sub)(nodeGetLabel node)
@@ -383,10 +373,8 @@ Hat言語にはパターンマッチがないので、nodeからラベルと部�
   if(isNil sub)(nodeGetLabel node)
   (min (map maximise sub)))
 
-#|
-whyfp.pdf p.18 の３段落目と４段落目の間の evaluate
-分かりやすくするため、composeを使わずに定義した。
-|#
+;; whyfp.pdf p.18 の３段落目と４段落目の間の evaluate
+;; 分かりやすくするため、composeを使わずに定義した。
 (defineCPS evaluate ^(pos)
   maximise (maptree static (gametree pos)))
-
+|#
