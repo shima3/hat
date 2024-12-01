@@ -26,3 +26,14 @@ Expression = Element1, Element2 ;
 ```
 
 - Example: Element1 is followed by Element2.
+
+### Alternatives
+
+Multiple options are separated by |, indicating that any one of them can match:
+
+```ebnf
+
+Expression = Option1 | Option2 ;
+```
+
+- Example: Matches either Option1 or Option2.
