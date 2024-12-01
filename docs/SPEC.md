@@ -12,6 +12,7 @@ This document separates the **lexical definitions** (used for tokenization) and 
 ## Lexical Definitions (Tokens)
 
 ```ebnf
+
 Token = Identifier | Digits | String | "(" | ")" | "^" | Whitespace | Comment ;
 
 String      = '"', { StringChar }, '"' ;
@@ -43,6 +44,7 @@ BlockCommentText    = ? character sequence not containing #| or |# ? ;
 ## Syntactic Definitions (Grammar)
 
 ```ebnf
+
 HatProgram  = { Statement } ;
 
 Statement   = Includer | Definition ;
