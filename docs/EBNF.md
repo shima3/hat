@@ -1,0 +1,17 @@
+# EBNF (Extended Backus-Naur Form) Notation Used
+
+The EBNF (Extended Backus-Naur Form) notation used in the definitions adheres to common conventions for describing the syntax of formal languages.
+Below is an explanation of the elements and constructs in this EBNF:
+
+## Key Elements and Constructs
+
+### Rule Definition
+
+Syntax rules are defined with the format:
+```ebnf
+
+RuleName = Expression ;
+```
+
+- The left-hand side (RuleName) specifies the name of the rule.
+- The right-hand side (Expression) defines its structure.
