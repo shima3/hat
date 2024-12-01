@@ -46,24 +46,14 @@ BlockCommentText    = ? character sequence not containing #| or |# ? ;
 ```ebnf
 
 HatProgram  = { Statement } ;
-
 Statement   = Includer | Definition ;
-
 Includer    = "(", "include", String, ")" ;
-
-Definition  = "(", "define", Identifier, Function, ")" ;
-
+Definition  = "(", "define", Symbol, Function, ")" ;
 Function    = "^", Head, Body ;
-
-Head        = "(", { Identifier }, ")" ;
-
-Body        = [ FilenameMetadata ], [ LinenoMetadata ],
-              Expression, { Expression }, [ Function ] ;
-
-FilenameMetadata = "(", "_FILENAME_", String, ")" ;
-LinenoMetadata   = "(", "_LINENO_", Digit, { Digit }, ")" ;
-
-Expression  = Identifier | String | "(", Function, ")" ;
+Head        = "(", { Symbol }, ")" ;
+Body        = [ LineMetadata ], Expression, { Expression }, [ Function ] ;
+Expression  = Symbol | String | "(", Function, ")" ;
+LineMetadata = "(", "_LINE_", Symbol, { String }, ")" ;
 ```
 
 ## Hat terms
