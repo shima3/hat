@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 # Specification of the Hat programming language
 
 The hat programming language is based on lambda calculus in continuation passing style (CPS).
