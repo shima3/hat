@@ -15,7 +15,7 @@ This document separates the **lexical definitions** (used for tokenization) and 
 
 ## Lexical Definitions (Tokens)
 
-```js
+```ebnf
 Token        = Significant | Whitespace | Comment ;
 Significant  = Symbol | String | "(" | ")" ;
 
