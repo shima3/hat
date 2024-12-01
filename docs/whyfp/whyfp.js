@@ -46,6 +46,10 @@ function getBoard(pos){
         getBoardRow(b, 2);
 }
 
+function getTurn(pos){
+    return pos.turn;
+}
+
 function getMark(turn){
     return turn? 'O': 'X';
 }
@@ -53,6 +57,7 @@ function getMark(turn){
 function moves(pos){
     let mark=getMark(pos.turn);
     let list=[];
+    let next=!pos.turn;
     for(let y=0; y<3; ++y){
         for(let x=0; x<3; ++x){
             if(pos.board[3*y+x]==' '){
@@ -60,7 +65,7 @@ function moves(pos){
                 b[3*y+x]=mark;
                 list.push({
                     board: b,
-                    turn: !pos.turn,
+                    turn: next,
                     subst: function(assignment){return this;},
                     isAtom: function(){return true;}
                 });
@@ -99,13 +104,13 @@ function check2diagonal(board, mark){ // 斜め方向の並び
     return count;
 }
 
-// コンピュータのマークが'O'のときtrue、'X'のときfalse
-computerTurn=false;
+computerMark='X'; // コンピュータのマーク
+userMark='O'; // ユーザのマーク
 
-function static(pos){
+function staticEvaluation(pos){
     let b=pos.board;
-    let cm=getMark(computerTurn); // コンピュータのマーク
-    let um=getMark(!computerTurn); // ユーザのマーク
+    let cm=computerMark;
+    let um=userMark;
     return check3line(b, cm)+
         check3row(b, cm)+
         check2diagonal(b, cm)-
