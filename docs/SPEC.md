@@ -13,19 +13,21 @@ This document separates the **lexical definitions** (used for tokenization) and 
 
 ```ebnf
 
-Token = Identifier | Digits | String | "(" | ")" | "^" | Whitespace | Comment ;
+Token        = Significant | Whitespace | Comment ;
+Significant  = Symbol | String | "(" | ")" ;
 
-String      = '"', { StringChar }, '"' ;
-StringChar = Char | EscapeSequence ;
-Char   = ? any valid character except '"', '\', and Newline ? ;
-EscapeSequence  = "\", ( '"' | "\" | "n" | "t" | "r" ) ;
-
-Identifier  = IdentifierChar, { IdentifierChar } ;
-IdentifierChar = Letter | Digit | SymbolChar ;
-
+Symbol      = SymbolChar, { SymbolChar } ;
+SymbolChar  = Letter | Digit | SpecialChar ;
 Letter      = "a"..."z" | "A"..."Z" | "_" ;
 Digit       = "0"..."9" ;
-SymbolChar  = "!" | "?" | "*" | "+" | "-" | "/" | "=" | "<" | ">" | "$" | "%" | "&" | "|" | "." ;
+SpecialChar = "!" | "?" | "*" | "+" | "-" | "/" | "=" | "<" | ">" | "$" | "%" | "&" | "|" | "." | "^" ;
+
+String      = '"', { StringCharacter }, '"' ;
+StringCharacter = Character | EscapeSequence ;
+Character   = ? any valid character except '"', '\', and Newline ? ;
+EscapeSequence  = "\", ( '"' | "\" | "n" | "t" | "r" ) ;
+
+Digits      = Digit, { Digit } ;
 
 Whitespace  = Space | Tab | Newline ;
 Space       = " " ;
@@ -33,8 +35,8 @@ Tab         = "\t" ;
 Newline     = "\n" | "\r\n" ;
 
 Comment     = LineComment | BlockComment ;
-LineComment = ";", { LineCommentChar }, Newline ;
-LineCommentChar = ? any valid character except Newline ? ;
+LineComment = ";", { LineCommentCharacter }, Newline ;
+LineCommentCharacter = ? any valid character except Newline ? ;
 
 BlockComment = "#|", { BlockCommentContent }, "|#" ;
 BlockCommentContent = BlockCommentText | BlockComment ;
